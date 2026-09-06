@@ -1,206 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 
+import 'categories/buttons_category.dart';
+import 'categories/display_category.dart';
+import 'categories/foundations_category.dart';
+import 'categories/inputs_category.dart';
+import 'categories/navigation_category.dart';
+
 void main() {
-  runApp(const IllustrationApp());
+  runApp(const AlterWidgetbookApp());
 }
 
-class IllustrationApp extends StatelessWidget {
-  const IllustrationApp({super.key});
+class AlterWidgetbookApp extends StatelessWidget {
+  const AlterWidgetbookApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Alter Illustration',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AlterSemanticTokens.baseWhite,
-        fontFamily: AlterTypography.geistFont,
-      ),
-      home: const ButtonShowcasePage(),
-    );
-  }
-}
-
-class ButtonShowcasePage extends StatelessWidget {
-  const ButtonShowcasePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Alter Buttons',
-          style: TextStyle(
-            color: AlterSemanticTokens.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: AlterSemanticTokens.baseWhite,
-        elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AlterSemanticTokens.stroke100,
-            height: 1,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            // Section: ButtonText (Normal Size)
-            const Text(
-              'ButtonText (Normal)',
-              style: AlterTypography.h3,
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                ButtonText(
-                  label: 'Primary',
-                  type: ButtonType.primary,
-                  onTap: () {},
-                ),
-                ButtonText(
-                  label: 'Gray',
-                  type: ButtonType.gray,
-                  onTap: () {},
-                ),
-                ButtonText(
-                  label: 'White',
-                  type: ButtonType.white,
-                  onTap: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-
-            // Section: ButtonText (Large Size)
-            const Text(
-              'ButtonText (Large)',
-              style: AlterTypography.h3,
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                ButtonText(
-                  label: 'Primary Large',
-                  type: ButtonType.primary,
-                  size: ButtonSize.large,
-                  onTap: () {},
-                ),
-                ButtonText(
-                  label: 'Gray Large',
-                  type: ButtonType.gray,
-                  size: ButtonSize.large,
-                  onTap: () {},
-                ),
-                ButtonText(
-                  label: 'White Large',
-                  type: ButtonType.white,
-                  size: ButtonSize.large,
-                  onTap: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-
-            // Section: ButtonIcon
-            const Text(
-              'ButtonIcon',
-              style: AlterTypography.h3,
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                ButtonIcon(
-                  icon: Icons.add,
-                  type: ButtonIconType.primary,
-                  onTap: () {},
-                ),
-                ButtonIcon(
-                  icon: Icons.favorite_border,
-                  type: ButtonIconType.gray,
-                  onTap: () {},
-                ),
-                ButtonIcon(
-                  icon: Icons.bookmark_border,
-                  type: ButtonIconType.white,
-                  onTap: () {},
-                ),
-                ButtonIcon(
-                  icon: Icons.check,
-                  type: ButtonIconType.gray,
-                  isSelected: true,
-                  onTap: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-
-            // Section: ButtonIconGhost
-            const Text(
-              'ButtonIconGhost',
-              style: AlterTypography.h3,
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 20,
-              runSpacing: 12,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                ButtonIconGhost(
-                  icon: Icons.close,
-                  type: ButtonIconGhostType.primary,
-                  onTap: () {},
-                ),
-                ButtonIconGhost(
-                  icon: Icons.chevron_right,
-                  type: ButtonIconGhostType.secondary,
-                  onTap: () {},
-                ),
-                ButtonIconGhost(
-                  icon: Icons.delete_outline,
-                  type: ButtonIconGhostType.red,
-                  onTap: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-
-            // Section: Graphic Buttons
-            const Text(
-              'Graphic Buttons',
-              style: AlterTypography.h3,
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                ButtonGraphicText(
-                  title: 'STREAK',
-                  subtitle: '7 DAYS',
-                  onTap: () {},
-                ),
-                ButtonGraphicImage(
-                  onTap: () {},
-                ),
-              ],
+    return Widgetbook.material(
+      directories: [
+        foundationsCategory(),
+        buttonsCategory(),
+        navigationCategory(),
+        inputsCategory(),
+        displayCategory(),
+      ],
+      addons: [
+        MaterialThemeAddon(
+          themes: [
+            WidgetbookTheme(
+              name: 'Light',
+              data: ThemeData(
+                brightness: Brightness.light,
+                fontFamily: AlterTypography.geistFont,
+                scaffoldBackgroundColor: AlterSemanticTokens.baseWhite,
+              ),
             ),
           ],
         ),
-      ),
+        // ignore: deprecated_member_use
+        DeviceFrameAddon(
+          devices: [
+            Devices.ios.iPhone13,
+            Devices.ios.iPad,
+            Devices.android.samsungGalaxyS20,
+          ],
+        ),
+        TextScaleAddon(
+          min: 1.0,
+          max: 2.0,
+        ),
+        InspectorAddon(),
+      ],
     );
   }
 }
-
