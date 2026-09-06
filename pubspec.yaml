@@ -1,7 +1,9 @@
 name: alter
-description: "A new Flutter package project."
+description: A lightweight, mobile-first Flutter design system featuring curated Geist typography, semantic tokens, and modular UI components.
 version: 0.0.1
-homepage:
+homepage: https://github.com/theoreticallydark/alter
+repository: https://github.com/theoreticallydark/alter
+issue_tracker: https://github.com/theoreticallydark/alter/issues
 
 environment:
   sdk: ^3.12.2

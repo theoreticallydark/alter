@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:illustration/main.dart';
+import 'package:example/main.dart';
 
 void main() {
   testWidgets('AlterWidgetbookApp pump smoke test', (WidgetTester tester) async {
