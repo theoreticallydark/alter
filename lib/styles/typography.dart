@@ -49,6 +49,9 @@ abstract class AlterTypography {
     height: 32 / 24,
   );
 
+  /// Exact Figma token alias for [h1Serif].
+  static const TextStyle hStyle = h1Serif;
+
   // Heading Styles
   static const TextStyle h1Bold = TextStyle(
     fontFamily: geistFont,

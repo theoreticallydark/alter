@@ -9,6 +9,7 @@ void main() {
       expect(AlterTypography.geistFont, equals('Geist'));
       expect(AlterTypography.instrumentSerifFont, equals('InstrumentSerif'));
       expect(AlterTypography.display.fontFamily, equals('packages/alter/Geist'));
+      expect(AlterTypography.hStyle, equals(AlterTypography.h1Serif));
     });
 
     test('AlterSemanticTokens are defined', () {
