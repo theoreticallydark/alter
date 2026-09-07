@@ -1,0 +1,6 @@
+# Pub ignore rules - files excluded from pub.dev package distribution
+docs/
+tool/
+build/
+.dart_tool/
+
