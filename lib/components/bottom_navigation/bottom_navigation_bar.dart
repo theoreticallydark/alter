@@ -14,7 +14,8 @@ class BottomNavigationItemData {
 
 class AlterBottomNavigationBar extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.1';
+  /// v1.1.0: Updated item layout with explicit 8px gap hugging content as per Figma node 117:4152.
+  static const String version = '1.1.0';
 
   final int selectedIndex;
   final List<BottomNavigationItemData> items;
@@ -41,16 +42,18 @@ class AlterBottomNavigationBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(items.length, (index) {
-          final item = items[index];
-          return BottomNavigationItem(
-            label: item.label,
-            icon: item.icon,
-            isSelected: index == selectedIndex,
-            onTap: () => onItemTapped?.call(index),
-          );
-        }),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          for (int index = 0; index < items.length; index++) ...[
+            if (index > 0) const SizedBox(width: 8),
+            BottomNavigationItem(
+              label: items[index].label,
+              icon: items[index].icon,
+              isSelected: index == selectedIndex,
+              onTap: () => onItemTapped?.call(index),
+            ),
+          ],
+        ],
       ),
     );
   }

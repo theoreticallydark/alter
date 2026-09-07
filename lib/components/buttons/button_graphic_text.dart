@@ -42,6 +42,7 @@ class ButtonGraphicText extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Geist',
+                package: 'alter',
                 color: AlterSemanticTokens.textInverse,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
@@ -54,6 +55,7 @@ class ButtonGraphicText extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Geist',
+                package: 'alter',
                 color: AlterSemanticTokens.textInverse,
                 fontSize: 12,
                 fontWeight: FontWeight.w900,

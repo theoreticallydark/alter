@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
-enum ButtonType { gray, white, primary }
+enum ButtonType { gray, white, primary, red }
 
 enum ButtonSize { normal, large }
 
 class ButtonText extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.1';
+  /// v1.1.0: Added ButtonType.red destructive variant using AlterSemanticTokens.statusDanger.
+  static const String version = '1.1.0';
 
   final String label;
   final ButtonType type;
@@ -31,6 +33,8 @@ class ButtonText extends StatelessWidget {
         return AlterSemanticTokens.baseWhite;
       case ButtonType.primary:
         return AlterSemanticTokens.baseBlack;
+      case ButtonType.red:
+        return AlterSemanticTokens.statusDanger;
     }
   }
 
@@ -41,6 +45,8 @@ class ButtonText extends StatelessWidget {
         return AlterSemanticTokens.stroke100;
       case ButtonType.primary:
         return AlterSemanticTokens.stroke1000;
+      case ButtonType.red:
+        return AlterColors.colorsRed800; // Variable: colors/red/800 (#9F0712)
     }
   }
 
@@ -51,6 +57,8 @@ class ButtonText extends StatelessWidget {
         return AlterSemanticTokens.textPrimary;
       case ButtonType.primary:
         return AlterSemanticTokens.textInverse;
+      case ButtonType.red:
+        return AlterSemanticTokens.statusDangerContrast;
     }
   }
 

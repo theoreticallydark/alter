@@ -2,23 +2,31 @@ import 'package:flutter/material.dart';
 import 'bottom_navigation_bar.dart';
 import 'bottom_navigation_button.dart';
 
-enum BottomNavigationBarActionType { defaultAction, save }
+enum BottomNavigationBarActionType {
+  defaultAction,
+  buttons;
+
+  /// Backward-compatible alias for [buttons].
+  @Deprecated('Use buttons instead')
+  static const BottomNavigationBarActionType save = BottomNavigationBarActionType.buttons;
+}
 
 class BottomNavigationBarAction extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.2';
+  /// v1.1.0: Renamed variant to buttons and updated default action button to secondary (gray) with add_circle icon as per Figma Node 60:2061.
+  static const String version = '1.1.0';
 
   final BottomNavigationBarActionType type;
   final int selectedIndex;
   final List<BottomNavigationItemData> items;
   final ValueChanged<int>? onItemTapped;
 
-  // Action Button (Default Type: add_circle Secondary, Save Type: Check/Save)
+  // Action Button (Default Type: add_circle Secondary, Buttons Type: Check Primary)
   final VoidCallback? onPrimaryActionTap;
   final IconData primaryActionIcon;
   final BottomNavigationButtonType primaryActionType;
 
-  // Additional Action Buttons (Save Type)
+  // Additional Action Buttons (Buttons Type)
   final VoidCallback? onSecondaryActionOneTap;
   final IconData secondaryActionOneIcon;
   final VoidCallback? onSecondaryActionTwoTap;
@@ -35,8 +43,8 @@ class BottomNavigationBarAction extends StatelessWidget {
     ],
     this.onItemTapped,
     this.onPrimaryActionTap,
-    this.primaryActionIcon = Icons.add,
-    this.primaryActionType = BottomNavigationButtonType.primary,
+    this.primaryActionIcon = Icons.add_circle_outline,
+    this.primaryActionType = BottomNavigationButtonType.secondary,
     this.onSecondaryActionOneTap,
     this.secondaryActionOneIcon = Icons.favorite_border,
     this.onSecondaryActionTwoTap,
@@ -69,8 +77,8 @@ class BottomNavigationBarAction extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BottomNavigationButton(
-            icon: primaryActionIcon,
-            type: BottomNavigationButtonType.primary,
+            icon: primaryActionIcon == Icons.add_circle_outline ? Icons.check : primaryActionIcon,
+            type: primaryActionType == BottomNavigationButtonType.secondary ? BottomNavigationButtonType.primary : primaryActionType,
             onTap: onPrimaryActionTap,
           ),
           const SizedBox(width: 10),

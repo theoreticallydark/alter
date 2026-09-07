@@ -108,11 +108,11 @@ WidgetbookFolder navigationCategory() {
             },
           ),
           WidgetbookUseCase(
-            name: 'Save Action Type',
+            name: 'Buttons Action Type',
             builder: (context) {
               return Center(
                 child: BottomNavigationBarAction(
-                  type: BottomNavigationBarActionType.save,
+                  type: BottomNavigationBarActionType.buttons,
                   primaryActionIcon: Icons.check,
                   onPrimaryActionTap: () {},
                   onSecondaryActionOneTap: () {},

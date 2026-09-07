@@ -87,6 +87,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     const TextStyle inputTextStyle = TextStyle(
       fontFamily: AlterTypography.geistFont,
+      package: AlterTypography.package,
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
       height: 28.0 / 16.0,
@@ -96,6 +97,7 @@ class _SearchState extends State<Search> {
 
     const TextStyle hintTextStyle = TextStyle(
       fontFamily: AlterTypography.geistFont,
+      package: AlterTypography.package,
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
       height: 28.0 / 16.0,

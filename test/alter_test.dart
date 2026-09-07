@@ -8,7 +8,7 @@ void main() {
     test('AlterTypography constants are defined', () {
       expect(AlterTypography.geistFont, equals('Geist'));
       expect(AlterTypography.instrumentSerifFont, equals('InstrumentSerif'));
-      expect(AlterTypography.display.fontFamily, equals('Geist'));
+      expect(AlterTypography.display.fontFamily, equals('packages/alter/Geist'));
     });
 
     test('AlterSemanticTokens are defined', () {
@@ -32,6 +32,7 @@ void main() {
             body: Center(
               child: ButtonText(
                 label: 'Click Me',
+                type: ButtonType.red,
                 onTap: () {
                   tapped = true;
                 },

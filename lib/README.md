@@ -52,15 +52,15 @@ MaterialApp(
 | Component | Version | Docs & Changelog | Widgetbook | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **`ApplicationHeader`** | `v1.0.2` | [application_header.md](file:///c:/Vayu/Alter/lib/components/application_header.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/applicationheader) | Top header with title, subtitle, composite actions, and child slot. |
-| **`AlterBottomNavigationBar`** | `v1.0.1` | [bottom_navigation_bar.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_bar.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbar) | Rounded bottom navigation bar with item list. |
-| **`BottomNavigationBarAction`** | `v1.0.2` | [bottom_navigation_bar_action.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_bar_action.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbaraction) | Action bottom bar with integrated primary action or multi-action triggers. |
+| **`AlterBottomNavigationBar`** | `v1.1.0` | [bottom_navigation_bar.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_bar.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbar) | Rounded bottom navigation bar with item list. |
+| **`BottomNavigationBarAction`** | `v1.1.0` | [bottom_navigation_bar_action.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_bar_action.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbaraction) | Action bottom bar with integrated primary action or multi-action triggers. |
 | **`BottomNavigationButton`** | `v1.0.1` | [bottom_navigation_button.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_button.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbutton) | 72x72 rounded action button. |
 | **`BottomNavigationItem`** | `v1.0.1` | [bottom_navigation_item.md](file:///c:/Vayu/Alter/lib/components/bottom_navigation/bottom_navigation_item.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationitem) | Individual selectable tab item. |
 
 ### Button Components
 | Component | Version | Docs & Changelog | Widgetbook | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **`ButtonText`** | `v1.0.1` | [button_text.md](file:///c:/Vayu/Alter/lib/components/buttons/button_text.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/buttons/buttontext) | Text button with type (`gray`, `white`, `primary`) and size variants. |
+| **`ButtonText`** | `v1.1.0` | [button_text.md](file:///c:/Vayu/Alter/lib/components/buttons/button_text.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/buttons/buttontext) | Text button with type (`gray`, `white`, `primary`, `red`) and size variants. |
 | **`ButtonIcon`** | `v1.2.0` | [button_icon.md](file:///c:/Vayu/Alter/lib/components/buttons/button_icon.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/buttons/buttonicon) | Square icon button (48x48, 64x64) with selection state. |
 | **`ButtonIconGhost`** | `v1.1.0` | [button_icon_ghost.md](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/buttons/buttoniconghost) | Ghost icon button with long press and tap gesture hooks. |
 | **`ButtonGraphicImage`** | `v1.0.1` | [button_graphic_image.md](file:///c:/Vayu/Alter/lib/components/buttons/button_graphic_image.md) | [Preview ↗](https://theoreticallydark.github.io/alter/#/buttons/buttongraphicimage) | Compact 48x48 icon container button. |

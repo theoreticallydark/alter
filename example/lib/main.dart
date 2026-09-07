@@ -32,7 +32,7 @@ class AlterWidgetbookApp extends StatelessWidget {
               name: 'Light',
               data: ThemeData(
                 brightness: Brightness.light,
-                fontFamily: AlterTypography.geistFont,
+                fontFamily: 'packages/alter/Geist',
                 scaffoldBackgroundColor: AlterSemanticTokens.baseWhite,
               ),
             ),
