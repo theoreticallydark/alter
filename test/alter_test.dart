@@ -15,6 +15,10 @@ void main() {
       expect(AlterSemanticTokens.baseWhite, equals(const Color(0xFFFFFFFF)));
       expect(AlterSemanticTokens.baseBlack, equals(AlterColors.colorsGray800));
       expect(AlterSemanticTokens.textPrimary, equals(AlterColors.black));
+      expect(AlterSemanticTokens.textWarning, equals(AlterColors.colorsOrange800));
+      expect(AlterSemanticTokens.statusDanger, equals(AlterColors.colorsRed600));
+      expect(AlterSemanticTokens.statusCaution, equals(AlterColors.colorsYellow400));
+      expect(AlterSemanticTokens.statusCautionContrast, equals(AlterColors.black));
     });
   });
 
