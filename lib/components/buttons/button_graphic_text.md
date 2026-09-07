@@ -1,6 +1,6 @@
 # ButtonGraphicText
 
-> Current Version: `v1.0.1`  
+> Current Version: `v1.0.2`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/buttons/buttongraphictext)
 
 ## Overview
@@ -25,5 +25,6 @@ ButtonGraphicText(
 ---
 
 ## Component Changelog
+* **`v1.0.2`**: Fine-tuned padding to exact Figma specification (`EdgeInsets.fromLTRB(10, 7, 10, 9)`).
 * **`v1.0.1`**: Bound container background to `AlterColors.colorsGreen900` with `AlterColors.colorsGreen500` border.
 * **`v1.0.0`**: Initial release.

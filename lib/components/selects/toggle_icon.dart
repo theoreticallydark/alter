@@ -9,50 +9,60 @@ enum ToggleIconState {
 
 class ToggleIcon extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.0';
+  /// v1.1.0: Added `icon` (default border), `selectedIcon` (filled), `isSelected` / `onSelectedChanged`, and `activeColor` following MUI convention with graceful fallback.
+  static const String version = '1.1.0';
 
-  final ToggleIconState state;
+  final bool isSelected;
+  final ToggleIconState? state;
+  final ValueChanged<bool>? onSelectedChanged;
   final ValueChanged<ToggleIconState>? onChanged;
+  final IconData icon;
+  final IconData? selectedIcon;
+  final Color? activeColor;
+  final Color? inactiveColor;
   final double size;
 
   const ToggleIcon({
     super.key,
-    this.state = ToggleIconState.unchecked,
+    this.isSelected = false,
+    this.state,
+    this.onSelectedChanged,
     this.onChanged,
+    this.icon = Icons.star_border,
+    this.selectedIcon = Icons.star,
+    this.activeColor,
+    this.inactiveColor,
     this.size = 24.0,
   });
 
+  bool get _selected => state != null ? state == ToggleIconState.checked : isSelected;
+
   Color get _iconColor {
-    switch (state) {
-      case ToggleIconState.unchecked:
-        return AlterSemanticTokens.textSecondary; // VariableID:103:9014 (gray600)
-      case ToggleIconState.checked:
-        return AlterColors.colorsPink600; // VariableID:1:194 (pink600 #E60076)
+    if (_selected) {
+      return activeColor ?? AlterColors.colorsPink600; // VariableID:1:194 (pink600 #E60076)
     }
+    return inactiveColor ?? AlterSemanticTokens.textSecondary; // VariableID:103:9014 (gray600)
   }
 
   IconData get _iconData {
-    switch (state) {
-      case ToggleIconState.unchecked:
-        return Icons.favorite_border;
-      case ToggleIconState.checked:
-        return Icons.favorite;
+    if (_selected) {
+      // Graceful fallback to `icon` if `selectedIcon` is not provided
+      return selectedIcon ?? icon;
     }
+    return icon;
   }
 
   void _handleTap() {
-    if (onChanged == null) return;
-    onChanged!(
-      state == ToggleIconState.unchecked
-          ? ToggleIconState.checked
-          : ToggleIconState.unchecked,
-    );
+    final next = !_selected;
+    onSelectedChanged?.call(next);
+    onChanged?.call(next ? ToggleIconState.checked : ToggleIconState.unchecked);
   }
 
   @override
   Widget build(BuildContext context) {
+    final isInteractive = onSelectedChanged != null || onChanged != null;
     return InkWell(
-      onTap: onChanged != null ? _handleTap : null,
+      onTap: isInteractive ? _handleTap : null,
       borderRadius: BorderRadius.circular(size / 2),
       child: SizedBox(
         width: size,

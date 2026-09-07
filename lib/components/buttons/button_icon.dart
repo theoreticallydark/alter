@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 
-enum ButtonIconType { gray, white, primary }
+enum ButtonIconType { gray, white, primary, red }
 
 class ButtonIcon extends StatelessWidget {
   /// Component version for reference.
+  /// v1.3.0: Added `ButtonIconType.red` variant matching Figma Design System.
   /// v1.2.0: Added customizable `size` (e.g. 64x64) and `iconSize` properties.
-  static const String version = '1.2.0';
+  static const String version = '1.3.0';
 
   final IconData icon;
   final ButtonIconType type;
@@ -33,11 +35,13 @@ class ButtonIcon extends StatelessWidget {
         return AlterSemanticTokens.baseWhite;
       case ButtonIconType.primary:
         return AlterSemanticTokens.baseBlack;
+      case ButtonIconType.red:
+        return AlterSemanticTokens.statusDanger;
     }
   }
 
   Color get _borderColor {
-    if (isSelected && type != ButtonIconType.primary) {
+    if (isSelected && type != ButtonIconType.primary && type != ButtonIconType.red) {
       return AlterSemanticTokens.stroke1000;
     }
     switch (type) {
@@ -46,6 +50,8 @@ class ButtonIcon extends StatelessWidget {
         return AlterSemanticTokens.stroke100;
       case ButtonIconType.primary:
         return AlterSemanticTokens.stroke1000;
+      case ButtonIconType.red:
+        return AlterColors.colorsRed800;
     }
   }
 
@@ -55,6 +61,7 @@ class ButtonIcon extends StatelessWidget {
       case ButtonIconType.white:
         return AlterSemanticTokens.textPrimary;
       case ButtonIconType.primary:
+      case ButtonIconType.red:
         return AlterSemanticTokens.textInverse;
     }
   }

@@ -7,7 +7,8 @@ import 'selects/toggle_icon.dart';
 
 class ListItem extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.0';
+  /// v1.0.1: Aligned subtitle color to `AlterSemanticTokens.textDisabled` (#99A1AF) and default right slot 2 to favorite heart toggle matching Figma node 130:4639.
+  static const String version = '1.0.1';
 
   final String title;
   final String? subtitle;
@@ -52,6 +53,8 @@ class ListItem extends StatelessWidget {
   Widget _buildRightSlotTwo() {
     return rightSlotTwo ??
         const ToggleIcon(
+          icon: Icons.favorite_border,
+          selectedIcon: Icons.favorite,
           state: ToggleIconState.unchecked,
         );
   }
@@ -95,7 +98,7 @@ class ListItem extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AlterTypography.caption.copyWith(
-                              color: AlterSemanticTokens.textSecondary,
+                              color: AlterSemanticTokens.textDisabled,
                             ),
                           ),
                         ],

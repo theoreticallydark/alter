@@ -4,15 +4,20 @@ import '../styles/typography.dart';
 import 'buttons/button_graphic_image.dart';
 import 'buttons/button_graphic_text.dart';
 import 'buttons/button_icon.dart';
+import 'buttons/button_icon_ghost.dart';
 
 class ApplicationHeader extends StatelessWidget {
   /// Component version for reference.
-  /// v1.0.1: Updated outer layout to 24px padding all around and 16px itemSpacing between headerContainer and Slot as per Figma node 119:5716.
+  /// v1.1.0: Added `hasReturnButton`, `onReturnTap`, custom action icons, and `profileImage` matching Figma node 119:5716.
   /// v1.0.2: Dynamically hug action elements with spacing only between adjacent active items, eliminating trailing space when subsequent actions are absent.
-  static const String version = '1.0.2';
+  /// v1.0.1: Updated outer layout to 24px padding all around and 16px itemSpacing between headerContainer and Slot as per Figma node 119:5716.
+  static const String version = '1.1.0';
 
   final String title;
   final String subtitle;
+
+  final bool hasReturnButton;
+  final VoidCallback? onReturnTap;
 
   final bool hasStyleButton;
   final String styleButtonTitle;
@@ -20,12 +25,15 @@ class ApplicationHeader extends StatelessWidget {
   final VoidCallback? onStyleButtonTap;
 
   final bool hasActionOne;
+  final IconData actionOneIcon;
   final VoidCallback? onActionOneTap;
 
   final bool hasActionTwo;
+  final IconData actionTwoIcon;
   final VoidCallback? onActionTwoTap;
 
   final bool hasProfileAction;
+  final ImageProvider? profileImage;
   final VoidCallback? onProfileTap;
 
   final Widget? slot;
@@ -34,15 +42,20 @@ class ApplicationHeader extends StatelessWidget {
     super.key,
     this.title = 'Alter',
     this.subtitle = 'Design System',
+    this.hasReturnButton = false,
+    this.onReturnTap,
     this.hasStyleButton = true,
     this.styleButtonTitle = 'STREAK',
     this.styleButtonSubtitle = '7 DAYS',
     this.onStyleButtonTap,
     this.hasActionOne = true,
+    this.actionOneIcon = Icons.favorite_border,
     this.onActionOneTap,
     this.hasActionTwo = false,
+    this.actionTwoIcon = Icons.favorite_border,
     this.onActionTwoTap,
     this.hasProfileAction = true,
+    this.profileImage,
     this.onProfileTap,
     this.slot,
   });
@@ -58,16 +71,19 @@ class ApplicationHeader extends StatelessWidget {
         ),
       if (hasActionTwo)
         ButtonIcon(
+          icon: actionTwoIcon,
           type: ButtonIconType.white,
           onTap: onActionTwoTap,
         ),
       if (hasActionOne)
         ButtonIcon(
+          icon: actionOneIcon,
           type: ButtonIconType.white,
           onTap: onActionOneTap,
         ),
       if (hasProfileAction)
         ButtonGraphicImage(
+          image: profileImage,
           onTap: onProfileTap,
         ),
     ];
@@ -89,11 +105,26 @@ class ApplicationHeader extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AlterTypography.h1Serif.copyWith(
-                        color: AlterSemanticTokens.textPrimary,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (hasReturnButton) ...[
+                          ButtonIconGhost(
+                            icon: Icons.arrow_back,
+                            onTap: onReturnTap,
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                        Flexible(
+                          child: Text(
+                            title,
+                            style: AlterTypography.h1Serif.copyWith(
+                              color: AlterSemanticTokens.textPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text(

@@ -4,7 +4,9 @@ import '../../styles/tokens.dart';
 
 class ButtonGraphicText extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.1';
+  /// v1.0.2: Fine-tuned padding to exact Figma specification (7px top, 9px bottom, 10px horizontal).
+  /// v1.0.1: Bound container background to `AlterColors.colorsGreen900` with `AlterColors.colorsGreen500` border.
+  static const String version = '1.0.2';
 
   final String title;
   final String subtitle;
@@ -23,7 +25,7 @@ class ButtonGraphicText extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.fromLTRB(10, 7, 10, 9),
         decoration: BoxDecoration(
           color: AlterColors.colorsGreen900,
           borderRadius: BorderRadius.circular(20),

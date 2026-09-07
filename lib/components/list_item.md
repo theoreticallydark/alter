@@ -1,6 +1,6 @@
 # ListItem
 
-> Current Version: `v1.0.0`  
+> Current Version: `v1.0.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/display/listitem)
 
 ## Overview
@@ -22,7 +22,7 @@ ListItem(
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | `String` | `'Title of the list item'` | Main label text using `AlterTypography.h2`. |
-| `subtitle` | `String?` | `'Subtitle of the list item'` | Optional secondary caption using `AlterTypography.caption`. |
+| `subtitle` | `String?` | `'Subtitle of the list item'` | Optional secondary caption using `AlterTypography.caption` with `AlterSemanticTokens.textDisabled`. |
 | `hasSubtitle` | `bool` | `true` | Visibility flag for subtitle. |
 | `hasLeftSlot` | `bool` | `true` | Shows left icon or custom slot widget. |
 | `leftSlot` | `Widget?` | `ButtonIconGhost` | Custom widget in the left position. |
@@ -35,4 +35,5 @@ ListItem(
 ---
 
 ## Component Changelog
+* **`v1.0.1`**: Aligned subtitle color to `AlterSemanticTokens.textDisabled` (`#99A1AF`) and default right slot 2 to favorite heart toggle.
 * **`v1.0.0`**: Initial release of `ListItem` with slot composition.
