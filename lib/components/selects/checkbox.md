@@ -1,7 +1,7 @@
 # Checkbox
 
 > Current Version: `v1.0.0`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/inputs/checkbox)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/selects/checkbox)
 
 ## Overview
 `Checkbox` is a tri-state selection control for Alter supporting `unchecked`, `intermediate`, and `checked` states with custom color tokens.

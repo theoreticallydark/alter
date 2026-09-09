@@ -1,7 +1,7 @@
 # ToggleIcon
 
 > Current Version: `v1.1.0`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/inputs/toggleicon)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/selects/toggleicon)
 
 ## Overview
 `ToggleIcon` is a binary toggle button (e.g. favorite heart, star rating) supporting border icon (unchecked) and filled icon (checked) following Material / MUI convention, with graceful fallback to color state when a filled variant is omitted.

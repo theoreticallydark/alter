@@ -7,6 +7,7 @@ export 'components/header/application_header.dart';
 export 'components/navigation/bottom_navigation_bar.dart';
 export 'components/navigation/bottom_navigation_bar_action.dart';
 export 'components/navigation/bottom_navigation_button.dart';
+export 'components/pills/advanced_pill.dart';
 export 'components/pills/badge.dart';
 export 'components/pills/pill.dart';
 export 'components/search/search.dart';

@@ -197,6 +197,168 @@ WidgetbookFolder pillsCategory() {
           ),
         ],
       ),
+      WidgetbookComponent(
+        name: 'AdvancedPill',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final title = context.knobs.string(
+                label: 'Title',
+                initialValue: 'Guava, 100g',
+              );
+              final subtitle = context.knobs.string(
+                label: 'Subtitle',
+                initialValue: 'ALA 20% • Zinc 10%',
+              );
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: AdvancedPillType.values,
+                labelBuilder: (t) => t.name,
+              );
+              final hasLeftSlot = context.knobs.boolean(
+                label: 'Has Left Slot',
+                initialValue: true,
+              );
+              final hasRightSlot = context.knobs.boolean(
+                label: 'Has Right Slot',
+                initialValue: false,
+              );
+
+              return Center(
+                child: AdvancedPill(
+                  title: title,
+                  subtitle: subtitle,
+                  type: type,
+                  hasLeftSlot: hasLeftSlot,
+                  leftSlot: hasLeftSlot
+                      ? ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked AdvancedPill Left Action',
+                          ),
+                        )
+                      : null,
+                  hasRightSlot: hasRightSlot,
+                  rightSlot: hasRightSlot
+                      ? ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked AdvancedPill Right Action',
+                          ),
+                        )
+                      : null,
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Matrix',
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      AdvancedPill(
+                        title: 'Guava, 100g',
+                        subtitle: 'ALA 20% • Zinc 10%',
+                        type: AdvancedPillType.gray,
+                        hasLeftSlot: true,
+                        leftSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Gray Left Action: Guava',
+                          ),
+                        ),
+                        hasRightSlot: false,
+                      ),
+                      AdvancedPill(
+                        title: 'Avocado, 150g',
+                        subtitle: 'Potassium 15% • Fiber 28%',
+                        type: AdvancedPillType.gray,
+                        hasLeftSlot: true,
+                        leftSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Gray Left Action: Avocado',
+                          ),
+                        ),
+                        hasRightSlot: true,
+                        rightSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Gray Right Action: Avocado',
+                          ),
+                        ),
+                      ),
+                      AdvancedPill(
+                        title: 'Almonds, 50g',
+                        subtitle: 'Magnesium 20% • Protein 12%',
+                        type: AdvancedPillType.white,
+                        hasLeftSlot: true,
+                        leftSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked White Left Action: Almonds',
+                          ),
+                        ),
+                        hasRightSlot: false,
+                      ),
+                      AdvancedPill(
+                        title: 'Chia Seeds, 30g',
+                        subtitle: 'Omega-3 100% • Calcium 18%',
+                        type: AdvancedPillType.white,
+                        hasLeftSlot: true,
+                        leftSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked White Left Action: Chia Seeds',
+                          ),
+                        ),
+                        hasRightSlot: true,
+                        rightSlot: ButtonIconGhost(
+                          icon: Icons.add_circle_outline,
+                          type: ButtonIconGhostType.secondary,
+                          size: 24,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked White Right Action: Chia Seeds',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     ],
   );
 }
