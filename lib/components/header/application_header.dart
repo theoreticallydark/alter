@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../styles/tokens.dart';
-import '../styles/typography.dart';
-import 'buttons/button_graphic_image.dart';
-import 'buttons/button_graphic_text.dart';
-import 'buttons/button_icon.dart';
-import 'buttons/button_icon_ghost.dart';
+import '../../styles/tokens.dart';
+import '../../styles/typography.dart';
+import '../buttons/button_graphic_image.dart';
+import '../buttons/button_graphic_text.dart';
+import '../buttons/button_icon.dart';
+import '../buttons/button_icon_ghost.dart';
 
 class ApplicationHeader extends StatelessWidget {
   /// Component version for reference.
@@ -69,17 +69,19 @@ class ApplicationHeader extends StatelessWidget {
           subtitle: styleButtonSubtitle,
           onTap: onStyleButtonTap,
         ),
-      if (hasActionTwo)
-        ButtonIcon(
-          icon: actionTwoIcon,
-          type: ButtonIconType.white,
-          onTap: onActionTwoTap,
-        ),
       if (hasActionOne)
         ButtonIcon(
           icon: actionOneIcon,
-          type: ButtonIconType.white,
+          type: ButtonIconType.gray,
+          size: 48,
           onTap: onActionOneTap,
+        ),
+      if (hasActionTwo)
+        ButtonIcon(
+          icon: actionTwoIcon,
+          type: ButtonIconType.gray,
+          size: 48,
+          onTap: onActionTwoTap,
         ),
       if (hasProfileAction)
         ButtonGraphicImage(
@@ -88,59 +90,69 @@ class ApplicationHeader extends StatelessWidget {
         ),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: AlterSemanticTokens.baseWhite,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header Row Container (Title + Subtitle on Left, Actions on Right)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Title & Subtitle Group
-              Expanded(
-                child: Column(
+              // Left Group (Return Button + Title/Subtitle)
+              Flexible(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (hasReturnButton) ...[
-                          ButtonIconGhost(
-                            icon: Icons.arrow_back,
-                            onTap: onReturnTap,
-                          ),
-                          const SizedBox(width: 6),
-                        ],
-                        Flexible(
-                          child: Text(
+                    if (hasReturnButton) ...[
+                      ButtonIconGhost(
+                        icon: Icons.chevron_left,
+                        size: 32,
+                        type: ButtonIconGhostType.primary,
+                        onTap: onReturnTap,
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    Flexible(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
                             title,
                             style: AlterTypography.h1Serif.copyWith(
                               color: AlterSemanticTokens.textPrimary,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: AlterTypography.caption.copyWith(
-                        color: AlterSemanticTokens.textSecondary,
+                          Text(
+                            subtitle,
+                            style: AlterTypography.caption.copyWith(
+                              color: AlterSemanticTokens.textSecondary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // Action Items Group (Hugging elements with gap only between active items)
-              if (actions.isNotEmpty)
+              // Right Group (Actions: dynamic hugging without trailing margin)
+              if (actions.isNotEmpty) ...[
+                const SizedBox(width: 16),
                 Row(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     for (int i = 0; i < actions.length; i++) ...[
                       if (i > 0) const SizedBox(width: 8),
@@ -148,19 +160,30 @@ class ApplicationHeader extends StatelessWidget {
                     ],
                   ],
                 ),
+              ],
             ],
           ),
 
-          // Slot Container (Animated with 16px gap above)
-          AnimatedSize(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOutCubic,
-            child: slot != null
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: slot!,
-                  )
-                : const SizedBox.shrink(),
+          // Slot Container
+          ClipRect(
+            child: AnimatedCrossFade(
+              alignment: Alignment.topCenter,
+              firstChild: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 16),
+                  slot ?? const SizedBox.shrink(),
+                ],
+              ),
+              secondChild: const SizedBox(width: double.infinity, height: 0),
+              crossFadeState: slot != null
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              duration: const Duration(milliseconds: 300),
+              firstCurve: Curves.easeInOutCubic,
+              secondCurve: Curves.easeInOutCubic,
+              sizeCurve: Curves.easeInOutCubic,
+            ),
           ),
         ],
       ),

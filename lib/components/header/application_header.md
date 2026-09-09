@@ -1,7 +1,7 @@
 # ApplicationHeader
 
 > Current Version: `v1.1.0`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/navigation/applicationheader)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/header/applicationheader)
 
 ## Overview
 `ApplicationHeader` is the standard top header component for the Alter Design System. It houses an optional return/back button, title and subtitle typography on the left, an adaptive right action group (style button, primary/secondary action buttons, profile image), and an expandable child slot below with smooth transition animations.

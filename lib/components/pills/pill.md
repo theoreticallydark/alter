@@ -1,7 +1,7 @@
 # Pill
 
 > Current Version: `v1.0.3`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/display/pill)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/pills/pill)
 
 ## Overview
 `Pill` is a multi-state badge and filter component in the Alter Design System. It supports `defaultSize` and `compact` sizing, `gray` and `neutral` color variants, selected/completed states, and smooth animated cross-fades when transitioning labels and values.

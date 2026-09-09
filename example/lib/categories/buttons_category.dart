@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
+import '../toast_helper.dart';
 
 WidgetbookFolder buttonsCategory() {
   return WidgetbookFolder(
@@ -12,23 +13,30 @@ WidgetbookFolder buttonsCategory() {
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
+              final label = context.knobs.string(
+                label: 'Label',
+                initialValue: 'Continue',
+              );
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: ButtonType.values,
+                labelBuilder: (type) => type.name,
+              );
+              final size = context.knobs.object.dropdown(
+                label: 'Size',
+                options: ButtonSize.values,
+                labelBuilder: (size) => size.name,
+              );
+
               return Center(
                 child: ButtonText(
-                  label: context.knobs.string(
-                    label: 'Label',
-                    initialValue: 'Continue',
+                  label: label,
+                  type: type,
+                  size: size,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked ButtonText: "$label" (${type.name}, ${size.name})',
                   ),
-                  type: context.knobs.object.dropdown(
-                    label: 'Type',
-                    options: ButtonType.values,
-                    labelBuilder: (type) => type.name,
-                  ),
-                  size: context.knobs.object.dropdown(
-                    label: 'Size',
-                    options: ButtonSize.values,
-                    labelBuilder: (size) => size.name,
-                  ),
-                  onTap: () {},
                 ),
               );
             },
@@ -53,7 +61,10 @@ WidgetbookFolder buttonsCategory() {
                             label: type.name.toUpperCase(),
                             type: type,
                             size: ButtonSize.normal,
-                            onTap: () {},
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Normal ButtonText: ${type.name.toUpperCase()}',
+                            ),
                           );
                         }).toList(),
                       ),
@@ -68,7 +79,10 @@ WidgetbookFolder buttonsCategory() {
                             label: '${type.name.toUpperCase()} LARGE',
                             type: type,
                             size: ButtonSize.large,
-                            onTap: () {},
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Large ButtonText: ${type.name.toUpperCase()}',
+                            ),
                           );
                         }).toList(),
                       ),
@@ -98,24 +112,30 @@ WidgetbookFolder buttonsCategory() {
                 label: 'Icon',
                 options: icons.keys.toList(),
               );
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: ButtonIconType.values,
+                labelBuilder: (type) => type.name,
+              );
+              final isSelected = context.knobs.boolean(
+                label: 'Is Selected',
+                initialValue: false,
+              );
+              final size = context.knobs.double.input(
+                label: 'Size',
+                initialValue: 48.0,
+              );
 
               return Center(
                 child: ButtonIcon(
                   icon: icons[selectedIconKey]!,
-                  type: context.knobs.object.dropdown(
-                    label: 'Type',
-                    options: ButtonIconType.values,
-                    labelBuilder: (type) => type.name,
+                  type: type,
+                  isSelected: isSelected,
+                  size: size,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked ButtonIcon: $selectedIconKey (${type.name}, size: ${size.toInt()}px)',
                   ),
-                  isSelected: context.knobs.boolean(
-                    label: 'Is Selected',
-                    initialValue: false,
-                  ),
-                  size: context.knobs.double.input(
-                    label: 'Size',
-                    initialValue: 48.0,
-                  ),
-                  onTap: () {},
                 ),
               );
             },
@@ -139,20 +159,25 @@ WidgetbookFolder buttonsCategory() {
                 label: 'Icon',
                 options: icons.keys.toList(),
               );
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: ButtonIconGhostType.values,
+                labelBuilder: (type) => type.name,
+              );
+              final size = context.knobs.double.input(
+                label: 'Size',
+                initialValue: 24.0,
+              );
 
               return Center(
                 child: ButtonIconGhost(
                   icon: icons[selectedIconKey]!,
-                  type: context.knobs.object.dropdown(
-                    label: 'Type',
-                    options: ButtonIconGhostType.values,
-                    labelBuilder: (type) => type.name,
+                  type: type,
+                  size: size,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked ButtonIconGhost: $selectedIconKey (${type.name}, size: ${size.toInt()}px)',
                   ),
-                  size: context.knobs.double.input(
-                    label: 'Size',
-                    initialValue: 24.0,
-                  ),
-                  onTap: () {},
                 ),
               );
             },
@@ -165,17 +190,23 @@ WidgetbookFolder buttonsCategory() {
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
+              final title = context.knobs.string(
+                label: 'Title',
+                initialValue: 'STREAK',
+              );
+              final subtitle = context.knobs.string(
+                label: 'Subtitle',
+                initialValue: '7 DAYS',
+              );
+
               return Center(
                 child: ButtonGraphicText(
-                  title: context.knobs.string(
-                    label: 'Title',
-                    initialValue: 'STREAK',
+                  title: title,
+                  subtitle: subtitle,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked ButtonGraphicText: "$title - $subtitle"',
                   ),
-                  subtitle: context.knobs.string(
-                    label: 'Subtitle',
-                    initialValue: '7 DAYS',
-                  ),
-                  onTap: () {},
                 ),
               );
             },
@@ -190,7 +221,10 @@ WidgetbookFolder buttonsCategory() {
             builder: (context) {
               return Center(
                 child: ButtonGraphicImage(
-                  onTap: () {},
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked ButtonGraphicImage (Profile Avatar)',
+                  ),
                 ),
               );
             },

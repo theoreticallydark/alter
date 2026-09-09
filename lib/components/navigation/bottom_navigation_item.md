@@ -1,10 +1,10 @@
 # BottomNavigationItem
 
 > Current Version: `v1.0.1`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationitem)
+> Internal sub-component for [AlterBottomNavigationBar](file:///c:/Vayu/Alter/lib/components/navigation/bottom_navigation_bar.md)
 
 ## Overview
-`BottomNavigationItem` represents a single interactive tab item inside `AlterBottomNavigationBar`. It organizes an icon and caption label vertically within a 24px rounded pill container.
+`BottomNavigationItem` is an internal sub-component representing a single tab item rendered exclusively within `AlterBottomNavigationBar`. It organizes an icon and caption label vertically within a 24px rounded pill container. It is not intended for standalone usage.
 
 ## Design Specifications
 * **Layout**: Auto Layout Column (centered, hugging content, `minWidth: 64px`).

@@ -1,68 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
+import '../toast_helper.dart';
 
 WidgetbookFolder navigationCategory() {
   return WidgetbookFolder(
     name: 'Navigation',
     children: [
-      WidgetbookComponent(
-        name: 'ApplicationHeader',
-        useCases: [
-          WidgetbookUseCase(
-            name: 'Interactive',
-            builder: (context) {
-              final showSlot = context.knobs.boolean(
-                label: 'Show Search in Slot',
-                initialValue: false,
-              );
-
-              return Align(
-                alignment: Alignment.topCenter,
-                child: ApplicationHeader(
-                  title: context.knobs.string(
-                    label: 'Title',
-                    initialValue: 'Alter',
-                  ),
-                  subtitle: context.knobs.string(
-                    label: 'Subtitle',
-                    initialValue: 'Design System',
-                  ),
-                  hasStyleButton: context.knobs.boolean(
-                    label: 'Has Streak Button',
-                    initialValue: true,
-                  ),
-                  styleButtonTitle: context.knobs.string(
-                    label: 'Streak Title',
-                    initialValue: 'STREAK',
-                  ),
-                  styleButtonSubtitle: context.knobs.string(
-                    label: 'Streak Subtitle',
-                    initialValue: '7 DAYS',
-                  ),
-                  hasActionOne: context.knobs.boolean(
-                    label: 'Has Action 1 (Search)',
-                    initialValue: true,
-                  ),
-                  hasActionTwo: context.knobs.boolean(
-                    label: 'Has Action 2',
-                    initialValue: false,
-                  ),
-                  hasProfileAction: context.knobs.boolean(
-                    label: 'Has Profile Action',
-                    initialValue: true,
-                  ),
-                  slot: showSlot
-                      ? const Search(
-                          hintText: 'Search inside header slot...',
-                        )
-                      : null,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
       WidgetbookComponent(
         name: 'BottomNavigationBar',
         useCases: [
@@ -78,7 +22,10 @@ WidgetbookFolder navigationCategory() {
               return Center(
                 child: AlterBottomNavigationBar(
                   selectedIndex: selectedIndex,
-                  onItemTapped: (index) {},
+                  onItemTapped: (index) => showExampleToast(
+                    context,
+                    'Clicked Bottom Navigation Tab $index',
+                  ),
                 ),
               );
             },
@@ -102,7 +49,14 @@ WidgetbookFolder navigationCategory() {
                   type: BottomNavigationBarActionType.defaultAction,
                   selectedIndex: selectedIndex,
                   primaryActionIcon: Icons.add,
-                  onPrimaryActionTap: () {},
+                  onPrimaryActionTap: () => showExampleToast(
+                    context,
+                    'Clicked Primary Action (Add) Button',
+                  ),
+                  onItemTapped: (index) => showExampleToast(
+                    context,
+                    'Clicked Navigation Tab $index',
+                  ),
                 ),
               );
             },
@@ -114,9 +68,48 @@ WidgetbookFolder navigationCategory() {
                 child: BottomNavigationBarAction(
                   type: BottomNavigationBarActionType.buttons,
                   primaryActionIcon: Icons.check,
-                  onPrimaryActionTap: () {},
-                  onSecondaryActionOneTap: () {},
-                  onSecondaryActionTwoTap: () {},
+                  onPrimaryActionTap: () => showExampleToast(
+                    context,
+                    'Clicked Primary Action (Check) Button',
+                  ),
+                  onSecondaryActionOneTap: () => showExampleToast(
+                    context,
+                    'Clicked Secondary Action 1 Button',
+                  ),
+                  onSecondaryActionTwoTap: () => showExampleToast(
+                    context,
+                    'Clicked Secondary Action 2 Button',
+                  ),
+                  onItemTapped: (index) => showExampleToast(
+                    context,
+                    'Clicked Navigation Tab $index',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      WidgetbookComponent(
+        name: 'BottomNavigationButton',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: BottomNavigationButtonType.values,
+                labelBuilder: (t) => t.name,
+              );
+
+              return Center(
+                child: BottomNavigationButton(
+                  icon: Icons.add,
+                  type: type,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked BottomNavigationButton (${type.name})',
+                  ),
                 ),
               );
             },

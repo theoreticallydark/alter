@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Checkbox;
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
+import '../toast_helper.dart';
 
 WidgetbookFolder inputsCategory() {
   return WidgetbookFolder(
@@ -32,6 +33,14 @@ WidgetbookFolder inputsCategory() {
                       label: 'Autofocus',
                       initialValue: false,
                     ),
+                    onTap: () => showExampleToast(
+                      context,
+                      'Tapped Search input field',
+                    ),
+                    onSubmitted: (query) => showExampleToast(
+                      context,
+                      'Submitted Search: "$query"',
+                    ),
                   ),
                 ),
               );
@@ -58,34 +67,52 @@ WidgetbookFolder inputsCategory() {
           WidgetbookUseCase(
             name: 'All States Matrix',
             builder: (context) {
-              return const Center(
+              return Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Checkbox(state: CheckboxState.unchecked),
-                        SizedBox(height: 8),
-                        Text('Unchecked', style: AlterTypography.caption),
+                        Checkbox(
+                          state: CheckboxState.unchecked,
+                          onChanged: (_) => showExampleToast(
+                            context,
+                            'Clicked Unchecked Checkbox',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Unchecked', style: AlterTypography.caption),
                       ],
                     ),
-                    SizedBox(width: 24),
+                    const SizedBox(width: 24),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Checkbox(state: CheckboxState.intermediate),
-                        SizedBox(height: 8),
-                        Text('Intermediate', style: AlterTypography.caption),
+                        Checkbox(
+                          state: CheckboxState.intermediate,
+                          onChanged: (_) => showExampleToast(
+                            context,
+                            'Clicked Intermediate Checkbox',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Intermediate', style: AlterTypography.caption),
                       ],
                     ),
-                    SizedBox(width: 24),
+                    const SizedBox(width: 24),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Checkbox(state: CheckboxState.checked),
-                        SizedBox(height: 8),
-                        Text('Checked', style: AlterTypography.caption),
+                        Checkbox(
+                          state: CheckboxState.checked,
+                          onChanged: (_) => showExampleToast(
+                            context,
+                            'Clicked Checked Checkbox',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Checked', style: AlterTypography.caption),
                       ],
                     ),
                   ],
@@ -114,25 +141,37 @@ WidgetbookFolder inputsCategory() {
           WidgetbookUseCase(
             name: 'All States Matrix',
             builder: (context) {
-              return const Center(
+              return Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ToggleIcon(state: ToggleIconState.unchecked),
-                        SizedBox(height: 8),
-                        Text('Unchecked', style: AlterTypography.caption),
+                        ToggleIcon(
+                          state: ToggleIconState.unchecked,
+                          onChanged: (_) => showExampleToast(
+                            context,
+                            'Clicked Unchecked ToggleIcon',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Unchecked', style: AlterTypography.caption),
                       ],
                     ),
-                    SizedBox(width: 24),
+                    const SizedBox(width: 24),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ToggleIcon(state: ToggleIconState.checked),
-                        SizedBox(height: 8),
-                        Text('Checked', style: AlterTypography.caption),
+                        ToggleIcon(
+                          state: ToggleIconState.checked,
+                          onChanged: (_) => showExampleToast(
+                            context,
+                            'Clicked Checked ToggleIcon',
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Checked', style: AlterTypography.caption),
                       ],
                     ),
                   ],
@@ -166,6 +205,10 @@ class _InteractiveCheckboxDemoState extends State<_InteractiveCheckboxDemo> {
         setState(() {
           _state = newState;
         });
+        showExampleToast(
+          context,
+          'Checkbox toggled to: ${newState.name.toUpperCase()}',
+        );
       },
     );
   }
@@ -191,6 +234,10 @@ class _InteractiveToggleIconDemoState extends State<_InteractiveToggleIconDemo> 
         setState(() {
           _state = newState;
         });
+        showExampleToast(
+          context,
+          'ToggleIcon changed to: ${newState.name.toUpperCase()}',
+        );
       },
     );
   }

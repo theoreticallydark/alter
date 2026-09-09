@@ -3,10 +3,12 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 
 import 'categories/buttons_category.dart';
-import 'categories/display_category.dart';
 import 'categories/foundations_category.dart';
+import 'categories/header_category.dart';
 import 'categories/inputs_category.dart';
 import 'categories/navigation_category.dart';
+import 'categories/pills_category.dart';
+import 'categories/utilities_category.dart';
 
 void main() {
   runApp(const AlterWidgetbookApp());
@@ -21,9 +23,11 @@ class AlterWidgetbookApp extends StatelessWidget {
       directories: [
         foundationsCategory(),
         buttonsCategory(),
+        headerCategory(),
         navigationCategory(),
         inputsCategory(),
-        displayCategory(),
+        pillsCategory(),
+        utilitiesCategory(),
       ],
       addons: [
         MaterialThemeAddon(

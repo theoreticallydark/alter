@@ -1,7 +1,7 @@
 # ListItem
 
 > Current Version: `v1.0.1`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/display/listitem)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/utilities/listitem)
 
 ## Overview
 `ListItem` provides a structured, responsive row component featuring left leading slot, title and optional subtitle, and dual configurable right action slots (e.g. checkbox and toggle icon).

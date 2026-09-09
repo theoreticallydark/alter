@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide Checkbox;
-import '../styles/tokens.dart';
-import '../styles/typography.dart';
-import 'buttons/button_icon_ghost.dart';
-import 'selects/checkbox.dart';
-import 'selects/toggle_icon.dart';
+import '../../styles/tokens.dart';
+import '../../styles/typography.dart';
+import '../buttons/button_icon_ghost.dart';
+import '../selects/checkbox.dart';
+import '../selects/toggle_icon.dart';
 
 class ListItem extends StatelessWidget {
   /// Component version for reference.
