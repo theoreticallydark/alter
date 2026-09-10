@@ -364,6 +364,158 @@ WidgetbookFolder selectsCategory() {
           ),
         ],
       ),
+      WidgetbookComponent(
+        name: 'ToggleText',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive State',
+            builder: (context) {
+              final label = context.knobs.string(
+                label: 'Label',
+                initialValue: 'Male',
+              );
+              final hasIcon = context.knobs.boolean(
+                label: 'Has Icon',
+                initialValue: true,
+              );
+              final type = context.knobs.object.dropdown(
+                label: 'Type',
+                options: ToggleTextType.values,
+                labelBuilder: (t) => t.name,
+                initialOption: ToggleTextType.gray,
+              );
+
+              return Center(
+                child: _InteractiveToggleTextDemo(
+                  label: label,
+                  hasIcon: hasIcon,
+                  type: type,
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Matrix',
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Gray Variant (Default vs Selected)',
+                        style: AlterTypography.captionBold.copyWith(
+                          color: AlterSemanticTokens.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ToggleText(
+                            label: 'Male',
+                            type: ToggleTextType.gray,
+                            isSelected: false,
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Default Gray ToggleText',
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          ToggleText(
+                            label: 'Male',
+                            type: ToggleTextType.gray,
+                            isSelected: true,
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Selected Gray ToggleText',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32),
+                      Text(
+                        'White Variant (Default vs Selected)',
+                        style: AlterTypography.captionBold.copyWith(
+                          color: AlterSemanticTokens.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AlterSemanticTokens.baseGray,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ToggleText(
+                              label: 'Female',
+                              type: ToggleTextType.white,
+                              isSelected: false,
+                              onTap: () => showExampleToast(
+                                context,
+                                'Clicked Default White ToggleText',
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            ToggleText(
+                              label: 'Female',
+                              type: ToggleTextType.white,
+                              isSelected: true,
+                              onTap: () => showExampleToast(
+                                context,
+                                'Clicked Selected White ToggleText',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Text(
+                        'Without Icon (hasIcon: false)',
+                        style: AlterTypography.captionBold.copyWith(
+                          color: AlterSemanticTokens.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ToggleText(
+                            label: 'Option A',
+                            hasIcon: false,
+                            type: ToggleTextType.gray,
+                            isSelected: false,
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Default Option A',
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          ToggleText(
+                            label: 'Option B',
+                            hasIcon: false,
+                            type: ToggleTextType.gray,
+                            isSelected: true,
+                            onTap: () => showExampleToast(
+                              context,
+                              'Clicked Selected Option B',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     ],
   );
 }
@@ -533,6 +685,42 @@ class _InteractiveToggleIconDemoState extends State<_InteractiveToggleIconDemo> 
         showExampleToast(
           context,
           'ToggleIcon changed to: ${newState.name.toUpperCase()}',
+        );
+      },
+    );
+  }
+}
+
+class _InteractiveToggleTextDemo extends StatefulWidget {
+  final String label;
+  final bool hasIcon;
+  final ToggleTextType type;
+
+  const _InteractiveToggleTextDemo({
+    required this.label,
+    required this.hasIcon,
+    required this.type,
+  });
+
+  @override
+  State<_InteractiveToggleTextDemo> createState() => _InteractiveToggleTextDemoState();
+}
+
+class _InteractiveToggleTextDemoState extends State<_InteractiveToggleTextDemo> {
+  bool _isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ToggleText(
+      label: widget.label,
+      hasIcon: widget.hasIcon,
+      type: widget.type,
+      isSelected: _isSelected,
+      onChanged: (val) {
+        setState(() => _isSelected = val);
+        showExampleToast(
+          context,
+          'ToggleText toggled: ${_isSelected ? "SELECTED" : "DEFAULT"} ("${widget.label}")',
         );
       },
     );
