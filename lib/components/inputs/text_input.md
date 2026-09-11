@@ -1,6 +1,6 @@
 # TextInput
 
-> Current Version: `v1.4.0`  
+> Current Version: `v1.5.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/inputs/textinput)
 
 ## Overview
@@ -98,12 +98,17 @@ TextInput(
 | `autocorrect` | `bool?` | `null` | Enables/disables autocorrect. |
 | `enableSuggestions` | `bool?` | `null` | Enables/disables predictive suggestions. |
 | `autofillHints` | `Iterable<String>?` | `null` | Autofill hints for native credentials. |
+| `isRequired` | `bool` | `false` | Marks field as required; appends asterisk (`*`) matching label color and triggers error when empty. |
+| `autoValidateRules` | `bool` | `true` | Automatically runs built-in format & required validation. |
+| `requiredErrorText` | `String?` | `null` | Custom error message for required rule. |
+| `emailErrorText` | `String?` | `null` | Custom error message for invalid email format. |
+| `phoneErrorText` | `String?` | `null` | Custom error message for invalid phone format. |
 | `isError` | `bool` | `false` | Triggers error state with red border `#E7000B`. |
 | `hasFeedback` | `bool` | `true` | Controls whether [FeedbackText] is rendered in error state. |
 | `errorText` | `String?` | `'Feedback Text'` | Error message displayed in [FeedbackText]. |
 | `enabled` | `bool` | `true` | Enabled state; rendered at **48% opacity** when disabled. |
 | `readOnly` | `bool` | `false` | Read-only state (1px `textDisabled` `#99A1AF` border, non-editable). |
-| `validator` | `FormFieldValidator<String>?` | `null` | Form validation function; registers with Flutter's `Form` (`FormState.validate()`). |
+| `validator` | `FormFieldValidator<String>?` | `null` | Custom form validation function; takes precedence over built-in rules. |
 | `onSaved` | `FormFieldSetter<String>?` | `null` | Form save function; registers with Flutter's `Form` (`FormState.save()`). |
 | `autovalidateMode` | `AutovalidateMode?` | `null` | Native form autovalidate mode. |
 | `onChanged` | `ValueChanged<String>?` | `null` | Callback emitted on text change. |
@@ -132,12 +137,16 @@ TextInput(
   - Input Text & Suffix: `Body/body-lg` -> `AlterTypography.bodyLg` (Geist 16px, Regular 400).
   - Placeholder: `AlterTypography.bodyLg` (`#4A5565`).
 - **Child Components Reused**:
+  - `InputContainer` for box layout, borders, and top label bar.
   - `ButtonIconGhost` (`size: 24`, `type: ButtonIconGhostType.secondary`) for `.rightSlot` clear action.
   - `FeedbackText` (`status: FeedbackTextStatus.danger`) for error message.
 
 ---
 
 ## Component Changelog
+* **`v1.5.1`**: Passed `isRequired` to `InputContainer` to render red label asterisk (`*`).
+* **`v1.5.0`**: Added smart built-in validation engine for `isRequired`, email, phone, and customizable error texts.
+* **`v1.4.1`**: Refactored to compose shared `InputContainer` for visual styling, border states, and label bar.
 * **`v1.4.0`**: Separated password logic into dedicated `PasswordInput` (`components/inputs/password_input.dart`); trimmed `isPassword` and `obscuringCharacter` from `TextInput`.
 * **`v1.3.1`**: Standardized naming to `showCharacterLimit` and replaced word limit with character limit across all documentation and comments.
 * **`v1.3.0`**: Added native `FormField<String>` registration (enabling `FormState.validate()` and `FormState.save()`), `onEditingComplete`, and `obscuringCharacter`.

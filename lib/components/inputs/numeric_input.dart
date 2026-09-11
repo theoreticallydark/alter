@@ -170,14 +170,6 @@ class _NumericTextInputFormatter extends TextInputFormatter {
       allowNegative: allowNegative,
     );
 
-    // Max value boundary check
-    if (maxValue != null) {
-      final parsed = NumericFormatterUtils.parse(formatted);
-      if (parsed != null && parsed > maxValue!) {
-        return oldValue;
-      }
-    }
-
     // Recompute cursor position based on raw non-comma characters
     int newSelectionIndex = 0;
     int rawCount = 0;
@@ -204,14 +196,17 @@ class _NumericTextInputFormatter extends TextInputFormatter {
 ///
 /// Encapsulates:
 /// - Comma Grouping: [NumberGroupingSystem.international] (`100,000`), [NumberGroupingSystem.indian] (`1,00,000`), or [NumberGroupingSystem.none]
-/// - Number Precision: Decimals ([allowDecimals], [decimalPlaces]), Signed ([allowNegative])
-/// - Bounds & Limits: [minValue], [maxValue], [clampOnUnfocus], [characterLimit]
+/// - Number Precision: Decimals ([allowDecimals], [decimalPlaces]), Signed (auto-derived from [minValue] < 0)
+/// - Smart Range & Bounds Validation: [minValue], [maxValue], [isRequired] with customizable error messages
 /// - Leading Icons (e.g. `Icons.currency_rupee`, `Icons.attach_money`) and Suffixes (`kg`, `%`, `hrs`)
 /// - Integrated with [InputContainer] for design system box styling and token parity.
 class NumericInput extends StatefulWidget {
   /// Component version for reference.
+  /// v1.2.1: Robust initialValue dynamic sync in didUpdateWidget.
+  /// v1.2.0: Removed redundant allowNegative (auto-derived from minValue < 0) and character limit properties; passed isRequired to InputContainer.
+  /// v1.1.0: Added smart numeric range & required validation engine with custom error text overrides.
   /// v1.0.0: Initial release of dedicated NumericInput component.
-  static const String version = '1.0.0';
+  static const String version = '1.2.1';
 
   final String? label;
   final bool hasLabelBar;
@@ -226,15 +221,18 @@ class NumericInput extends StatefulWidget {
   final NumberGroupingSystem groupingSystem;
   final bool allowDecimals;
   final int? decimalPlaces;
-  final bool allowNegative;
 
-  // Limits & Bounds
+  // Limits & Smart Bounds Validation
+  final bool isRequired;
+  final bool autoValidateRules;
   final num? minValue;
   final num? maxValue;
   final bool clampOnUnfocus;
-  final bool hasCharacterLimit;
-  final int? characterLimit;
-  final bool showCharacterLimit;
+
+  // Custom Error Text Overrides
+  final String? requiredErrorText;
+  final String? minErrorText;
+  final String? maxErrorText;
 
   // Leading Slot (Currency / Icon)
   final bool hasIcon;
@@ -278,13 +276,14 @@ class NumericInput extends StatefulWidget {
     this.groupingSystem = NumberGroupingSystem.international,
     this.allowDecimals = true,
     this.decimalPlaces,
-    this.allowNegative = false,
+    this.isRequired = false,
+    this.autoValidateRules = true,
     this.minValue,
     this.maxValue,
     this.clampOnUnfocus = false,
-    this.hasCharacterLimit = false,
-    this.characterLimit,
-    this.showCharacterLimit = true,
+    this.requiredErrorText,
+    this.minErrorText,
+    this.maxErrorText,
     this.hasIcon = false,
     this.icon,
     this.leadingWidget,
@@ -320,6 +319,8 @@ class _NumericInputState extends State<NumericInput> {
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
+  bool get _allowNegative => widget.minValue == null || widget.minValue! < 0;
+
   String _formatInitial(num? val) {
     if (val == null) return '';
     return NumericFormatterUtils.formatNumberString(
@@ -327,7 +328,7 @@ class _NumericInputState extends State<NumericInput> {
       groupingSystem: widget.groupingSystem,
       allowDecimals: widget.allowDecimals,
       decimalPlaces: widget.decimalPlaces,
-      allowNegative: widget.allowNegative,
+      allowNegative: _allowNegative,
     );
   }
 
@@ -366,10 +367,11 @@ class _NumericInputState extends State<NumericInput> {
       }
       _controller.addListener(_onTextChanged);
     } else if (widget.controller == null &&
-        oldWidget.initialValue != widget.initialValue &&
-        widget.initialValue != null) {
+        oldWidget.initialValue != widget.initialValue) {
       final formatted = _formatInitial(widget.initialValue);
-      if (_controller.text.isEmpty || _controller.text == _formatInitial(oldWidget.initialValue)) {
+      if (_controller.text.isEmpty ||
+          _controller.text == _formatInitial(oldWidget.initialValue) ||
+          widget.initialValue == null) {
         _controller.text = formatted;
       }
     }
@@ -436,7 +438,7 @@ class _NumericInputState extends State<NumericInput> {
         groupingSystem: widget.groupingSystem,
         allowDecimals: widget.allowDecimals,
         decimalPlaces: widget.decimalPlaces,
-        allowNegative: widget.allowNegative,
+        allowNegative: _allowNegative,
       );
       _controller.text = formatted;
       widget.onChanged?.call(formatted);
@@ -444,70 +446,74 @@ class _NumericInputState extends State<NumericInput> {
     }
   }
 
+  String? _evaluateBuiltInValidation(String? value) {
+    if (!widget.autoValidateRules) {
+      return null;
+    }
+
+    final text = value ?? '';
+
+    // Required check
+    if (widget.isRequired && text.trim().isEmpty) {
+      return widget.requiredErrorText ?? 'This field is required';
+    }
+
+    if (text.trim().isNotEmpty) {
+      final parsed = NumericFormatterUtils.parse(text);
+      if (parsed != null) {
+        // Min Value check
+        if (widget.minValue != null && parsed < widget.minValue!) {
+          return widget.minErrorText ??
+              'Value cannot be less than ${widget.minValue}';
+        }
+        // Max Value check
+        if (widget.maxValue != null && parsed > widget.maxValue!) {
+          return widget.maxErrorText ??
+              'Value cannot exceed ${widget.maxValue}';
+        }
+      }
+    }
+
+    return null;
+  }
+
   bool _computeIsError(String? formError) {
-    if (widget.isError || (formError != null && formError.isNotEmpty)) {
-      return true;
-    }
-    // Check min/max bounds if not clamping on blur
-    final parsed = NumericFormatterUtils.parse(_controller.text);
-    if (parsed != null) {
-      if (widget.minValue != null && parsed < widget.minValue!) {
-        return true;
-      }
-      if (widget.maxValue != null && parsed > widget.maxValue!) {
-        return true;
-      }
-    }
-    return false;
+    if (widget.isError) return true;
+    if (formError != null && formError.isNotEmpty) return true;
+    final builtInError = _evaluateBuiltInValidation(_controller.text);
+    return builtInError != null && builtInError.isNotEmpty;
   }
 
   String? _computeErrorText(String? formError) {
     if (formError != null && formError.isNotEmpty) {
       return formError;
     }
-    final parsed = NumericFormatterUtils.parse(_controller.text);
-    if (parsed != null) {
-      if (widget.minValue != null && parsed < widget.minValue!) {
-        return 'Minimum value is ${widget.minValue}';
-      }
-      if (widget.maxValue != null && parsed > widget.maxValue!) {
-        return 'Maximum value is ${widget.maxValue}';
-      }
+    final builtInError = _evaluateBuiltInValidation(_controller.text);
+    if (builtInError != null && builtInError.isNotEmpty) {
+      return builtInError;
     }
     return widget.errorText;
   }
 
   List<TextInputFormatter> get _inputFormatters {
-    final formatters = <TextInputFormatter>[];
-
-    // Character Limit enforcement
-    if (widget.hasCharacterLimit &&
-        widget.characterLimit != null &&
-        widget.characterLimit! > 0) {
-      formatters.add(LengthLimitingTextInputFormatter(widget.characterLimit));
-    }
-
-    // Number grouping & decimal precision formatter
-    formatters.add(
+    return [
       _NumericTextInputFormatter(
         groupingSystem: widget.groupingSystem,
         allowDecimals: widget.allowDecimals,
         decimalPlaces: widget.decimalPlaces,
-        allowNegative: widget.allowNegative,
-        maxValue: widget.maxValue,
+        allowNegative: _allowNegative,
+        maxValue: widget.clampOnUnfocus ? null : widget.maxValue,
       ),
-    );
-
-    return formatters;
+    ];
   }
 
   TextInputType get _keyboardType {
-    if (!widget.allowDecimals && !widget.allowNegative) {
+    if (!widget.allowDecimals && !_allowNegative) {
       return TextInputType.number;
     }
     return TextInputType.numberWithOptions(
       decimal: widget.allowDecimals,
-      signed: widget.allowNegative,
+      signed: _allowNegative,
     );
   }
 
@@ -614,9 +620,7 @@ class _NumericInputState extends State<NumericInput> {
     return InputContainer(
       label: widget.label,
       hasLabelBar: widget.hasLabelBar,
-      hasCharacterLimit: widget.hasCharacterLimit,
-      characterLimit: widget.characterLimit,
-      showCharacterLimit: widget.showCharacterLimit,
+      isRequired: widget.isRequired,
       currentLength: _controller.text.length,
       type: widget.type,
       isError: isError,
@@ -667,14 +671,22 @@ class _NumericInputState extends State<NumericInput> {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveValidator = widget.validator ?? _evaluateBuiltInValidation;
+
     if (widget.validator != null ||
         widget.onSaved != null ||
-        widget.autovalidateMode != null) {
+        widget.autovalidateMode != null ||
+        widget.isRequired ||
+        widget.minValue != null ||
+        widget.maxValue != null) {
       return FormField<String>(
         initialValue: _controller.text,
-        validator: widget.validator,
+        validator: effectiveValidator,
         onSaved: widget.onSaved,
-        autovalidateMode: widget.autovalidateMode,
+        autovalidateMode: widget.autovalidateMode ??
+            (widget.autoValidateRules
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled),
         builder: (FormFieldState<String> state) {
           _formFieldState = state;
           return _buildFieldContent(state.errorText);

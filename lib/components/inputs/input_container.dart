@@ -18,13 +18,16 @@ import 'text_input.dart';
 /// - Child layout: Row with optional leading widget, core input [child], and trailing right slot.
 class InputContainer extends StatelessWidget {
   /// Component version for reference.
+  /// v1.0.3: Render required asterisk in the same color as the label (AlterSemanticTokens.textSecondary).
+  /// v1.0.2: Added isRequired support rendering an asterisk on label.
   /// v1.0.1: Updated readOnly border token reference to AlterSemanticTokens.textDisabled (#99A1AF).
   /// v1.0.0: Initial release of shared InputContainer.
-  static const String version = '1.0.1';
+  static const String version = '1.0.3';
 
   // Top Label Bar (labelBarContainer)
   final String? label;
   final bool hasLabelBar;
+  final bool isRequired;
   final bool hasCharacterLimit;
   final int? characterLimit;
   final bool showCharacterLimit;
@@ -51,6 +54,7 @@ class InputContainer extends StatelessWidget {
     super.key,
     this.label,
     this.hasLabelBar = true,
+    this.isRequired = false,
     this.hasCharacterLimit = false,
     this.characterLimit,
     this.showCharacterLimit = true,
@@ -119,7 +123,7 @@ class InputContainer extends StatelessWidget {
           if (hasLabelText)
             Expanded(
               child: Text(
-                label!,
+                isRequired ? '$label *' : label!,
                 style: AlterTypography.body.copyWith(
                   color: AlterSemanticTokens.textSecondary,
                 ),

@@ -223,6 +223,10 @@ WidgetbookFolder inputsCategory() {
                 label: 'Show Character Limit',
                 initialValue: true,
               );
+              final isRequired = context.knobs.boolean(
+                label: 'Is Required',
+                initialValue: false,
+              );
               final isError = context.knobs.boolean(
                 label: 'Is Error',
                 initialValue: false,
@@ -268,6 +272,7 @@ WidgetbookFolder inputsCategory() {
                       hasCharacterLimit: hasCharacterLimit,
                       characterLimit: characterLimit,
                       showCharacterLimit: showCharacterLimit,
+                      isRequired: isRequired,
                       isError: isError,
                       hasFeedback: hasFeedback,
                       errorText: errorText,
@@ -496,6 +501,26 @@ WidgetbookFolder inputsCategory() {
                 label: 'Show Character Limit',
                 initialValue: true,
               );
+              final isRequired = context.knobs.boolean(
+                label: 'Is Required',
+                initialValue: false,
+              );
+              final minLength = context.knobs.intOrNull.input(
+                label: 'Min Length',
+                initialValue: 8,
+              );
+              final requireSpecialChar = context.knobs.boolean(
+                label: 'Require Special Char',
+                initialValue: true,
+              );
+              final requireUppercase = context.knobs.boolean(
+                label: 'Require Uppercase',
+                initialValue: false,
+              );
+              final requireDigit = context.knobs.boolean(
+                label: 'Require Digit',
+                initialValue: false,
+              );
               final isError = context.knobs.boolean(
                 label: 'Is Error',
                 initialValue: false,
@@ -533,9 +558,14 @@ WidgetbookFolder inputsCategory() {
                       placeholder: placeholder,
                       initialValue: initialValue,
                       type: type,
+                      isRequired: isRequired,
                       hasCharacterLimit: hasCharacterLimit,
                       characterLimit: characterLimit,
                       showCharacterLimit: showCharacterLimit,
+                      minLength: minLength,
+                      requireSpecialChar: requireSpecialChar,
+                      requireUppercase: requireUppercase,
+                      requireDigit: requireDigit,
                       isError: isError,
                       hasFeedback: hasFeedback,
                       errorText: errorText,
@@ -702,6 +732,13 @@ WidgetbookFolder inputsCategory() {
                 label: 'Placeholder',
                 initialValue: '0.00',
               );
+              final initialValueStr = context.knobs.stringOrNull(
+                label: 'Initial Value',
+                initialValue: '500000',
+              );
+              final initialValue = initialValueStr != null
+                  ? num.tryParse(initialValueStr.replaceAll(',', '').trim())
+                  : null;
               final type = context.knobs.object.dropdown(
                 label: 'Variant',
                 options: TextInputVariant.values,
@@ -722,10 +759,6 @@ WidgetbookFolder inputsCategory() {
                 label: 'Decimal Places',
                 initialValue: 2,
               );
-              final allowNegative = context.knobs.boolean(
-                label: 'Allow Negative',
-                initialValue: false,
-              );
               final hasIcon = context.knobs.boolean(
                 label: 'Has Leading Icon',
                 initialValue: true,
@@ -743,24 +776,16 @@ WidgetbookFolder inputsCategory() {
                 initialValue: true,
               );
               final minValue = context.knobs.intOrNull.input(
-                label: 'Min Value',
+                label: 'Min Value (negative allows - sign)',
                 initialValue: null,
               );
               final maxValue = context.knobs.intOrNull.input(
                 label: 'Max Value',
                 initialValue: 10000000,
               );
-              final hasCharacterLimit = context.knobs.boolean(
-                label: 'Has Character Limit',
+              final isRequired = context.knobs.boolean(
+                label: 'Is Required',
                 initialValue: false,
-              );
-              final characterLimit = context.knobs.int.input(
-                label: 'Character Limit',
-                initialValue: 15,
-              );
-              final showCharacterLimit = context.knobs.boolean(
-                label: 'Show Character Limit',
-                initialValue: true,
               );
               final isError = context.knobs.boolean(
                 label: 'Is Error',
@@ -789,20 +814,18 @@ WidgetbookFolder inputsCategory() {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 378),
                     child: NumericInput(
-                      key: ValueKey('num_${type.name}_${groupingSystem.name}_$readOnly'),
+                      key: ValueKey('num_${type.name}_${groupingSystem.name}_${readOnly}_${initialValueStr}_$allowDecimals'),
                       label: label,
                       hasLabelBar: hasLabelBar,
                       placeholder: placeholder,
+                      initialValue: initialValue,
                       type: type,
                       groupingSystem: groupingSystem,
                       allowDecimals: allowDecimals,
                       decimalPlaces: decimalPlaces > 0 ? decimalPlaces : null,
-                      allowNegative: allowNegative,
                       minValue: minValue,
                       maxValue: maxValue,
-                      hasCharacterLimit: hasCharacterLimit,
-                      characterLimit: characterLimit,
-                      showCharacterLimit: showCharacterLimit,
+                      isRequired: isRequired,
                       hasIcon: hasIcon,
                       icon: groupingSystem == NumberGroupingSystem.indian
                           ? Icons.currency_rupee

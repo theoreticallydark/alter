@@ -29,10 +29,10 @@ enum TextInputMode {
   /// Allows decimal numbers ([0-9.]) with decimal keyboard.
   decimal,
 
-  /// Email address input with email keyboard layout.
+  /// Email address input with email keyboard layout and built-in email format validation.
   email,
 
-  /// Phone number input with dial pad keyboard.
+  /// Phone number input with dial pad keyboard and built-in phone number validation.
   phone,
 }
 
@@ -48,15 +48,13 @@ enum TextInputMode {
 ///   - `state=ReadOnly`: Border 1px `textDisabled` (`#99A1AF`), non-editable
 ///   - `state=Disabled`: 48% opacity, disabled interaction
 ///   - `state=Error`: Border 1px `textDanger` (`#E7000B`), optional [FeedbackText]
-/// - Structure & Layout:
-///   - Composes [InputContainer] for container dimensions, borders, label bar, and feedback.
-///   - `.rightSlot` (`454:482`): Mutually exclusive slot supporting `type=Suffix` or `type=Clear`.
-/// - Child Components Reused:
-///   - [InputContainer] for box layout & styling
-///   - [ButtonIconGhost] for clear input
-///   - [FeedbackText] for error message banner
+/// - Smart Validation Engine:
+///   - Built-in validation for [isRequired], email format, phone format, and character limit.
+///   - Full developer customization via custom error message strings or explicit [validator].
 class TextInput extends StatefulWidget {
   /// Component version for reference.
+  /// v1.5.1: Pass isRequired to InputContainer to render required asterisk in label bar.
+  /// v1.5.0: Added smart built-in validation engine for isRequired, email, phone, and customizable error texts.
   /// v1.4.1: Refactored to compose shared InputContainer for visual styling, border states, and label bar.
   /// v1.4.0: Extracted password logic into dedicated PasswordInput component (lib/components/inputs/password_input.dart).
   /// v1.3.1: Standardized naming to showCharacterLimit and replaced word limit with character limit across all documentation and comments.
@@ -71,7 +69,7 @@ class TextInput extends StatefulWidget {
   /// v1.0.2: Updated leading icon and suffix color to textPrimary in typing, filled, read-only, and error states.
   /// v1.0.1: Disabled clear button in password mode; verified read-only and token colors against Figma.
   /// v1.0.0: Initial release matching Figma Node 441:9205.
-  static const String version = '1.4.1';
+  static const String version = '1.5.1';
 
   final String? label;
   final bool hasLabelBar;
@@ -106,7 +104,12 @@ class TextInput extends StatefulWidget {
   final int? characterLimit;
   final bool showCharacterLimit;
 
-  // Error & Feedback
+  // Smart Validation & Error
+  final bool isRequired;
+  final bool autoValidateRules;
+  final String? requiredErrorText;
+  final String? emailErrorText;
+  final String? phoneErrorText;
   final bool isError;
   final bool hasFeedback;
   final String? errorText;
@@ -147,6 +150,11 @@ class TextInput extends StatefulWidget {
     this.hasCharacterLimit = false,
     this.characterLimit,
     this.showCharacterLimit = true,
+    this.isRequired = false,
+    this.autoValidateRules = true,
+    this.requiredErrorText,
+    this.emailErrorText,
+    this.phoneErrorText,
     this.isError = false,
     this.hasFeedback = true,
     this.errorText = 'Feedback Text',
@@ -173,6 +181,10 @@ class _TextInputState extends State<TextInput> {
   TextEditingController get _controller =>
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
+
+  static final RegExp _emailRegExp = RegExp(
+    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$',
+  );
 
   @override
   void initState() {
@@ -253,13 +265,52 @@ class _TextInputState extends State<TextInput> {
     setState(() {});
   }
 
+  String? _evaluateBuiltInValidation(String? value) {
+    if (!widget.autoValidateRules) {
+      return null;
+    }
+
+    final text = value ?? '';
+
+    // Required check
+    if (widget.isRequired && text.trim().isEmpty) {
+      return widget.requiredErrorText ?? 'This field is required';
+    }
+
+    if (text.trim().isNotEmpty) {
+      // Email check
+      if (widget.inputMode == TextInputMode.email) {
+        if (!_emailRegExp.hasMatch(text.trim())) {
+          return widget.emailErrorText ?? 'Please enter a valid email address';
+        }
+      }
+
+      // Phone check
+      if (widget.inputMode == TextInputMode.phone) {
+        final digits = text.replaceAll(RegExp(r'\D'), '');
+        if (digits.length < 7) {
+          return widget.phoneErrorText ?? 'Please enter a valid phone number';
+        }
+      }
+    }
+
+    return null;
+  }
+
   bool _computeIsError(String? formError) {
-    return widget.isError || (formError != null && formError.isNotEmpty);
+    if (widget.isError) return true;
+    if (formError != null && formError.isNotEmpty) return true;
+    final builtInError = _evaluateBuiltInValidation(_controller.text);
+    return builtInError != null && builtInError.isNotEmpty;
   }
 
   String? _computeErrorText(String? formError) {
     if (formError != null && formError.isNotEmpty) {
       return formError;
+    }
+    final builtInError = _evaluateBuiltInValidation(_controller.text);
+    if (builtInError != null && builtInError.isNotEmpty) {
+      return builtInError;
     }
     return widget.errorText;
   }
@@ -436,6 +487,7 @@ class _TextInputState extends State<TextInput> {
     return InputContainer(
       label: widget.label,
       hasLabelBar: widget.hasLabelBar,
+      isRequired: widget.isRequired,
       hasCharacterLimit: widget.hasCharacterLimit,
       characterLimit: widget.characterLimit,
       showCharacterLimit: widget.showCharacterLimit,
@@ -490,14 +542,23 @@ class _TextInputState extends State<TextInput> {
 
   @override
   Widget build(BuildContext context) {
+    // Custom validator or Form integration
+    final effectiveValidator = widget.validator ?? _evaluateBuiltInValidation;
+
     if (widget.validator != null ||
         widget.onSaved != null ||
-        widget.autovalidateMode != null) {
+        widget.autovalidateMode != null ||
+        widget.isRequired ||
+        widget.inputMode == TextInputMode.email ||
+        widget.inputMode == TextInputMode.phone) {
       return FormField<String>(
         initialValue: _controller.text,
-        validator: widget.validator,
+        validator: effectiveValidator,
         onSaved: widget.onSaved,
-        autovalidateMode: widget.autovalidateMode,
+        autovalidateMode: widget.autovalidateMode ??
+            (widget.autoValidateRules
+                ? AutovalidateMode.onUserInteraction
+                : AutovalidateMode.disabled),
         builder: (FormFieldState<String> state) {
           _formFieldState = state;
           return _buildFieldContent(state.errorText);
