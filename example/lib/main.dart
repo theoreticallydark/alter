@@ -5,6 +5,7 @@ import 'package:alter/alter.dart';
 import 'categories/buttons_category.dart';
 import 'categories/foundations_category.dart';
 import 'categories/header_category.dart';
+import 'categories/input_category.dart';
 import 'categories/inputs_category.dart';
 import 'categories/navigation_category.dart';
 import 'categories/pills_category.dart';
@@ -28,6 +29,7 @@ class AlterWidgetbookApp extends StatelessWidget {
         buttonsCategory(),
         headerCategory(),
         navigationCategory(),
+        inputCategory(),
         inputsCategory(),
         selectsCategory(),
         pillsCategory(),

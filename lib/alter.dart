@@ -4,6 +4,7 @@ export 'components/buttons/button_icon.dart';
 export 'components/buttons/button_icon_ghost.dart';
 export 'components/buttons/button_text.dart';
 export 'components/header/application_header.dart';
+export 'components/input/input_control.dart';
 export 'components/inputs/numeric_input.dart';
 export 'components/inputs/password_input.dart';
 export 'components/inputs/search.dart';
