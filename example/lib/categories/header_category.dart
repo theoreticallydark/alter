@@ -81,8 +81,8 @@ WidgetbookFolder headerCategory() {
                     'Clicked Header Profile Avatar',
                   ),
                   slot: showSlot
-                      ? Search(
-                          hintText: 'Search inside header slot...',
+                      ? SearchInput(
+                          placeholder: 'Search inside header slot...',
                           onTap: () => showExampleToast(
                             context,
                             'Tapped Header Slot Search',

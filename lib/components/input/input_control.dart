@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
+import '../buttons/button_icon_ghost.dart';
 
 /// Surface variant types for [InputControl] as defined in Figma Node `470:436`.
 enum InputControlType {
@@ -11,63 +13,42 @@ enum InputControlType {
   white,
 }
 
-/// Visual status variants for [InputControl] matching Figma Node `470:436`.
-enum InputControlStatus {
-  /// Default empty state with placeholder styling.
-  default_,
-
-  /// Active / Selected / Focused state with black border (`stroke1000`).
-  selected,
-
-  /// Populated / Filled state with primary text styling.
-  filled,
-
-  /// Readonly state with gray text (`textSecondary`) and `textDisabled` border.
-  readonly,
-
-  /// Disabled state rendered at 48% opacity.
-  disabled,
-}
-
 /// A highly configurable, multi-slot input control primitive for the Alter Design System.
 ///
 /// Direct 1:1 implementation of Figma Node `470:436` (`InputControl`):
-/// - `labelBar`: Top row containing `label` on left (`hasLabel`, `showLabel`, `isRequired`) and `characterLimit` on right (`hasCharacterLimit`, `showCharacterLimit`)
+/// - `labelBar`: Top row containing `label` on left (`isRequired`) and `characterLimit` on right (rendered on UI when label is present)
 /// - `inputContainer`: 64px box (`padding: 20px 24px`, `borderRadius: 20px`, `gap: 16px`)
-/// - `leftSection`: Row containing `leftIcon` (`hasLeftIcon`), `prefix` (`hasPrefix`), and editable `input` / placeholder
-/// - `suffix`: Trailing unit or descriptor text (`hasSuffix`)
-/// - `rightIcon`: Trailing icon slot (`hasRightIcon`)
+/// - `leftSection`: Row containing `leftIcon`, `prefix`, and editable `input` / placeholder
+/// - `suffix`: Trailing unit or descriptor text
+/// - `rightButton`: Trailing interactive action slot accepting [ButtonIconGhost] directly
 /// - `errorContainer`: Bottom row with 16px `error_outline` icon and caption text in `textDanger` (renders latest active error)
 class InputControl extends StatefulWidget {
   /// Component version for reference.
+  /// v2.1.0: Streamlined label & character limit UI: Removed showLabel and showCharacterLimit booleans. labelBar is rendered whenever label is provided (with characterLimit counter shown on UI during typing). Character limit validation continues to function in background even without a label.
+  /// v2.0.0: Pure Flutter convention overhaul: Removed InputControlStatus enum (visual states are 100% dynamically driven by FocusNode and TextEditingController). Streamlined API by removing redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon in favor of clean nullable properties.
+  /// v1.7.0: Removed redundant readonly and disabled from InputControlStatus; standardized on boolean enabled and readOnly properties.
+  /// v1.6.0: Streamlined right action slot to accept ButtonIconGhost? rightButton directly (replacing split icon properties).
+  /// v1.5.0: Replaced rightIcon slot with ButtonIconGhost component (with rightIconType and onRightIconTap); added obscureText, maxLines, minLines, and inputFormatters passthroughs.
   /// v1.4.0: Added isRequired support with asterisk matching label color. Added multiple error condition support rendering the latest error in order.
   /// v1.3.0: Added character limit overflow logic (isError=true, textDanger counter color, and 'Character limit exceeded' error message when character limit is crossed).
   /// v1.2.0: Hide entire labelBar if showLabel is false. Replaced wordLimit with numeric characterLimit showing "x/characterLimit" dynamically only in typing (selected) state. Replaced error status with independent isError and showErrorMessage properties.
   /// v1.1.0: Replaced initialValue with clean value property; streamlined placeholder and value auto-transitions.
   /// v1.0.0: Initial recreation of InputControl matching Figma Node 470:436.
-  static const String version = '1.4.0';
+  static const String version = '2.1.0';
 
-  // Label Bar Properties (Figma: showLabel, label, isRequired, showCharacterLimit, characterLimit)
-  final bool hasLabel;
-  final bool showLabel;
-  final String label;
+  // Label Bar Properties (Figma: label, isRequired, characterLimit)
+  final String? label;
   final bool isRequired;
-
-  final bool hasCharacterLimit;
-  final bool showCharacterLimit;
   final int? characterLimit;
 
-  // Variant & Status Properties (Figma: type, status)
+  // Variant & Surface (Figma: type)
   final InputControlType type;
-  final InputControlStatus status;
 
-  // Left Section Properties (Figma: hasLeftIcon, hasPrefix, prefix, input)
-  final bool hasLeftIcon;
+  // Left Section Properties (Figma: leftIcon, prefix, input)
   final IconData? leftIcon;
   final Widget? leftIconWidget;
 
-  final bool hasPrefix;
-  final String prefix;
+  final String? prefix;
   final Widget? prefixWidget;
 
   final String placeholder;
@@ -75,14 +56,18 @@ class InputControl extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
 
-  // Right Section Properties (Figma: hasSuffix, suffix, hasRightIcon)
-  final bool hasSuffix;
-  final String suffix;
+  // Right Section Properties (Figma: suffix, rightButton)
+  final String? suffix;
   final Widget? suffixWidget;
 
-  final bool hasRightIcon;
-  final IconData? rightIcon;
-  final Widget? rightIconWidget;
+  final ButtonIconGhost? rightButton;
+
+  // Core Text & Format Passthroughs
+  final bool obscureText;
+  final String obscuringCharacter;
+  final int? maxLines;
+  final int? minLines;
+  final List<TextInputFormatter>? inputFormatters;
 
   // Error Properties (Multiple error support & latest error rendering)
   final bool isError;
@@ -103,31 +88,26 @@ class InputControl extends StatefulWidget {
 
   const InputControl({
     super.key,
-    this.hasLabel = true,
-    this.showLabel = true,
     this.label = 'Label',
     this.isRequired = false,
-    this.hasCharacterLimit = true,
-    this.showCharacterLimit = true,
     this.characterLimit = 32,
     this.type = InputControlType.gray,
-    this.status = InputControlStatus.default_,
-    this.hasLeftIcon = true,
     this.leftIcon = Icons.face_5_outlined,
     this.leftIconWidget,
-    this.hasPrefix = true,
     this.prefix = 'Prefix',
     this.prefixWidget,
     this.placeholder = 'Input',
     this.value,
     this.controller,
     this.focusNode,
-    this.hasSuffix = true,
     this.suffix = 'Suffix',
     this.suffixWidget,
-    this.hasRightIcon = true,
-    this.rightIcon = Icons.face_5_outlined,
-    this.rightIconWidget,
+    this.rightButton,
+    this.obscureText = false,
+    this.obscuringCharacter = '•',
+    this.maxLines = 1,
+    this.minLines = 1,
+    this.inputFormatters,
     this.isError = false,
     this.showErrorMessage = true,
     this.errorMessage = 'Error Message',
@@ -165,8 +145,8 @@ class _InputControlState extends State<InputControl> {
       _internalFocusNode = FocusNode();
     }
 
-    _controller.addListener(_handleTextChange);
-    _focusNode.addListener(_handleFocusChange);
+    _controller.addListener(_handleStateChange);
+    _focusNode.addListener(_handleStateChange);
   }
 
   @override
@@ -174,8 +154,8 @@ class _InputControlState extends State<InputControl> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.removeListener(_handleTextChange);
-      _internalController?.removeListener(_handleTextChange);
+      oldWidget.controller?.removeListener(_handleStateChange);
+      _internalController?.removeListener(_handleStateChange);
 
       if (widget.controller == null) {
         _internalController ??= TextEditingController(
@@ -185,7 +165,7 @@ class _InputControlState extends State<InputControl> {
         _internalController?.dispose();
         _internalController = null;
       }
-      _controller.addListener(_handleTextChange);
+      _controller.addListener(_handleStateChange);
     } else if (widget.controller == null &&
         oldWidget.value != widget.value) {
       if (widget.value != null && _controller.text != widget.value) {
@@ -196,8 +176,8 @@ class _InputControlState extends State<InputControl> {
     }
 
     if (oldWidget.focusNode != widget.focusNode) {
-      oldWidget.focusNode?.removeListener(_handleFocusChange);
-      _internalFocusNode?.removeListener(_handleFocusChange);
+      oldWidget.focusNode?.removeListener(_handleStateChange);
+      _internalFocusNode?.removeListener(_handleStateChange);
 
       if (widget.focusNode == null) {
         _internalFocusNode ??= FocusNode();
@@ -205,36 +185,34 @@ class _InputControlState extends State<InputControl> {
         _internalFocusNode?.dispose();
         _internalFocusNode = null;
       }
-      _focusNode.addListener(_handleFocusChange);
+      _focusNode.addListener(_handleStateChange);
     }
   }
 
   @override
   void dispose() {
     if (widget.controller != null) {
-      widget.controller!.removeListener(_handleTextChange);
+      widget.controller!.removeListener(_handleStateChange);
     }
     if (widget.focusNode != null) {
-      widget.focusNode!.removeListener(_handleFocusChange);
+      widget.focusNode!.removeListener(_handleStateChange);
     }
-    _internalController?.removeListener(_handleTextChange);
+    _internalController?.removeListener(_handleStateChange);
     _internalController?.dispose();
-    _internalFocusNode?.removeListener(_handleFocusChange);
+    _internalFocusNode?.removeListener(_handleStateChange);
     _internalFocusNode?.dispose();
     super.dispose();
   }
 
-  void _handleTextChange() {
+  void _handleStateChange() {
     setState(() {});
   }
 
-  void _handleFocusChange() {
-    setState(() {});
-  }
+  bool get _isFocused => _focusNode.hasFocus;
+  bool get _isFilled => _controller.text.isNotEmpty;
 
   /// Checks if character limit is exceeded.
   bool get _isLimitExceeded =>
-      widget.hasCharacterLimit &&
       widget.characterLimit != null &&
       _controller.text.length > widget.characterLimit!;
 
@@ -269,24 +247,6 @@ class _InputControlState extends State<InputControl> {
     return widget.errorMessage;
   }
 
-  /// Determines effective status taking user-specified status and runtime focus into account.
-  InputControlStatus get _effectiveStatus {
-    if (!widget.enabled || widget.status == InputControlStatus.disabled) {
-      return InputControlStatus.disabled;
-    }
-    if (widget.readOnly || widget.status == InputControlStatus.readonly) {
-      return InputControlStatus.readonly;
-    }
-    if (_focusNode.hasFocus || widget.status == InputControlStatus.selected) {
-      return InputControlStatus.selected;
-    }
-    if (_controller.text.isNotEmpty ||
-        widget.status == InputControlStatus.filled) {
-      return InputControlStatus.filled;
-    }
-    return InputControlStatus.default_;
-  }
-
   // Color mappings per Figma Node 470:436
   Color get _backgroundColor {
     switch (widget.type) {
@@ -301,47 +261,42 @@ class _InputControlState extends State<InputControl> {
     if (_effectiveIsError) {
       return AlterSemanticTokens.textDanger; // #EF4444 / #E7000B
     }
-    switch (_effectiveStatus) {
-      case InputControlStatus.selected:
-        return AlterSemanticTokens.stroke1000; // #000000
-      case InputControlStatus.readonly:
-        return AlterSemanticTokens.textDisabled; // #99A1AF (stroke 1px)
-      case InputControlStatus.disabled:
-      case InputControlStatus.filled:
-      case InputControlStatus.default_:
-        switch (widget.type) {
-          case InputControlType.gray:
-            return AlterSemanticTokens.stroke200; // #E5E7EB
-          case InputControlType.white:
-            return AlterSemanticTokens.stroke100; // #F3F4F6
-        }
+    if (widget.readOnly) {
+      return AlterSemanticTokens.textDisabled; // #99A1AF (stroke 1px)
+    }
+    if (_isFocused) {
+      return AlterSemanticTokens.stroke1000; // #000000 (active typing border)
+    }
+    switch (widget.type) {
+      case InputControlType.gray:
+        return AlterSemanticTokens.stroke200; // #E5E7EB
+      case InputControlType.white:
+        return AlterSemanticTokens.stroke100; // #F3F4F6
     }
   }
 
   Color get _contentColor {
-    switch (_effectiveStatus) {
-      case InputControlStatus.readonly:
-        return AlterSemanticTokens.textSecondary; // #4A5565
-      case InputControlStatus.selected:
-      case InputControlStatus.filled:
-        return AlterSemanticTokens.textPrimary; // #000000
-      case InputControlStatus.default_:
-      case InputControlStatus.disabled:
-        return AlterSemanticTokens.textDisabled; // #99A1AF
+    if (widget.readOnly) {
+      return AlterSemanticTokens.textSecondary; // #4A5565
     }
+    if (!widget.enabled) {
+      return AlterSemanticTokens.textDisabled; // #99A1AF
+    }
+    if (_isFocused || _isFilled) {
+      return AlterSemanticTokens.textPrimary; // #000000
+    }
+    return AlterSemanticTokens.textDisabled; // #99A1AF
   }
 
   Widget? _buildLabelBar() {
-    // If showLabel is false, hide the complete labelBar container (including characterLimit)
-    if (!widget.hasLabel || !widget.showLabel) {
+    // For characterLimit to be rendered on UI, label must be provided.
+    // If no label is provided, the top labelBar is completely hidden.
+    if (widget.label == null || widget.label!.isEmpty) {
       return null;
     }
 
-    final isTypingState = _effectiveStatus == InputControlStatus.selected;
-    final showCharLimit = widget.hasCharacterLimit &&
-        widget.showCharacterLimit &&
-        widget.characterLimit != null &&
-        isTypingState;
+    final isTypingState = _isFocused;
+    final showCharLimit = widget.characterLimit != null && isTypingState;
 
     final charLimitText = widget.characterLimit != null
         ? '${_controller.text.length}/${widget.characterLimit}'
@@ -351,7 +306,9 @@ class _InputControlState extends State<InputControl> {
         ? AlterSemanticTokens.textDanger
         : AlterSemanticTokens.textSecondary;
 
-    final labelText = widget.isRequired ? '${widget.label} *' : widget.label;
+    final labelText = widget.isRequired
+        ? '${widget.label} *'
+        : widget.label!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -367,7 +324,7 @@ class _InputControlState extends State<InputControl> {
           ),
         ),
 
-        // Character Limit on Right (Visible only in Typing / Selected State)
+        // Character Limit on Right (Visible only when label is present AND during Typing / Focused State)
         if (showCharLimit) ...[
           const SizedBox(width: 16),
           Text(
@@ -388,32 +345,32 @@ class _InputControlState extends State<InputControl> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Left Icon (24x24)
-          if (widget.hasLeftIcon) ...[
-            if (widget.leftIconWidget != null)
-              widget.leftIconWidget!
-            else if (widget.leftIcon != null)
-              Icon(
-                widget.leftIcon,
-                size: 24,
-                color: _contentColor,
-              ),
+          if (widget.leftIconWidget != null) ...[
+            widget.leftIconWidget!,
+            const SizedBox(width: 8),
+          ] else if (widget.leftIcon != null) ...[
+            Icon(
+              widget.leftIcon,
+              size: 24,
+              color: _contentColor,
+            ),
             const SizedBox(width: 8),
           ],
 
           // Prefix
-          if (widget.hasPrefix && widget.prefix.isNotEmpty) ...[
-            if (widget.prefixWidget != null)
-              widget.prefixWidget!
-            else
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  widget.prefix,
-                  style: AlterTypography.bodyLg.copyWith(
-                    color: _contentColor,
-                  ),
+          if (widget.prefixWidget != null) ...[
+            widget.prefixWidget!,
+            const SizedBox(width: 8),
+          ] else if (widget.prefix != null && widget.prefix!.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Text(
+                widget.prefix!,
+                style: AlterTypography.bodyLg.copyWith(
+                  color: _contentColor,
                 ),
               ),
+            ),
             const SizedBox(width: 8),
           ],
 
@@ -424,10 +381,13 @@ class _InputControlState extends State<InputControl> {
               child: TextField(
                 controller: _controller,
                 focusNode: _focusNode,
-                enabled: widget.enabled &&
-                    _effectiveStatus != InputControlStatus.disabled,
-                readOnly: widget.readOnly ||
-                    _effectiveStatus == InputControlStatus.readonly,
+                obscureText: widget.obscureText,
+                obscuringCharacter: widget.obscuringCharacter,
+                maxLines: widget.maxLines,
+                minLines: widget.minLines,
+                inputFormatters: widget.inputFormatters,
+                enabled: widget.enabled,
+                readOnly: widget.readOnly,
                 autofocus: widget.autofocus,
                 keyboardType: widget.keyboardType,
                 textInputAction: widget.textInputAction,
@@ -435,8 +395,7 @@ class _InputControlState extends State<InputControl> {
                 onSubmitted: widget.onSubmitted,
                 cursorColor: AlterSemanticTokens.textPrimary,
                 style: AlterTypography.bodyLg.copyWith(
-                  color: _controller.text.isEmpty &&
-                          _effectiveStatus == InputControlStatus.default_
+                  color: !_isFilled && !_isFocused
                       ? AlterSemanticTokens.textDisabled
                       : _contentColor,
                 ),
@@ -462,40 +421,20 @@ class _InputControlState extends State<InputControl> {
   }
 
   Widget? _buildSuffix() {
-    if (!widget.hasSuffix || widget.suffix.isEmpty) {
-      return null;
-    }
-
     if (widget.suffixWidget != null) {
       return widget.suffixWidget;
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Text(
-        widget.suffix,
-        textAlign: TextAlign.right,
-        style: AlterTypography.bodyLg.copyWith(
-          color: _contentColor,
+    if (widget.suffix != null && widget.suffix!.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Text(
+          widget.suffix!,
+          textAlign: TextAlign.right,
+          style: AlterTypography.bodyLg.copyWith(
+            color: _contentColor,
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget? _buildRightIcon() {
-    if (!widget.hasRightIcon) {
-      return null;
-    }
-
-    if (widget.rightIconWidget != null) {
-      return widget.rightIconWidget;
-    }
-
-    if (widget.rightIcon != null) {
-      return Icon(
-        widget.rightIcon,
-        size: 24,
-        color: _contentColor,
       );
     }
 
@@ -530,13 +469,12 @@ class _InputControlState extends State<InputControl> {
   Widget build(BuildContext context) {
     final labelBar = _buildLabelBar();
     final suffixWidget = _buildSuffix();
-    final rightIconWidget = _buildRightIcon();
     final effectiveError = _effectiveIsError;
     final effectiveMsg = _effectiveErrorMessage;
     final showErrorMessage = effectiveError &&
         widget.showErrorMessage &&
         effectiveMsg.isNotEmpty;
-    final isDisabled = _effectiveStatus == InputControlStatus.disabled;
+    final isDisabled = !widget.enabled;
 
     Widget containerContent = GestureDetector(
       onTap: isDisabled
@@ -563,9 +501,9 @@ class _InputControlState extends State<InputControl> {
               const SizedBox(width: 16),
               suffixWidget,
             ],
-            if (rightIconWidget != null) ...[
+            if (widget.rightButton != null) ...[
               const SizedBox(width: 16),
-              rightIconWidget,
+              widget.rightButton!,
             ],
           ],
         ),
