@@ -1,132 +1,141 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../styles/tokens.dart';
-import '../../styles/typography.dart';
 import '../buttons/button_icon_ghost.dart';
-import '../status/feedback_text.dart';
-import 'input_container.dart';
-import 'text_input.dart';
+import 'input_control.dart';
 
-/// Reusable Password Input field component for the Alter Design System.
+/// A secure password input field component for the Alter Design System built on [InputControl].
 ///
-/// Figma Specifications (Node `441:9205` & dependent `.rightSlot` Node `454:482`):
-/// - Variants:
-///   - `type=Gray`: Fill `baseGray` (`#F9FAFB`), Border 1px `stroke200` (`#E5E7EB`)
-///   - `type=White`: Fill `baseWhite` (`#FFFFFF`), Border 1px `stroke100` (`#F3F4F6`)
-///   - `state=Default`: Placeholder visible, subtle border
-///   - `state=Typing`: Focused, Border 1px `stroke1000` (`#000000`)
-///   - `state=Filled`: Unfocused with content, subtle border
-///   - `state=ReadOnly`: Border 1px `textDisabled` (`#99A1AF`), non-editable
-///   - `state=Disabled`: 48% opacity, disabled interaction
-///   - `state=Error`: Border 1px `textDanger` (`#E7000B`), optional [FeedbackText]
-/// - Smart Password Validation Engine:
-///   - Built-in customizable checks for [minLength] (default 8), [maxLength], [requireSpecialChar], [requireUppercase], and [requireDigit].
-///   - Password reveal toggle ([ButtonIconGhost]) in `.rightSlot` visible when text is entered.
-///   - Autocorrect & suggestions disabled by default with native `AutofillHints.password`.
+/// Features:
+/// - Clean surface with no left icon by default (`leftIcon: null`, customizable).
+/// - Space-denial input formatting (`allowSpaces: false` by default).
+/// - Dynamic interactive eye toggle button ([ButtonIconGhost]) switching between visible and obscured text.
+/// - Obscured text with `•` bullet point characters.
+/// - Character limit counting and overflow handling.
+/// - Configurable strength & complexity rules (min length, numbers, special characters, uppercase, lowercase).
+/// - Full Flutter `FormField<String>` integration supporting `Form.validate()`.
 class PasswordInput extends StatefulWidget {
   /// Component version for reference.
-  /// v1.1.1: Added isRequired support with label asterisk and required error validation.
-  /// v1.1.0: Added smart password validation engine (minLength, maxLength, specialChar, uppercase, digit) with custom error text overrides.
-  /// v1.0.1: Refactored to compose shared InputContainer for visual styling, border states, and label bar.
-  /// v1.0.0: Initial release of dedicated PasswordInput component.
-  static const String version = '1.1.1';
+  /// v2.2.1: Fixed isRequired trigger lifecycle: Defer required error until blur (unfocus after focus) or explicit typing & clearing, preventing immediate error upon clicking into an empty field.
+  /// v2.2.0: Removed default leftIcon (defaults to null); added allowSpaces formatter (deny spaces by default); added configurable password strength validation rules (minCharacters, requireNumber, requireSpecialChar, requireUppercase, requireLowercase); full characterLimit overflow support.
+  /// v2.1.0: Aligned with InputControl v2.1.0 & TextInput v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
+  /// v2.0.0: Aligned with InputControl v2.0.0 & TextInput v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
+  /// v1.0.0: Initial release of PasswordInput wrapper built on TextInput with ButtonIconGhost eye toggle.
+  static const String version = '2.2.1';
 
+  // Label Bar Properties
   final String? label;
-  final bool hasLabelBar;
-  final String? placeholder;
-  final String? initialValue;
+  final bool isRequired;
+  final int? characterLimit;
+
+  // Variant & Surface
+  final InputControlType type;
+
+  // Left Section (default leftIcon: null)
+  final IconData? leftIcon;
+  final Widget? leftIconWidget;
+  final String? prefix;
+  final Widget? prefixWidget;
+
+  // Content
+  final String placeholder;
+  final String? value;
   final TextEditingController? controller;
   final FocusNode? focusNode;
 
-  final TextInputVariant type;
-
-  // Password / Obscure
+  // Suffix & Visibility Toggle
+  final String? suffix;
+  final Widget? suffixWidget;
+  final bool showEyeToggle;
+  final bool initiallyObscured;
   final String obscuringCharacter;
-  final bool? autocorrect;
-  final bool? enableSuggestions;
-  final Iterable<String>? autofillHints;
+  final ValueChanged<bool>? onToggleObscure;
 
-  // Limits (labelBarContainer: character limit counter)
-  final bool hasCharacterLimit;
-  final int? characterLimit;
-  final bool showCharacterLimit;
+  // Formatting
+  final bool allowSpaces;
+  final List<TextInputFormatter>? inputFormatters;
 
-  // Smart Password Validation Rules
-  final bool isRequired;
-  final int? minLength;
-  final int? maxLength;
+  // Strength & Validation Rules
+  final int? minCharacters;
+  final bool requireNumber;
   final bool requireSpecialChar;
   final bool requireUppercase;
-  final bool requireDigit;
+  final bool requireLowercase;
   final bool autoValidateRules;
 
-  // Custom Error Text Overrides
+  // Custom Error Texts
+  final String? minCharactersErrorText;
+  final String? requireNumberErrorText;
+  final String? requireSpecialCharErrorText;
+  final String? requireUppercaseErrorText;
+  final String? requireLowercaseErrorText;
   final String? requiredErrorText;
-  final String? minLengthErrorText;
-  final String? maxLengthErrorText;
-  final String? specialCharErrorText;
-  final String? uppercaseErrorText;
-  final String? digitErrorText;
 
-  // Error & Feedback
+  // Validation & Error
   final bool isError;
-  final bool hasFeedback;
-  final String? errorText;
-
-  // State & Interactivity
-  final bool enabled;
-  final bool readOnly;
-  final ValueChanged<String>? onChanged;
-  final ValueChanged<String>? onSubmitted;
-  final VoidCallback? onEditingComplete;
-  final TextInputAction textInputAction;
-
-  // Form Validation Integration
+  final bool showErrorMessage;
+  final String errorMessage;
+  final List<String>? errorMessages;
+  final Widget? errorIconWidget;
   final FormFieldValidator<String>? validator;
   final FormFieldSetter<String>? onSaved;
   final AutovalidateMode? autovalidateMode;
 
+  // Callbacks
+  final bool enabled;
+  final bool readOnly;
+  final bool autofocus;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
+
   const PasswordInput({
     super.key,
     this.label = 'Password',
-    this.hasLabelBar = true,
+    this.isRequired = false,
+    this.characterLimit,
+    this.type = InputControlType.gray,
+    this.leftIcon,
+    this.leftIconWidget,
+    this.prefix,
+    this.prefixWidget,
     this.placeholder = 'Enter password',
-    this.initialValue,
+    this.value,
     this.controller,
     this.focusNode,
-    this.type = TextInputVariant.gray,
+    this.suffix,
+    this.suffixWidget,
+    this.showEyeToggle = true,
+    this.initiallyObscured = true,
     this.obscuringCharacter = '•',
-    this.autocorrect = false,
-    this.enableSuggestions = false,
-    this.autofillHints = const [AutofillHints.password],
-    this.hasCharacterLimit = false,
-    this.characterLimit,
-    this.showCharacterLimit = true,
-    this.isRequired = false,
-    this.minLength = 8,
-    this.maxLength,
+    this.onToggleObscure,
+    this.allowSpaces = false,
+    this.inputFormatters,
+    this.minCharacters = 8,
+    this.requireNumber = false,
     this.requireSpecialChar = false,
     this.requireUppercase = false,
-    this.requireDigit = false,
+    this.requireLowercase = false,
     this.autoValidateRules = true,
+    this.minCharactersErrorText,
+    this.requireNumberErrorText,
+    this.requireSpecialCharErrorText,
+    this.requireUppercaseErrorText,
+    this.requireLowercaseErrorText,
     this.requiredErrorText,
-    this.minLengthErrorText,
-    this.maxLengthErrorText,
-    this.specialCharErrorText,
-    this.uppercaseErrorText,
-    this.digitErrorText,
     this.isError = false,
-    this.hasFeedback = true,
-    this.errorText = 'Feedback Text',
-    this.enabled = true,
-    this.readOnly = false,
-    this.onChanged,
-    this.onSubmitted,
-    this.onEditingComplete,
-    this.textInputAction = TextInputAction.done,
+    this.showErrorMessage = true,
+    this.errorMessage = 'Error Message',
+    this.errorMessages,
+    this.errorIconWidget,
     this.validator,
     this.onSaved,
     this.autovalidateMode,
+    this.enabled = true,
+    this.readOnly = false,
+    this.autofocus = false,
+    this.onChanged,
+    this.onSubmitted,
+    this.onTap,
   });
 
   @override
@@ -134,64 +143,59 @@ class PasswordInput extends StatefulWidget {
 }
 
 class _PasswordInputState extends State<PasswordInput> {
+  late bool _isObscured;
   TextEditingController? _internalController;
   FocusNode? _internalFocusNode;
-  FormFieldState<String>? _formFieldState;
 
   TextEditingController get _controller =>
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
-  bool _isObscured = true;
-
-  static final RegExp _specialCharRegExp = RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/]');
-  static final RegExp _uppercaseRegExp = RegExp(r'[A-Z]');
-  static final RegExp _digitRegExp = RegExp(r'[0-9]');
+  bool _hasHadFocus = false;
+  bool _hasBeenTouched = false;
 
   @override
   void initState() {
     super.initState();
+    _isObscured = widget.initiallyObscured;
     if (widget.controller == null) {
-      _internalController = TextEditingController(text: widget.initialValue);
+      _internalController = TextEditingController(text: widget.value);
     }
     if (widget.focusNode == null) {
       _internalFocusNode = FocusNode();
     }
-
-    _controller.addListener(_onTextChanged);
-    _focusNode.addListener(_onFocusChanged);
+    _controller.addListener(_onStateChange);
+    _focusNode.addListener(_onFocusChange);
   }
 
   @override
   void didUpdateWidget(covariant PasswordInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // Sync Controller
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.removeListener(_onTextChanged);
-      _internalController?.removeListener(_onTextChanged);
+      oldWidget.controller?.removeListener(_onStateChange);
+      _internalController?.removeListener(_onStateChange);
 
       if (widget.controller == null) {
         _internalController ??= TextEditingController(
-          text: oldWidget.controller?.text ?? widget.initialValue,
+          text: oldWidget.controller?.text ?? widget.value,
         );
       } else {
         _internalController?.dispose();
         _internalController = null;
       }
-      _controller.addListener(_onTextChanged);
+      _controller.addListener(_onStateChange);
     } else if (widget.controller == null &&
-        oldWidget.initialValue != widget.initialValue &&
-        widget.initialValue != null) {
-      if (_controller.text.isEmpty || _controller.text == oldWidget.initialValue) {
-        _controller.text = widget.initialValue!;
+        oldWidget.value != widget.value) {
+      if (widget.value != null && _controller.text != widget.value) {
+        _controller.text = widget.value!;
+      } else if (widget.value == null && oldWidget.value != null) {
+        _controller.clear();
       }
     }
 
-    // Sync FocusNode
     if (oldWidget.focusNode != widget.focusNode) {
-      oldWidget.focusNode?.removeListener(_onFocusChanged);
-      _internalFocusNode?.removeListener(_onFocusChanged);
+      oldWidget.focusNode?.removeListener(_onFocusChange);
+      _internalFocusNode?.removeListener(_onFocusChange);
 
       if (widget.focusNode == null) {
         _internalFocusNode ??= FocusNode();
@@ -199,238 +203,199 @@ class _PasswordInputState extends State<PasswordInput> {
         _internalFocusNode?.dispose();
         _internalFocusNode = null;
       }
-      _focusNode.addListener(_onFocusChanged);
+      _focusNode.addListener(_onFocusChange);
     }
   }
 
   @override
   void dispose() {
     if (widget.controller != null) {
-      widget.controller!.removeListener(_onTextChanged);
+      widget.controller!.removeListener(_onStateChange);
     }
     if (widget.focusNode != null) {
-      widget.focusNode!.removeListener(_onFocusChanged);
+      widget.focusNode!.removeListener(_onFocusChange);
     }
-    _internalController?.removeListener(_onTextChanged);
+    _internalController?.removeListener(_onStateChange);
     _internalController?.dispose();
-    _internalFocusNode?.removeListener(_onFocusChanged);
+    _internalFocusNode?.removeListener(_onFocusChange);
     _internalFocusNode?.dispose();
     super.dispose();
   }
 
-  void _onTextChanged() {
-    _formFieldState?.didChange(_controller.text);
+  void _onStateChange() {
     setState(() {});
   }
 
-  void _onFocusChanged() {
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      _hasHadFocus = true;
+    } else if (_hasHadFocus) {
+      // User entered the field and blurred (clicked away / lost focus)
+      _hasBeenTouched = true;
+    }
     setState(() {});
   }
 
-  String? _evaluateBuiltInValidation(String? value) {
-    if (!widget.autoValidateRules) {
-      return null;
-    }
-
-    final text = value ?? '';
-
-    // Required check
-    if (widget.isRequired && text.trim().isEmpty) {
-      return widget.requiredErrorText ?? 'This field is required';
-    }
-
-    if (text.isEmpty) {
-      return null;
-    }
-
-    // Minimum Length
-    if (widget.minLength != null && text.length < widget.minLength!) {
-      return widget.minLengthErrorText ??
-          'Password must be at least ${widget.minLength} characters';
-    }
-
-    // Maximum Length
-    if (widget.maxLength != null && text.length > widget.maxLength!) {
-      return widget.maxLengthErrorText ??
-          'Password cannot exceed ${widget.maxLength} characters';
-    }
-
-    // Uppercase Requirement
-    if (widget.requireUppercase && !_uppercaseRegExp.hasMatch(text)) {
-      return widget.uppercaseErrorText ??
-          'Password must include at least one uppercase letter';
-    }
-
-    // Digit Requirement
-    if (widget.requireDigit && !_digitRegExp.hasMatch(text)) {
-      return widget.digitErrorText ??
-          'Password must include at least one number';
-    }
-
-    // Special Character Requirement
-    if (widget.requireSpecialChar && !_specialCharRegExp.hasMatch(text)) {
-      return widget.specialCharErrorText ??
-          'Password must include at least one special character';
-    }
-
-    return null;
+  void _toggleObscure() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+    widget.onToggleObscure?.call(_isObscured);
   }
 
-  bool _computeIsError(String? formError) {
-    if (widget.isError) return true;
-    if (formError != null && formError.isNotEmpty) return true;
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    return builtInError != null && builtInError.isNotEmpty;
-  }
-
-  String? _computeErrorText(String? formError) {
-    if (formError != null && formError.isNotEmpty) {
-      return formError;
-    }
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    if (builtInError != null && builtInError.isNotEmpty) {
-      return builtInError;
-    }
-    return widget.errorText;
-  }
-
-  List<TextInputFormatter> get _inputFormatters {
+  List<TextInputFormatter> get _effectiveFormatters {
     final formatters = <TextInputFormatter>[];
-
-    // Character Limit enforcement
-    if (widget.hasCharacterLimit &&
-        widget.characterLimit != null &&
-        widget.characterLimit! > 0) {
-      formatters.add(LengthLimitingTextInputFormatter(widget.characterLimit));
+    if (!widget.allowSpaces) {
+      formatters.add(FilteringTextInputFormatter.deny(RegExp(r'\s')));
     }
-
+    if (widget.inputFormatters != null) {
+      formatters.addAll(widget.inputFormatters!);
+    }
     return formatters;
   }
 
-  Color get _textColor {
-    if (widget.readOnly) {
-      return AlterSemanticTokens.textSecondary;
-    }
-    return AlterSemanticTokens.textPrimary;
-  }
+  List<String> _evaluateErrors(FormFieldState<String>? field) {
+    final errors = <String>[];
 
-  /// Builds the right-hand password visibility toggle button (.rightSlot: type=Password).
-  Widget? _buildRightSlot() {
-    if (_controller.text.isNotEmpty && widget.enabled && !widget.readOnly) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          ButtonIconGhost(
-            icon: _isObscured
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
-            size: 24,
-            type: ButtonIconGhostType.secondary,
-            onTap: () {
-              setState(() {
-                _isObscured = !_isObscured;
-              });
-            },
-          ),
-        ],
+    // 1. External error messages list
+    if (widget.errorMessages != null && widget.errorMessages!.isNotEmpty) {
+      errors.addAll(
+        widget.errorMessages!.where((e) => e.trim().isNotEmpty),
       );
+    } else if (widget.isError && widget.errorMessage.trim().isNotEmpty) {
+      errors.add(widget.errorMessage);
     }
-    return null;
-  }
 
-  Widget _buildFieldContent(String? formError) {
-    final isError = _computeIsError(formError);
-    final errorText = _computeErrorText(formError);
-    final rightSlot = _buildRightSlot();
+    // 2. Built-in automatic validation rules
+    if (widget.autoValidateRules) {
+      final text = _controller.text;
 
-    return InputContainer(
-      label: widget.label,
-      hasLabelBar: widget.hasLabelBar,
-      isRequired: widget.isRequired,
-      hasCharacterLimit: widget.hasCharacterLimit,
-      characterLimit: widget.characterLimit,
-      showCharacterLimit: widget.showCharacterLimit,
-      currentLength: _controller.text.length,
-      type: widget.type,
-      isError: isError,
-      hasFeedback: widget.hasFeedback,
-      errorText: errorText,
-      enabled: widget.enabled,
-      readOnly: widget.readOnly,
-      hasFocus: _focusNode.hasFocus,
-      onTap: () => _focusNode.requestFocus(),
-      trailing: rightSlot,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        showCursor: !widget.readOnly && widget.enabled,
-        obscureText: _isObscured,
-        obscuringCharacter: widget.obscuringCharacter,
-        maxLines: 1,
-        autocorrect: widget.autocorrect ?? false,
-        enableSuggestions: widget.enableSuggestions ?? false,
-        autofillHints: widget.autofillHints,
-        keyboardType: TextInputType.visiblePassword,
-        inputFormatters: _inputFormatters,
-        textInputAction: widget.textInputAction,
-        onChanged: (val) {
-          widget.onChanged?.call(val);
-        },
-        onSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        cursorColor: AlterSemanticTokens.textPrimary,
-        style: AlterTypography.bodyLg.copyWith(
-          color: _textColor,
-        ),
-        decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: widget.placeholder,
-          hintStyle: AlterTypography.bodyLg.copyWith(
-            color: AlterSemanticTokens.textSecondary,
-          ),
-        ),
-      ),
-    );
+      // Required validation (deferred until touch/blur or form submission)
+      if (widget.isRequired && _hasBeenTouched && text.trim().isEmpty) {
+        errors.add(widget.requiredErrorText ?? '${widget.label ?? "Password"} is required');
+      }
+
+      if (text.isNotEmpty) {
+        // Min characters
+        if (widget.minCharacters != null && text.length < widget.minCharacters!) {
+          errors.add(
+            widget.minCharactersErrorText ??
+                'Password must be at least ${widget.minCharacters} characters',
+          );
+        }
+
+        // Require uppercase
+        if (widget.requireUppercase && !RegExp(r'[A-Z]').hasMatch(text)) {
+          errors.add(
+            widget.requireUppercaseErrorText ??
+                'Must contain at least 1 uppercase letter',
+          );
+        }
+
+        // Require lowercase
+        if (widget.requireLowercase && !RegExp(r'[a-z]').hasMatch(text)) {
+          errors.add(
+            widget.requireLowercaseErrorText ??
+                'Must contain at least 1 lowercase letter',
+          );
+        }
+
+        // Require number
+        if (widget.requireNumber && !RegExp(r'[0-9]').hasMatch(text)) {
+          errors.add(
+            widget.requireNumberErrorText ??
+                'Must contain at least 1 number',
+          );
+        }
+
+        // Require special character
+        if (widget.requireSpecialChar &&
+            !RegExp(r'[!@#\$%^&*(),.?":{}|<>_\-+=\[\]\\\/~`]').hasMatch(text)) {
+          errors.add(
+            widget.requireSpecialCharErrorText ??
+                'Must contain at least 1 special character',
+          );
+        }
+      }
+    }
+
+    // 3. FormField errorText from custom validator
+    if (field?.errorText != null && field!.errorText!.isNotEmpty) {
+      errors.add(field.errorText!);
+    }
+
+    return errors;
   }
 
   @override
   Widget build(BuildContext context) {
-    final effectiveValidator = widget.validator ?? _evaluateBuiltInValidation;
-
-    if (widget.validator != null ||
-        widget.onSaved != null ||
-        widget.autovalidateMode != null ||
-        widget.isRequired ||
-        widget.minLength != null ||
-        widget.maxLength != null ||
-        widget.requireSpecialChar ||
-        widget.requireUppercase ||
-        widget.requireDigit) {
-      return FormField<String>(
-        initialValue: _controller.text,
-        validator: effectiveValidator,
-        onSaved: widget.onSaved,
-        autovalidateMode: widget.autovalidateMode ??
-            (widget.autoValidateRules
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled),
-        builder: (FormFieldState<String> state) {
-          _formFieldState = state;
-          return _buildFieldContent(state.errorText);
-        },
+    ButtonIconGhost? eyeButton;
+    if (widget.showEyeToggle && widget.enabled) {
+      eyeButton = ButtonIconGhost(
+        icon: _isObscured
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined,
+        type: ButtonIconGhostType.secondary,
+        onTap: _toggleObscure,
       );
     }
 
-    _formFieldState = null;
-    return _buildFieldContent(null);
+    return FormField<String>(
+      initialValue: widget.value ?? widget.controller?.text,
+      validator: (val) {
+        if (widget.validator != null) {
+          return widget.validator!(val ?? _controller.text);
+        }
+        if (widget.isRequired && (val == null || val.trim().isEmpty)) {
+          return widget.requiredErrorText ?? '${widget.label ?? "Password"} is required';
+        }
+        return null;
+      },
+      onSaved: widget.onSaved,
+      autovalidateMode: widget.autovalidateMode ?? AutovalidateMode.disabled,
+      builder: (FormFieldState<String> field) {
+        final activeErrors = _evaluateErrors(field);
+        final hasError = activeErrors.isNotEmpty || widget.isError;
+
+        return InputControl(
+          label: widget.label,
+          isRequired: widget.isRequired,
+          characterLimit: widget.characterLimit,
+          type: widget.type,
+          leftIcon: widget.leftIcon,
+          leftIconWidget: widget.leftIconWidget,
+          prefix: widget.prefix,
+          prefixWidget: widget.prefixWidget,
+          placeholder: widget.placeholder,
+          value: widget.value,
+          controller: _controller,
+          focusNode: _focusNode,
+          suffix: widget.suffix,
+          suffixWidget: widget.suffixWidget,
+          rightButton: eyeButton,
+          obscureText: _isObscured,
+          obscuringCharacter: widget.obscuringCharacter,
+          inputFormatters: _effectiveFormatters,
+          isError: hasError,
+          showErrorMessage: widget.showErrorMessage,
+          errorMessage: widget.errorMessage,
+          errorMessages: activeErrors,
+          errorIconWidget: widget.errorIconWidget,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          autofocus: widget.autofocus,
+          textInputAction: TextInputAction.done,
+          onTap: widget.onTap,
+          onChanged: (text) {
+            if (text.isNotEmpty) {
+              _hasBeenTouched = true;
+            }
+            field.didChange(text);
+            widget.onChanged?.call(text);
+          },
+          onSubmitted: widget.onSubmitted,
+        );
+      },
+    );
   }
 }

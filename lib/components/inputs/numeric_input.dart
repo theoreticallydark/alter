@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../styles/tokens.dart';
-import '../../styles/typography.dart';
 import '../buttons/button_icon_ghost.dart';
-import 'input_container.dart';
-import 'text_input.dart';
+import 'input_control.dart';
 
-/// Number grouping and thousand separator systems for [NumericInput].
+/// Number grouping and separator systems for numeric inputs.
 enum NumberGroupingSystem {
   /// No thousand separators (e.g. `1000000.50`).
   none,
@@ -14,7 +11,7 @@ enum NumberGroupingSystem {
   /// Standard Western 3-digit grouping (e.g. `100,000`, `1,000,000.50`).
   international,
 
-  /// Indian numbering system: 3 digits initially, then 2 digits (e.g. `1,00,000`, `10,00,000.50`).
+  /// Indian numbering system (3 digits initially, then pairs: e.g. `10,00,000.50`).
   indian,
 }
 
@@ -76,12 +73,10 @@ class NumericFormatterUtils {
       clean = clean.substring(1);
     }
 
-    // Split integer and decimal parts
     final hasDecimal = allowDecimals && clean.contains('.');
     String integerPart = hasDecimal ? clean.split('.').first : clean;
     String? decimalPart = hasDecimal ? clean.split('.').sublist(1).join('') : null;
 
-    // Filter non-digits
     integerPart = integerPart.replaceAll(RegExp(r'[^\d]'), '');
     if (decimalPart != null) {
       decimalPart = decimalPart.replaceAll(RegExp(r'[^\d]'), '');
@@ -108,23 +103,23 @@ class NumericFormatterUtils {
     return buffer.toString();
   }
 
-  /// Parses a formatted string into a numeric value (`num?`).
-  static num? parse(String? text) {
-    if (text == null || text.trim().isEmpty) return null;
-    final unformatted = text.replaceAll(',', '').trim();
-    return num.tryParse(unformatted);
+  /// Parses a formatted string back to a numeric value.
+  static num? parse(String text) {
+    if (text.isEmpty) return null;
+    final clean = text.replaceAll(',', '');
+    return num.tryParse(clean);
   }
 }
 
-/// Custom [TextInputFormatter] ensuring live number grouping, decimal limits, and smart cursor preservation.
-class _NumericTextInputFormatter extends TextInputFormatter {
+/// Live text input formatter that manages comma grouping and decimal rules.
+class GroupedNumberInputFormatter extends TextInputFormatter {
   final NumberGroupingSystem groupingSystem;
   final bool allowDecimals;
   final int? decimalPlaces;
   final bool allowNegative;
   final num? maxValue;
 
-  _NumericTextInputFormatter({
+  GroupedNumberInputFormatter({
     required this.groupingSystem,
     required this.allowDecimals,
     this.decimalPlaces,
@@ -141,25 +136,13 @@ class _NumericTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    // Handle single leading minus
     if (allowNegative && newValue.text == '-') {
       return newValue;
     }
 
-    // Handle leading decimal point (.5 -> 0.5)
     String textToFormat = newValue.text;
     if (allowDecimals && textToFormat.startsWith('.')) {
       textToFormat = '0$textToFormat';
-    } else if (allowNegative && textToFormat.startsWith('-.')) {
-      textToFormat = '-0${textToFormat.substring(2)}';
-    }
-
-    // Count raw characters to the left of the new selection to preserve cursor
-    int rawCursorPos = 0;
-    for (int i = 0; i < newValue.selection.end && i < newValue.text.length; i++) {
-      if (newValue.text[i] != ',') {
-        rawCursorPos++;
-      }
     }
 
     final formatted = NumericFormatterUtils.formatNumberString(
@@ -170,140 +153,139 @@ class _NumericTextInputFormatter extends TextInputFormatter {
       allowNegative: allowNegative,
     );
 
-    // Recompute cursor position based on raw non-comma characters
-    int newSelectionIndex = 0;
-    int rawCount = 0;
-    for (int i = 0; i < formatted.length; i++) {
-      if (rawCount >= rawCursorPos) {
-        break;
-      }
-      newSelectionIndex++;
-      if (formatted[i] != ',') {
-        rawCount++;
+    if (maxValue != null) {
+      final parsed = NumericFormatterUtils.parse(formatted);
+      if (parsed != null && parsed > maxValue!) {
+        return oldValue;
       }
     }
 
-    newSelectionIndex = newSelectionIndex.clamp(0, formatted.length);
+    // Cursor position calculation
+    int cursorPosition = newValue.selection.end;
+    final oldDigitsBeforeCursor = newValue.text
+        .substring(0, cursorPosition.clamp(0, newValue.text.length))
+        .replaceAll(RegExp(r'[^\d.]'), '')
+        .length;
+
+    int newCursor = 0;
+    int digitsCount = 0;
+    for (int i = 0; i < formatted.length; i++) {
+      if (digitsCount >= oldDigitsBeforeCursor) break;
+      if (RegExp(r'[\d.]').hasMatch(formatted[i])) {
+        digitsCount++;
+      }
+      newCursor = i + 1;
+    }
 
     return TextEditingValue(
       text: formatted,
-      selection: TextSelection.collapsed(offset: newSelectionIndex),
+      selection: TextSelection.collapsed(
+        offset: newCursor.clamp(0, formatted.length),
+      ),
     );
   }
 }
 
-/// Dedicated Numeric Input field component for the Alter Design System.
+/// A comprehensive numeric input field for the Alter Design System built on [InputControl].
 ///
-/// Encapsulates:
-/// - Comma Grouping: [NumberGroupingSystem.international] (`100,000`), [NumberGroupingSystem.indian] (`1,00,000`), or [NumberGroupingSystem.none]
-/// - Number Precision: Decimals ([allowDecimals], [decimalPlaces]), Signed (auto-derived from [minValue] < 0)
-/// - Smart Range & Bounds Validation: [minValue], [maxValue], [isRequired] with customizable error messages
-/// - Leading Icons (e.g. `Icons.currency_rupee`, `Icons.attach_money`) and Suffixes (`kg`, `%`, `hrs`)
-/// - Integrated with [InputContainer] for design system box styling and token parity.
+/// Features:
+/// - Smart comma formatting (International `1,000,000` & Indian `10,00,000` systems).
+/// - Bounds enforcement (`minValue`, `maxValue`), decimal places, and negative numbers.
+/// - Optional stepper controls (+ / -) using [ButtonIconGhost].
+/// - Reuses [InputControl] for full token fidelity and error displays.
 class NumericInput extends StatefulWidget {
   /// Component version for reference.
-  /// v1.2.1: Robust initialValue dynamic sync in didUpdateWidget.
-  /// v1.2.0: Removed redundant allowNegative (auto-derived from minValue < 0) and character limit properties; passed isRequired to InputContainer.
-  /// v1.1.0: Added smart numeric range & required validation engine with custom error text overrides.
-  /// v1.0.0: Initial release of dedicated NumericInput component.
-  static const String version = '1.2.1';
+  /// v2.3.0: Removed stepper controls in favor of standard rightButton (ButtonIconGhost) slot matching InputControl Figma spec.
+  /// v2.2.0: Added deferred isRequired validation on blur/touch, preventing premature errors on initial focus.
+  /// v2.1.0: Aligned with InputControl v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
+  /// v2.0.0: Aligned with InputControl v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
+  /// v1.0.0: Initial release of NumericInput built directly on InputControl with live comma formatting.
+  static const String version = '2.3.0';
 
+  // Label Bar Properties
   final String? label;
-  final bool hasLabelBar;
-  final String? placeholder;
+  final bool isRequired;
+  final int? characterLimit;
+
+  // Variant & Surface
+  final InputControlType type;
+
+  // Numeric Rules & Grouping
+  final NumberGroupingSystem groupingSystem;
+  final bool allowDecimals;
+  final int? decimalPlaces;
+  final bool allowNegative;
+  final num? minValue;
+  final num? maxValue;
+
+  // Left Section
+  final IconData? leftIcon;
+  final Widget? leftIconWidget;
+  final String? prefix;
+  final Widget? prefixWidget;
+
+  // Content
+  final String placeholder;
   final num? initialValue;
   final TextEditingController? controller;
   final FocusNode? focusNode;
 
-  final TextInputVariant type;
-
-  // Number Formatting & Precision
-  final NumberGroupingSystem groupingSystem;
-  final bool allowDecimals;
-  final int? decimalPlaces;
-
-  // Limits & Smart Bounds Validation
-  final bool isRequired;
-  final bool autoValidateRules;
-  final num? minValue;
-  final num? maxValue;
-  final bool clampOnUnfocus;
-
-  // Custom Error Text Overrides
-  final String? requiredErrorText;
-  final String? minErrorText;
-  final String? maxErrorText;
-
-  // Leading Slot (Currency / Icon)
-  final bool hasIcon;
-  final IconData? icon;
-  final Widget? leadingWidget;
-
-  // Right Slot (.rightSlot: type=Suffix or type=Clear)
-  final bool hasSuffix;
+  // Suffix & Action
   final String? suffix;
   final Widget? suffixWidget;
-  final bool hasClear;
+  final ButtonIconGhost? rightButton;
 
-  // Error & Feedback
+  // Validation & Error
   final bool isError;
-  final bool hasFeedback;
-  final String? errorText;
+  final bool showErrorMessage;
+  final String errorMessage;
+  final List<String>? errorMessages;
+  final Widget? errorIconWidget;
 
-  // State & Interactivity
+  // Callbacks
   final bool enabled;
   final bool readOnly;
-  final ValueChanged<num?>? onChangedNumber;
+  final bool autofocus;
+  final ValueChanged<num?>? onNumberChanged;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
-  final VoidCallback? onEditingComplete;
-  final TextInputAction textInputAction;
-
-  // Form Validation Integration
-  final FormFieldValidator<String>? validator;
-  final FormFieldSetter<String>? onSaved;
-  final AutovalidateMode? autovalidateMode;
+  final VoidCallback? onTap;
 
   const NumericInput({
     super.key,
     this.label = 'Number',
-    this.hasLabelBar = true,
+    this.isRequired = false,
+    this.characterLimit,
+    this.type = InputControlType.gray,
+    this.groupingSystem = NumberGroupingSystem.international,
+    this.allowDecimals = true,
+    this.decimalPlaces,
+    this.allowNegative = false,
+    this.minValue,
+    this.maxValue,
+    this.leftIcon,
+    this.leftIconWidget,
+    this.prefix,
+    this.prefixWidget,
     this.placeholder = '0',
     this.initialValue,
     this.controller,
     this.focusNode,
-    this.type = TextInputVariant.gray,
-    this.groupingSystem = NumberGroupingSystem.international,
-    this.allowDecimals = true,
-    this.decimalPlaces,
-    this.isRequired = false,
-    this.autoValidateRules = true,
-    this.minValue,
-    this.maxValue,
-    this.clampOnUnfocus = false,
-    this.requiredErrorText,
-    this.minErrorText,
-    this.maxErrorText,
-    this.hasIcon = false,
-    this.icon,
-    this.leadingWidget,
-    this.hasSuffix = false,
     this.suffix,
     this.suffixWidget,
-    this.hasClear = false,
+    this.rightButton,
     this.isError = false,
-    this.hasFeedback = true,
-    this.errorText = 'Feedback Text',
+    this.showErrorMessage = true,
+    this.errorMessage = 'Error Message',
+    this.errorMessages,
+    this.errorIconWidget,
     this.enabled = true,
     this.readOnly = false,
-    this.onChangedNumber,
+    this.autofocus = false,
+    this.onNumberChanged,
     this.onChanged,
     this.onSubmitted,
-    this.onEditingComplete,
-    this.textInputAction = TextInputAction.done,
-    this.validator,
-    this.onSaved,
-    this.autovalidateMode,
+    this.onTap,
   });
 
   @override
@@ -313,73 +295,57 @@ class NumericInput extends StatefulWidget {
 class _NumericInputState extends State<NumericInput> {
   TextEditingController? _internalController;
   FocusNode? _internalFocusNode;
-  FormFieldState<String>? _formFieldState;
 
   TextEditingController get _controller =>
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
-  bool get _allowNegative => widget.minValue == null || widget.minValue! < 0;
-
-  String _formatInitial(num? val) {
-    if (val == null) return '';
-    return NumericFormatterUtils.formatNumberString(
-      val.toString(),
-      groupingSystem: widget.groupingSystem,
-      allowDecimals: widget.allowDecimals,
-      decimalPlaces: widget.decimalPlaces,
-      allowNegative: _allowNegative,
-    );
-  }
+  bool _hasHadFocus = false;
+  bool _hasBeenTouched = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.controller == null) {
-      _internalController = TextEditingController(
-        text: _formatInitial(widget.initialValue),
-      );
+      final initText = widget.initialValue != null
+          ? NumericFormatterUtils.formatNumberString(
+              widget.initialValue.toString(),
+              groupingSystem: widget.groupingSystem,
+              allowDecimals: widget.allowDecimals,
+              decimalPlaces: widget.decimalPlaces,
+              allowNegative: widget.allowNegative,
+            )
+          : '';
+      _internalController = TextEditingController(text: initText);
     }
     if (widget.focusNode == null) {
       _internalFocusNode = FocusNode();
     }
-
     _controller.addListener(_onTextChanged);
-    _focusNode.addListener(_onFocusChanged);
+    _focusNode.addListener(_onFocusChange);
   }
 
   @override
   void didUpdateWidget(covariant NumericInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // Sync Controller
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller?.removeListener(_onTextChanged);
       _internalController?.removeListener(_onTextChanged);
 
       if (widget.controller == null) {
         _internalController ??= TextEditingController(
-          text: oldWidget.controller?.text ?? _formatInitial(widget.initialValue),
+          text: oldWidget.controller?.text ?? '',
         );
       } else {
         _internalController?.dispose();
         _internalController = null;
       }
       _controller.addListener(_onTextChanged);
-    } else if (widget.controller == null &&
-        oldWidget.initialValue != widget.initialValue) {
-      final formatted = _formatInitial(widget.initialValue);
-      if (_controller.text.isEmpty ||
-          _controller.text == _formatInitial(oldWidget.initialValue) ||
-          widget.initialValue == null) {
-        _controller.text = formatted;
-      }
     }
 
-    // Sync FocusNode
     if (oldWidget.focusNode != widget.focusNode) {
-      oldWidget.focusNode?.removeListener(_onFocusChanged);
-      _internalFocusNode?.removeListener(_onFocusChanged);
+      oldWidget.focusNode?.removeListener(_onFocusChange);
+      _internalFocusNode?.removeListener(_onFocusChange);
 
       if (widget.focusNode == null) {
         _internalFocusNode ??= FocusNode();
@@ -387,7 +353,7 @@ class _NumericInputState extends State<NumericInput> {
         _internalFocusNode?.dispose();
         _internalFocusNode = null;
       }
-      _focusNode.addListener(_onFocusChanged);
+      _focusNode.addListener(_onFocusChange);
     }
   }
 
@@ -397,304 +363,103 @@ class _NumericInputState extends State<NumericInput> {
       widget.controller!.removeListener(_onTextChanged);
     }
     if (widget.focusNode != null) {
-      widget.focusNode!.removeListener(_onFocusChanged);
+      widget.focusNode!.removeListener(_onFocusChange);
     }
     _internalController?.removeListener(_onTextChanged);
     _internalController?.dispose();
-    _internalFocusNode?.removeListener(_onFocusChanged);
+    _internalFocusNode?.removeListener(_onFocusChange);
     _internalFocusNode?.dispose();
     super.dispose();
   }
 
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      _hasHadFocus = true;
+    } else if (_hasHadFocus) {
+      _hasBeenTouched = true;
+    }
+    setState(() {});
+  }
+
   void _onTextChanged() {
-    final parsed = NumericFormatterUtils.parse(_controller.text);
-    widget.onChangedNumber?.call(parsed);
-    _formFieldState?.didChange(_controller.text);
-    setState(() {});
-  }
-
-  void _onFocusChanged() {
-    if (!_focusNode.hasFocus && widget.clampOnUnfocus) {
-      _clampCurrentValue();
+    if (_controller.text.isNotEmpty) {
+      _hasBeenTouched = true;
     }
     setState(() {});
+    final numVal = NumericFormatterUtils.parse(_controller.text);
+    widget.onNumberChanged?.call(numVal);
   }
 
-  void _clampCurrentValue() {
+  List<String> get _activeValidationErrors {
+    final errors = <String>[];
+    if (widget.errorMessages != null && widget.errorMessages!.isNotEmpty) {
+      errors.addAll(widget.errorMessages!.where((e) => e.trim().isNotEmpty));
+    } else if (widget.isError && widget.errorMessage.trim().isNotEmpty) {
+      errors.add(widget.errorMessage);
+    }
+
+    if (widget.isRequired && _hasBeenTouched && _controller.text.trim().isEmpty) {
+      errors.add('${widget.label ?? "Field"} is required');
+    }
+
     final parsed = NumericFormatterUtils.parse(_controller.text);
-    if (parsed == null) return;
-
-    num clamped = parsed;
-    if (widget.minValue != null && clamped < widget.minValue!) {
-      clamped = widget.minValue!;
-    }
-    if (widget.maxValue != null && clamped > widget.maxValue!) {
-      clamped = widget.maxValue!;
-    }
-
-    if (clamped != parsed) {
-      final formatted = NumericFormatterUtils.formatNumberString(
-        clamped.toString(),
-        groupingSystem: widget.groupingSystem,
-        allowDecimals: widget.allowDecimals,
-        decimalPlaces: widget.decimalPlaces,
-        allowNegative: _allowNegative,
-      );
-      _controller.text = formatted;
-      widget.onChanged?.call(formatted);
-      widget.onChangedNumber?.call(clamped);
-    }
-  }
-
-  String? _evaluateBuiltInValidation(String? value) {
-    if (!widget.autoValidateRules) {
-      return null;
-    }
-
-    final text = value ?? '';
-
-    // Required check
-    if (widget.isRequired && text.trim().isEmpty) {
-      return widget.requiredErrorText ?? 'This field is required';
-    }
-
-    if (text.trim().isNotEmpty) {
-      final parsed = NumericFormatterUtils.parse(text);
-      if (parsed != null) {
-        // Min Value check
-        if (widget.minValue != null && parsed < widget.minValue!) {
-          return widget.minErrorText ??
-              'Value cannot be less than ${widget.minValue}';
-        }
-        // Max Value check
-        if (widget.maxValue != null && parsed > widget.maxValue!) {
-          return widget.maxErrorText ??
-              'Value cannot exceed ${widget.maxValue}';
-        }
+    if (parsed != null) {
+      if (widget.minValue != null && parsed < widget.minValue!) {
+        errors.add('Value must be at least ${widget.minValue}');
+      }
+      if (widget.maxValue != null && parsed > widget.maxValue!) {
+        errors.add('Value cannot exceed ${widget.maxValue}');
       }
     }
 
-    return null;
-  }
-
-  bool _computeIsError(String? formError) {
-    if (widget.isError) return true;
-    if (formError != null && formError.isNotEmpty) return true;
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    return builtInError != null && builtInError.isNotEmpty;
-  }
-
-  String? _computeErrorText(String? formError) {
-    if (formError != null && formError.isNotEmpty) {
-      return formError;
-    }
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    if (builtInError != null && builtInError.isNotEmpty) {
-      return builtInError;
-    }
-    return widget.errorText;
-  }
-
-  List<TextInputFormatter> get _inputFormatters {
-    return [
-      _NumericTextInputFormatter(
-        groupingSystem: widget.groupingSystem,
-        allowDecimals: widget.allowDecimals,
-        decimalPlaces: widget.decimalPlaces,
-        allowNegative: _allowNegative,
-        maxValue: widget.clampOnUnfocus ? null : widget.maxValue,
-      ),
-    ];
-  }
-
-  TextInputType get _keyboardType {
-    if (!widget.allowDecimals && !_allowNegative) {
-      return TextInputType.number;
-    }
-    return TextInputType.numberWithOptions(
-      decimal: widget.allowDecimals,
-      signed: _allowNegative,
-    );
-  }
-
-  Color _computeIconColor(bool isError) {
-    if (widget.readOnly) {
-      return AlterSemanticTokens.textSecondary;
-    }
-    if ((_focusNode.hasFocus && widget.enabled) ||
-        _controller.text.isNotEmpty ||
-        isError) {
-      return AlterSemanticTokens.textPrimary;
-    }
-    return AlterSemanticTokens.textSecondary;
-  }
-
-  Color get _textColor {
-    if (widget.readOnly) {
-      return AlterSemanticTokens.textSecondary;
-    }
-    return AlterSemanticTokens.textPrimary;
-  }
-
-  Color get _suffixColor => AlterSemanticTokens.textDisabled;
-
-  /// Builds the mutually exclusive right slot as defined in Figma Node `454:482` (`.rightSlot`).
-  Widget? _buildRightSlot() {
-    // 1. Custom Suffix Widget or Static Suffix Text: type=Suffix
-    if (widget.suffixWidget != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          widget.suffixWidget!,
-        ],
-      );
-    }
-
-    if (widget.hasSuffix && widget.suffix != null && widget.suffix!.isNotEmpty) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          Text(
-            widget.suffix!,
-            style: AlterTypography.bodyLg.copyWith(
-              color: _suffixColor,
-            ),
-          ),
-        ],
-      );
-    }
-
-    // 2. Clear Button: type=Clear (ButtonIconGhost with clear icon)
-    final canShowClear = widget.hasClear &&
-        _controller.text.isNotEmpty &&
-        widget.enabled &&
-        !widget.readOnly;
-
-    if (canShowClear) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          ButtonIconGhost(
-            icon: Icons.close,
-            size: 24,
-            type: ButtonIconGhostType.secondary,
-            onTap: () {
-              _controller.clear();
-              _focusNode.requestFocus();
-              widget.onChanged?.call('');
-              widget.onChangedNumber?.call(null);
-            },
-          ),
-        ],
-      );
-    }
-
-    return null;
-  }
-
-  Widget? _buildLeading(Color iconColor) {
-    if (widget.leadingWidget != null) {
-      return widget.leadingWidget;
-    }
-    if (widget.hasIcon && widget.icon != null) {
-      return Icon(
-        widget.icon,
-        size: 24,
-        color: iconColor,
-      );
-    }
-    return null;
-  }
-
-  Widget _buildFieldContent(String? formError) {
-    final isError = _computeIsError(formError);
-    final errorText = _computeErrorText(formError);
-    final iconColor = _computeIconColor(isError);
-
-    final leadingWidget = _buildLeading(iconColor);
-    final rightSlot = _buildRightSlot();
-
-    return InputContainer(
-      label: widget.label,
-      hasLabelBar: widget.hasLabelBar,
-      isRequired: widget.isRequired,
-      currentLength: _controller.text.length,
-      type: widget.type,
-      isError: isError,
-      hasFeedback: widget.hasFeedback,
-      errorText: errorText,
-      enabled: widget.enabled,
-      readOnly: widget.readOnly,
-      hasFocus: _focusNode.hasFocus,
-      onTap: () => _focusNode.requestFocus(),
-      leading: leadingWidget,
-      trailing: rightSlot,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        showCursor: !widget.readOnly && widget.enabled,
-        autocorrect: false,
-        enableSuggestions: false,
-        keyboardType: _keyboardType,
-        inputFormatters: _inputFormatters,
-        textInputAction: widget.textInputAction,
-        onChanged: (val) {
-          widget.onChanged?.call(val);
-        },
-        onSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        cursorColor: AlterSemanticTokens.textPrimary,
-        style: AlterTypography.bodyLg.copyWith(
-          color: _textColor,
-        ),
-        decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: widget.placeholder,
-          hintStyle: AlterTypography.bodyLg.copyWith(
-            color: AlterSemanticTokens.textSecondary,
-          ),
-        ),
-      ),
-    );
+    return errors;
   }
 
   @override
   Widget build(BuildContext context) {
-    final effectiveValidator = widget.validator ?? _evaluateBuiltInValidation;
+    final errors = _activeValidationErrors;
+    final effectiveIsError = errors.isNotEmpty || widget.isError;
 
-    if (widget.validator != null ||
-        widget.onSaved != null ||
-        widget.autovalidateMode != null ||
-        widget.isRequired ||
-        widget.minValue != null ||
-        widget.maxValue != null) {
-      return FormField<String>(
-        initialValue: _controller.text,
-        validator: effectiveValidator,
-        onSaved: widget.onSaved,
-        autovalidateMode: widget.autovalidateMode ??
-            (widget.autoValidateRules
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled),
-        builder: (FormFieldState<String> state) {
-          _formFieldState = state;
-          return _buildFieldContent(state.errorText);
-        },
-      );
-    }
-
-    _formFieldState = null;
-    return _buildFieldContent(null);
+    return InputControl(
+      label: widget.label,
+      isRequired: widget.isRequired,
+      characterLimit: widget.characterLimit,
+      type: widget.type,
+      leftIcon: widget.leftIcon,
+      leftIconWidget: widget.leftIconWidget,
+      prefix: widget.prefix,
+      prefixWidget: widget.prefixWidget,
+      placeholder: widget.placeholder,
+      controller: _controller,
+      focusNode: _focusNode,
+      suffix: widget.suffix,
+      suffixWidget: widget.suffixWidget,
+      rightButton: widget.rightButton,
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: widget.allowDecimals,
+        signed: widget.allowNegative,
+      ),
+      inputFormatters: [
+        GroupedNumberInputFormatter(
+          groupingSystem: widget.groupingSystem,
+          allowDecimals: widget.allowDecimals,
+          decimalPlaces: widget.decimalPlaces,
+          allowNegative: widget.allowNegative,
+          maxValue: widget.maxValue,
+        ),
+      ],
+      isError: effectiveIsError,
+      showErrorMessage: widget.showErrorMessage,
+      errorMessage: widget.errorMessage,
+      errorMessages: errors,
+      errorIconWidget: widget.errorIconWidget,
+      enabled: widget.enabled,
+      readOnly: widget.readOnly,
+      autofocus: widget.autofocus,
+      textInputAction: TextInputAction.done,
+      onTap: widget.onTap,
+      onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
+    );
   }
 }

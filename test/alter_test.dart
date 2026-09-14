@@ -215,9 +215,9 @@ void main() {
       expect(find.text('Test Header'), findsOneWidget);
       expect(find.text('Test Subtitle'), findsOneWidget);
       expect(find.text('Slot Content'), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_left), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.tap(find.byIcon(Icons.chevron_left));
       await tester.pump();
       expect(returnTapped, isTrue);
 
@@ -333,6 +333,169 @@ void main() {
       await tester.tap(find.text('Custom Item Title'));
       await tester.pump();
       expect(rowTapped, isTrue);
+    });
+
+    testWidgets('TextInput renders label, placeholder, and handles input', (WidgetTester tester) async {
+      String typedValue = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: TextInput(
+                label: 'Test Input',
+                placeholder: 'Enter text here',
+                onChanged: (val) => typedValue = val,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Test Input'), findsOneWidget);
+      expect(find.text('Enter text here'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'Hello World');
+      await tester.pump();
+      expect(typedValue, equals('Hello World'));
+    });
+
+    testWidgets('TextArea renders with multiline sizing', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: TextArea(
+                label: 'Bio',
+                placeholder: 'Write your bio...',
+                lines: 4,
+                minLines: 1,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Bio'), findsOneWidget);
+      expect(find.text('Write your bio...'), findsOneWidget);
+    });
+
+    testWidgets('NumericInput accepts numbers and enforces formatting', (WidgetTester tester) async {
+      num? numericVal;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: NumericInput(
+                label: 'Quantity',
+                placeholder: '0',
+                onNumberChanged: (val) => numericVal = val,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Quantity'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), '42');
+      await tester.pump();
+      expect(numericVal, equals(42));
+    });
+
+    testWidgets('PasswordInput toggles visibility and respects validations', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: PasswordInput(
+                label: 'Password',
+                placeholder: 'Enter password',
+                showEyeToggle: true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Password'), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.visibility_outlined));
+      await tester.pump();
+      expect(find.byIcon(Icons.visibility_off_outlined), findsOneWidget);
+    });
+
+    testWidgets('SearchInput renders search icon and triggers search callback', (WidgetTester tester) async {
+      String searched = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SearchInput(
+                placeholder: 'Search items...',
+                onSearch: (q) => searched = q,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Search items...'), findsOneWidget);
+      expect(find.byIcon(Icons.search_rounded), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'Flutter');
+      await tester.testTextInput.receiveAction(TextInputAction.search);
+      await tester.pump();
+      expect(searched, equals('Flutter'));
+    });
+
+    testWidgets('CurrencyInput formats input currency correctly', (WidgetTester tester) async {
+      num? currentVal;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: CurrencyInput(
+                label: 'Amount',
+                prefix: '\$',
+                onAmountChanged: (val) => currentVal = val,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Amount'), findsOneWidget);
+      expect(find.text('\$'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '150.50');
+      await tester.pump();
+      expect(currentVal, equals(150.50));
+    });
+
+    testWidgets('OTPInput renders boxes and accepts digit pins', (WidgetTester tester) async {
+      String completedPin = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: OTPInput(
+                length: 4,
+                onCompleted: (pin) => completedPin = pin,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(TextField), findsNWidgets(4));
+      await tester.enterText(find.byType(TextField).first, '1');
+      await tester.pump();
+      expect(completedPin, isEmpty);
     });
   });
 }

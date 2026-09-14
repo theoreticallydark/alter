@@ -1,128 +1,126 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../styles/tokens.dart';
-import '../../styles/typography.dart';
 import '../buttons/button_icon_ghost.dart';
-import '../status/feedback_text.dart';
-import 'input_container.dart';
+import 'input_control.dart';
 
-/// Surface style variant for [TextInput].
-enum TextInputVariant {
-  gray,
-  white,
-}
-
-/// Input filtering and keyboard mode for [TextInput].
+/// Text filtering modes for [TextInput].
 enum TextInputMode {
-  /// Allows all characters (standard text input).
+  /// Allows all characters.
   all,
 
-  /// Allows only alphabetical characters and spaces ([a-zA-Z\s]).
+  /// Only alphabetic characters (A-Z, a-z, spaces).
   onlyAlphabets,
 
-  /// Allows letters, numbers, and spaces ([a-zA-Z0-9\s]).
+  /// Alphanumeric characters (A-Z, a-z, 0-9, spaces).
   alphanumeric,
 
-  /// Allows only integer digits ([0-9]) with numeric keyboard.
+  /// Digits only (0-9).
   onlyNumbers,
 
-  /// Allows decimal numbers ([0-9.]) with decimal keyboard.
+  /// Decimal numbers (0-9, single period).
   decimal,
 
-  /// Email address input with email keyboard layout and built-in email format validation.
+  /// Email format (disables spaces, suggestions).
   email,
 
-  /// Phone number input with dial pad keyboard and built-in phone number validation.
+  /// Phone number format (digits, +, -, spaces, parentheses).
   phone,
 }
 
-/// Reusable Text Input field component for the Alter Design System.
+/// A comprehensive text entry field component for the Alter Design System built on [InputControl].
 ///
-/// Figma Specifications (Node `441:9205` & dependent `.rightSlot` Node `454:482`):
-/// - Variants:
-///   - `type=Gray` (`339:12055`): Fill `baseGray` (`#F9FAFB`), Border 1px `stroke200` (`#E5E7EB`)
-///   - `type=White` (`441:9230`): Fill `baseWhite` (`#FFFFFF`), Border 1px `stroke100` (`#F3F4F6`)
-///   - `state=Default`: Placeholder visible, subtle border
-///   - `state=Typing`: Focused, Border 1px `stroke1000` (`#000000`)
-///   - `state=Filled`: Unfocused with content, subtle border
-///   - `state=ReadOnly`: Border 1px `textDisabled` (`#99A1AF`), non-editable
-///   - `state=Disabled`: 48% opacity, disabled interaction
-///   - `state=Error`: Border 1px `textDanger` (`#E7000B`), optional [FeedbackText]
-/// - Smart Validation Engine:
-///   - Built-in validation for [isRequired], email format, phone format, and character limit.
-///   - Full developer customization via custom error message strings or explicit [validator].
+/// Direct implementation of Figma Node `471:1547` (`TextInput`):
+/// - Composes [InputControl] with Figma default configuration:
+///   - `leftIcon: Icons.face_5_outlined`
+///   - `rightButton: null` (interactive trailing action via [ButtonIconGhost])
+///   - `prefix: null`
+///   - `suffix: null`
+///   - `label: 'Label'`
+///   - `characterLimit: 32`
+/// - Full Flutter `FormField<String>` integration supporting `Form.validate()` and `Form.save()`.
+/// - Supports multiple simultaneous error conditions, rendering the latest error in evaluation order.
+/// - Built-in validation for required (deferred until touch/blur or Form submit), email, phone, and character limits.
 class TextInput extends StatefulWidget {
   /// Component version for reference.
-  /// v1.5.1: Pass isRequired to InputContainer to render required asterisk in label bar.
-  /// v1.5.0: Added smart built-in validation engine for isRequired, email, phone, and customizable error texts.
-  /// v1.4.1: Refactored to compose shared InputContainer for visual styling, border states, and label bar.
-  /// v1.4.0: Extracted password logic into dedicated PasswordInput component (lib/components/inputs/password_input.dart).
-  /// v1.3.1: Standardized naming to showCharacterLimit and replaced word limit with character limit across all documentation and comments.
-  /// v1.3.0: Added native `FormField<String>` registration (enabling Form.validate() and Form.save()), onEditingComplete, and obscuringCharacter.
-  /// v1.2.3: Renamed hasLabel to hasLabelBar to control visibility of the entire top bar (including label and character limit counter).
-  /// v1.2.2: Suffix is always visible across all states; Password toggle and Clear buttons are visible only when input text is present.
-  /// v1.2.1: Updated suffix color to textDisabled (#99A1AF), and read-only leading icon and input text color to textSecondary (#4A5565) as per Figma.
-  /// v1.2.0: Aligned with updated Figma Nodes 441:9205 & 454:482 (top labelBarContainer with right-aligned character limit counter, .rightSlot sub-architecture, and read-only stroke ui4).
-  /// v1.1.1: Refined slot priorities (password mode hides leading icon/suffix/clear; independent suffix suppresses character counter; suffix presence suppresses clear button).
-  /// v1.1.0: Added leadingWidget, character counter in suffix, password security rules, container tap-to-focus, and full FormField validator integration.
-  /// v1.0.3: Retain focus and keyboard active in typing state when clearing input.
-  /// v1.0.2: Updated leading icon and suffix color to textPrimary in typing, filled, read-only, and error states.
-  /// v1.0.1: Disabled clear button in password mode; verified read-only and token colors against Figma.
-  /// v1.0.0: Initial release matching Figma Node 441:9205.
-  static const String version = '1.5.1';
+  /// v2.3.0: Streamlined multiline sizing: Clean minLines and maxLines configuration without redundant boolean flags.
+  /// v2.2.0: Fixed isRequired trigger lifecycle: Defer required error until blur (unfocus after focus) or explicit typing & clearing, preventing immediate error upon clicking into an empty field.
+  /// v2.1.0: Aligned with InputControl v2.1.0: removed showLabel and showCharacterLimit booleans. Label bar and UI counter render when label is non-null.
+  /// v2.0.0: Pure Flutter convention overhaul: Removed statusOverride and redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon flags in favor of clean nullable properties.
+  /// v1.6.0: Streamlined right action slot to accept ButtonIconGhost? rightButton directly (matching InputControl v1.6.0).
+  /// v1.5.0: Integrated ButtonIconGhost rightIcon configuration (rightIconType, onRightIconTap), maxLines/minLines, and inputFormatters passthrough to InputControl v1.5.0.
+  /// v1.4.0: Deferred isRequired validation until touch/blur or explicit Form validation (preventing immediate errors on pristine load).
+  /// v1.3.0: Added support for multiple error conditions rendering the latest error in order; integrated InputControl v1.4.0 isRequired asterisk styling.
+  /// v1.2.0: Aligned character limit overflow behavior with InputControl v1.3.0 ('Character limit exceeded').
+  /// v1.1.0: Updated to use InputControl v1.2.0 API: renamed wordLimit to characterLimit, hide labelBar if showLabel is false, dynamic characterLimit shown only in typing state, independent isError and showErrorMessage properties.
+  /// v2.4.0: Added optional keyboardType (TextInputType?) fallback for direct native virtual keyboard override.
+  /// v2.3.0: Multiline sizing support: Added minLines and maxLines passthrough with safe bounds guarding.
+  /// v2.2.0: Added TextInputMode enum (all, numeric, email, phone, decimal, alphanumeric, onlyAlphabets, onlyNumbers) with automatic formatters, autocorrect, autofillHints, enableSuggestions, and phone/email validation.
+  /// v2.1.0: Aligned with InputControl v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
+  /// v2.0.0: Aligned with InputControl v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
+  /// v1.0.0: Initial release of TextInput built on InputControl.
+  static const String version = '2.4.0';
 
+  // Label Bar Properties (Figma default: label='Label', isRequired=false, characterLimit=32)
   final String? label;
-  final bool hasLabelBar;
-  final String? placeholder;
-  final String? initialValue;
+  final int? characterLimit;
+
+  // Variant & Surface
+  final InputControlType type;
+
+  // Left Section Slots (Figma default: leftIcon=Icons.face_5_outlined, prefix=null)
+  final IconData? leftIcon;
+  final Widget? leftIconWidget;
+
+  final String? prefix;
+  final Widget? prefixWidget;
+
+  final String placeholder;
+  final String? value;
   final TextEditingController? controller;
   final FocusNode? focusNode;
 
-  final TextInputVariant type;
-  final TextInputMode inputMode;
-
-  // Leading
-  final bool hasIcon;
-  final IconData? icon;
-  final Widget? leadingWidget;
-
-  // Suffix (.rightSlot: type=Suffix)
-  final bool hasSuffix;
+  // Right Section Slots (Figma default: suffix=null, rightButton=null)
   final String? suffix;
   final Widget? suffixWidget;
 
-  // Clear Button (.rightSlot: type=Clear)
-  final bool hasClear;
+  final ButtonIconGhost? rightButton;
 
-  // General Text Input Options
+  // Core Text & Format Passthroughs
+  final int? maxLines;
+  final int? minLines;
+  final List<TextInputFormatter>? inputFormatters;
+
+  // Text Mode, Limits & Filtering
+  final TextInputMode inputMode;
+  final TextInputType? keyboardType;
   final bool? autocorrect;
   final bool? enableSuggestions;
   final Iterable<String>? autofillHints;
 
-  // Limits (labelBarContainer: character limit counter)
-  final bool hasCharacterLimit;
-  final int? characterLimit;
-  final bool showCharacterLimit;
-
-  // Smart Validation & Error
+  // Validation & Multiple Error Support
   final bool isRequired;
   final bool autoValidateRules;
+  final bool isError;
+  final bool showErrorMessage;
+  final String errorMessage;
+  final List<String>? errorMessages;
   final String? requiredErrorText;
   final String? emailErrorText;
   final String? phoneErrorText;
-  final bool isError;
-  final bool hasFeedback;
-  final String? errorText;
+  final String? characterLimitErrorText;
+  final Widget? errorIconWidget;
 
-  // State & Interactivity
+  // Interactivity & Callbacks
   final bool enabled;
   final bool readOnly;
+  final bool autofocus;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final VoidCallback? onEditingComplete;
+  final VoidCallback? onTap;
   final TextInputAction textInputAction;
 
-  // Form Validation Integration
+  // Form Integration
   final FormFieldValidator<String>? validator;
   final FormFieldSetter<String>? onSaved;
   final AutovalidateMode? autovalidateMode;
@@ -130,39 +128,45 @@ class TextInput extends StatefulWidget {
   const TextInput({
     super.key,
     this.label = 'Label',
-    this.hasLabelBar = true,
+    this.characterLimit = 32,
+    this.type = InputControlType.gray,
+    this.leftIcon = Icons.face_5_outlined,
+    this.leftIconWidget,
+    this.prefix,
+    this.prefixWidget,
     this.placeholder = 'Input',
-    this.initialValue,
+    this.value,
     this.controller,
     this.focusNode,
-    this.type = TextInputVariant.gray,
-    this.inputMode = TextInputMode.all,
-    this.hasIcon = true,
-    this.icon = Icons.face_5_outlined,
-    this.leadingWidget,
-    this.hasSuffix = false,
-    this.suffix = 'suffix',
+    this.suffix,
     this.suffixWidget,
-    this.hasClear = false,
+    this.rightButton,
+    this.maxLines = 1,
+    this.minLines = 1,
+    this.inputFormatters,
+    this.inputMode = TextInputMode.all,
+    this.keyboardType,
     this.autocorrect,
     this.enableSuggestions,
     this.autofillHints,
-    this.hasCharacterLimit = false,
-    this.characterLimit,
-    this.showCharacterLimit = true,
     this.isRequired = false,
     this.autoValidateRules = true,
+    this.isError = false,
+    this.showErrorMessage = true,
+    this.errorMessage = 'Error Message',
+    this.errorMessages,
     this.requiredErrorText,
     this.emailErrorText,
     this.phoneErrorText,
-    this.isError = false,
-    this.hasFeedback = true,
-    this.errorText = 'Feedback Text',
+    this.characterLimitErrorText,
+    this.errorIconWidget,
     this.enabled = true,
     this.readOnly = false,
+    this.autofocus = false,
     this.onChanged,
     this.onSubmitted,
     this.onEditingComplete,
+    this.onTap,
     this.textInputAction = TextInputAction.done,
     this.validator,
     this.onSaved,
@@ -176,60 +180,57 @@ class TextInput extends StatefulWidget {
 class _TextInputState extends State<TextInput> {
   TextEditingController? _internalController;
   FocusNode? _internalFocusNode;
-  FormFieldState<String>? _formFieldState;
 
   TextEditingController get _controller =>
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
-  static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$',
-  );
+  bool _hasHadFocus = false;
+  bool _hasBeenTouched = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.controller == null) {
-      _internalController = TextEditingController(text: widget.initialValue);
+      _internalController = TextEditingController(text: widget.value);
     }
     if (widget.focusNode == null) {
       _internalFocusNode = FocusNode();
     }
 
-    _controller.addListener(_onTextChanged);
-    _focusNode.addListener(_onFocusChanged);
+    _controller.addListener(_onStateChange);
+    _focusNode.addListener(_onFocusChange);
   }
 
   @override
   void didUpdateWidget(covariant TextInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Sync Controller
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.removeListener(_onTextChanged);
-      _internalController?.removeListener(_onTextChanged);
+      oldWidget.controller?.removeListener(_onStateChange);
+      _internalController?.removeListener(_onStateChange);
 
       if (widget.controller == null) {
         _internalController ??= TextEditingController(
-          text: oldWidget.controller?.text ?? widget.initialValue,
+          text: oldWidget.controller?.text ?? widget.value,
         );
       } else {
         _internalController?.dispose();
         _internalController = null;
       }
-      _controller.addListener(_onTextChanged);
+      _controller.addListener(_onStateChange);
     } else if (widget.controller == null &&
-        oldWidget.initialValue != widget.initialValue &&
-        widget.initialValue != null) {
-      if (_controller.text.isEmpty || _controller.text == oldWidget.initialValue) {
-        _controller.text = widget.initialValue!;
+        oldWidget.value != widget.value) {
+      if (widget.value != null && _controller.text != widget.value) {
+        _controller.text = widget.value!;
+      } else if (widget.value == null && oldWidget.value != null) {
+        _controller.clear();
       }
     }
 
-    // Sync FocusNode
     if (oldWidget.focusNode != widget.focusNode) {
-      oldWidget.focusNode?.removeListener(_onFocusChanged);
-      _internalFocusNode?.removeListener(_onFocusChanged);
+      oldWidget.focusNode?.removeListener(_onFocusChange);
+      _internalFocusNode?.removeListener(_onFocusChange);
 
       if (widget.focusNode == null) {
         _internalFocusNode ??= FocusNode();
@@ -237,98 +238,44 @@ class _TextInputState extends State<TextInput> {
         _internalFocusNode?.dispose();
         _internalFocusNode = null;
       }
-      _focusNode.addListener(_onFocusChanged);
+      _focusNode.addListener(_onFocusChange);
     }
   }
 
   @override
   void dispose() {
     if (widget.controller != null) {
-      widget.controller!.removeListener(_onTextChanged);
+      widget.controller!.removeListener(_onStateChange);
     }
     if (widget.focusNode != null) {
-      widget.focusNode!.removeListener(_onFocusChanged);
+      widget.focusNode!.removeListener(_onFocusChange);
     }
-    _internalController?.removeListener(_onTextChanged);
+    _internalController?.removeListener(_onStateChange);
     _internalController?.dispose();
-    _internalFocusNode?.removeListener(_onFocusChanged);
+    _internalFocusNode?.removeListener(_onFocusChange);
     _internalFocusNode?.dispose();
     super.dispose();
   }
 
-  void _onTextChanged() {
-    _formFieldState?.didChange(_controller.text);
+  void _onStateChange() {
     setState(() {});
   }
 
-  void _onFocusChanged() {
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      _hasHadFocus = true;
+    } else if (_hasHadFocus) {
+      // User entered the field and blurred (clicked away / lost focus)
+      _hasBeenTouched = true;
+    }
     setState(() {});
   }
 
-  String? _evaluateBuiltInValidation(String? value) {
-    if (!widget.autoValidateRules) {
-      return null;
-    }
-
-    final text = value ?? '';
-
-    // Required check
-    if (widget.isRequired && text.trim().isEmpty) {
-      return widget.requiredErrorText ?? 'This field is required';
-    }
-
-    if (text.trim().isNotEmpty) {
-      // Email check
-      if (widget.inputMode == TextInputMode.email) {
-        if (!_emailRegExp.hasMatch(text.trim())) {
-          return widget.emailErrorText ?? 'Please enter a valid email address';
-        }
-      }
-
-      // Phone check
-      if (widget.inputMode == TextInputMode.phone) {
-        final digits = text.replaceAll(RegExp(r'\D'), '');
-        if (digits.length < 7) {
-          return widget.phoneErrorText ?? 'Please enter a valid phone number';
-        }
-      }
-    }
-
-    return null;
-  }
-
-  bool _computeIsError(String? formError) {
-    if (widget.isError) return true;
-    if (formError != null && formError.isNotEmpty) return true;
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    return builtInError != null && builtInError.isNotEmpty;
-  }
-
-  String? _computeErrorText(String? formError) {
-    if (formError != null && formError.isNotEmpty) {
-      return formError;
-    }
-    final builtInError = _evaluateBuiltInValidation(_controller.text);
-    if (builtInError != null && builtInError.isNotEmpty) {
-      return builtInError;
-    }
-    return widget.errorText;
-  }
-
-  List<TextInputFormatter> get _inputFormatters {
+  /// Resolve input formatters based on [widget.inputMode] and custom formatters.
+  List<TextInputFormatter> get _effectiveInputFormatters {
     final formatters = <TextInputFormatter>[];
 
-    // Character Limit enforcement
-    if (widget.hasCharacterLimit &&
-        widget.characterLimit != null &&
-        widget.characterLimit! > 0) {
-      formatters.add(LengthLimitingTextInputFormatter(widget.characterLimit));
-    }
-
-    // Input Mode filtering
     switch (widget.inputMode) {
-      case TextInputMode.all:
-        break;
       case TextInputMode.onlyAlphabets:
         formatters.add(FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')));
         break;
@@ -339,25 +286,32 @@ class _TextInputState extends State<TextInput> {
         formatters.add(FilteringTextInputFormatter.digitsOnly);
         break;
       case TextInputMode.decimal:
-        formatters.add(FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')));
+        formatters.add(FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')));
         break;
       case TextInputMode.email:
         formatters.add(FilteringTextInputFormatter.deny(RegExp(r'\s')));
         break;
       case TextInputMode.phone:
-        formatters.add(FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s()]')));
+        formatters.add(FilteringTextInputFormatter.allow(RegExp(r'[\d\+\-\(\)\s]')));
         break;
+      case TextInputMode.all:
+        break;
+    }
+
+    if (widget.inputFormatters != null) {
+      formatters.addAll(widget.inputFormatters!);
     }
 
     return formatters;
   }
 
-  TextInputType get _keyboardType {
+  /// Resolved keyboard type: uses [widget.keyboardType] if explicitly provided,
+  /// otherwise derives from [widget.inputMode] and multiline state.
+  TextInputType get _effectiveKeyboardType {
+    if (widget.keyboardType != null) {
+      return widget.keyboardType!;
+    }
     switch (widget.inputMode) {
-      case TextInputMode.all:
-      case TextInputMode.onlyAlphabets:
-      case TextInputMode.alphanumeric:
-        return TextInputType.text;
       case TextInputMode.onlyNumbers:
         return TextInputType.number;
       case TextInputMode.decimal:
@@ -366,207 +320,129 @@ class _TextInputState extends State<TextInput> {
         return TextInputType.emailAddress;
       case TextInputMode.phone:
         return TextInputType.phone;
+      case TextInputMode.all:
+      case TextInputMode.onlyAlphabets:
+      case TextInputMode.alphanumeric:
+        return widget.maxLines != null && widget.maxLines! > 1
+            ? TextInputType.multiline
+            : TextInputType.text;
     }
   }
 
-  Iterable<String>? get _effectiveAutofillHints {
-    if (widget.autofillHints != null) {
-      return widget.autofillHints;
-    }
-    switch (widget.inputMode) {
-      case TextInputMode.email:
-        return const [AutofillHints.email];
-      case TextInputMode.phone:
-        return const [AutofillHints.telephoneNumber];
-      default:
-        return null;
-    }
-  }
+  /// Collects active validation errors in sequence.
+  List<String> _evaluateErrors(FormFieldState<String>? field) {
+    final errors = <String>[];
 
-  Color _computeIconColor(bool isError) {
-    if (widget.readOnly) {
-      return AlterSemanticTokens.textSecondary;
-    }
-    if ((_focusNode.hasFocus && widget.enabled) ||
-        _controller.text.isNotEmpty ||
-        isError) {
-      return AlterSemanticTokens.textPrimary;
-    }
-    return AlterSemanticTokens.textSecondary;
-  }
-
-  Color get _textColor {
-    if (widget.readOnly) {
-      return AlterSemanticTokens.textSecondary;
-    }
-    return AlterSemanticTokens.textPrimary;
-  }
-
-  Color get _suffixColor => AlterSemanticTokens.textDisabled;
-
-  /// Builds the mutually exclusive right slot as defined in Figma Node `454:482` (`.rightSlot`).
-  Widget? _buildRightSlot() {
-    // 1. Custom Suffix Widget or Static Suffix Text: type=Suffix
-    // Always visible in each state (Default, Typing, Filled, ReadOnly, Disabled, Error)
-    if (widget.suffixWidget != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          widget.suffixWidget!,
-        ],
+    // 1. External error messages list
+    if (widget.errorMessages != null && widget.errorMessages!.isNotEmpty) {
+      errors.addAll(
+        widget.errorMessages!.where((e) => e.trim().isNotEmpty),
       );
+    } else if (widget.isError && widget.errorMessage.trim().isNotEmpty) {
+      errors.add(widget.errorMessage);
     }
 
-    if (widget.hasSuffix && widget.suffix != null && widget.suffix!.isNotEmpty) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          Text(
-            widget.suffix!,
-            style: AlterTypography.bodyLg.copyWith(
-              color: _suffixColor,
-            ),
-          ),
-        ],
-      );
+    // 2. Built-in automatic validation rules
+    if (widget.autoValidateRules) {
+      final text = _controller.text;
+
+      // Required validation (deferred until touch/blur or form submission)
+      if (widget.isRequired && _hasBeenTouched && text.trim().isEmpty) {
+        errors.add(widget.requiredErrorText ?? '${widget.label ?? "Field"} is required');
+      }
+
+      // Email format
+      if (widget.inputMode == TextInputMode.email && text.isNotEmpty) {
+        final emailRegex = RegExp(
+          r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$',
+        );
+        if (!emailRegex.hasMatch(text)) {
+          errors.add(widget.emailErrorText ?? 'Enter a valid email address');
+        }
+      }
+
+      // Phone format
+      if (widget.inputMode == TextInputMode.phone && text.isNotEmpty) {
+        final digits = text.replaceAll(RegExp(r'\D'), '');
+        if (digits.length < 7) {
+          errors.add(widget.phoneErrorText ?? 'Enter a valid phone number');
+        }
+      }
     }
 
-    // 2. Clear Button: type=Clear (ButtonIconGhost with clear icon)
-    // Only visible when input is available (i.e. text is not empty)
-    final canShowClear = widget.hasClear &&
-        _controller.text.isNotEmpty &&
-        widget.enabled &&
-        !widget.readOnly;
-
-    if (canShowClear) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(width: 8),
-          ButtonIconGhost(
-            icon: Icons.close,
-            size: 24,
-            type: ButtonIconGhostType.secondary,
-            onTap: () {
-              _controller.clear();
-              _focusNode.requestFocus();
-              widget.onChanged?.call('');
-            },
-          ),
-        ],
-      );
+    // 3. FormField errorText from custom validator
+    if (field?.errorText != null && field!.errorText!.isNotEmpty) {
+      errors.add(field.errorText!);
     }
 
-    return null;
-  }
-
-  Widget? _buildLeading(Color iconColor) {
-    if (widget.leadingWidget != null) {
-      return widget.leadingWidget;
-    }
-    if (widget.hasIcon && widget.icon != null) {
-      return Icon(
-        widget.icon,
-        size: 24,
-        color: iconColor,
-      );
-    }
-    return null;
-  }
-
-  Widget _buildFieldContent(String? formError) {
-    final isError = _computeIsError(formError);
-    final errorText = _computeErrorText(formError);
-    final iconColor = _computeIconColor(isError);
-
-    final leadingWidget = _buildLeading(iconColor);
-    final rightSlot = _buildRightSlot();
-
-    return InputContainer(
-      label: widget.label,
-      hasLabelBar: widget.hasLabelBar,
-      isRequired: widget.isRequired,
-      hasCharacterLimit: widget.hasCharacterLimit,
-      characterLimit: widget.characterLimit,
-      showCharacterLimit: widget.showCharacterLimit,
-      currentLength: _controller.text.length,
-      type: widget.type,
-      isError: isError,
-      hasFeedback: widget.hasFeedback,
-      errorText: errorText,
-      enabled: widget.enabled,
-      readOnly: widget.readOnly,
-      hasFocus: _focusNode.hasFocus,
-      onTap: () => _focusNode.requestFocus(),
-      leading: leadingWidget,
-      trailing: rightSlot,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        showCursor: !widget.readOnly && widget.enabled,
-        autocorrect: widget.autocorrect ?? true,
-        enableSuggestions: widget.enableSuggestions ?? true,
-        autofillHints: _effectiveAutofillHints,
-        keyboardType: _keyboardType,
-        inputFormatters: _inputFormatters,
-        textInputAction: widget.textInputAction,
-        onChanged: (val) {
-          widget.onChanged?.call(val);
-        },
-        onSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        cursorColor: AlterSemanticTokens.textPrimary,
-        style: AlterTypography.bodyLg.copyWith(
-          color: _textColor,
-        ),
-        decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: widget.placeholder,
-          hintStyle: AlterTypography.bodyLg.copyWith(
-            color: AlterSemanticTokens.textSecondary,
-          ),
-        ),
-      ),
-    );
+    return errors;
   }
 
   @override
   Widget build(BuildContext context) {
-    // Custom validator or Form integration
-    final effectiveValidator = widget.validator ?? _evaluateBuiltInValidation;
+    return FormField<String>(
+      initialValue: widget.value ?? widget.controller?.text,
+      validator: (val) {
+        // If form is validating explicitly, mark as touched
+        if (widget.isRequired) {
+          _hasBeenTouched = true;
+        }
 
-    if (widget.validator != null ||
-        widget.onSaved != null ||
-        widget.autovalidateMode != null ||
-        widget.isRequired ||
-        widget.inputMode == TextInputMode.email ||
-        widget.inputMode == TextInputMode.phone) {
-      return FormField<String>(
-        initialValue: _controller.text,
-        validator: effectiveValidator,
-        onSaved: widget.onSaved,
-        autovalidateMode: widget.autovalidateMode ??
-            (widget.autoValidateRules
-                ? AutovalidateMode.onUserInteraction
-                : AutovalidateMode.disabled),
-        builder: (FormFieldState<String> state) {
-          _formFieldState = state;
-          return _buildFieldContent(state.errorText);
-        },
-      );
-    }
+        if (widget.validator != null) {
+          return widget.validator!(val ?? _controller.text);
+        }
+        if (widget.isRequired && (val == null || val.trim().isEmpty)) {
+          return widget.requiredErrorText ?? '${widget.label ?? "Field"} is required';
+        }
+        return null;
+      },
+      onSaved: widget.onSaved,
+      autovalidateMode: widget.autovalidateMode ?? AutovalidateMode.disabled,
+      builder: (FormFieldState<String> field) {
+        final activeErrors = _evaluateErrors(field);
+        final hasError = activeErrors.isNotEmpty || widget.isError;
 
-    _formFieldState = null;
-    return _buildFieldContent(null);
+        return InputControl(
+          label: widget.label,
+          isRequired: widget.isRequired,
+          characterLimit: widget.characterLimit,
+          type: widget.type,
+          leftIcon: widget.leftIcon,
+          leftIconWidget: widget.leftIconWidget,
+          prefix: widget.prefix,
+          prefixWidget: widget.prefixWidget,
+          placeholder: widget.placeholder,
+          value: widget.value,
+          controller: _controller,
+          focusNode: _focusNode,
+          suffix: widget.suffix,
+          suffixWidget: widget.suffixWidget,
+          rightButton: widget.rightButton,
+          obscureText: false,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          inputFormatters: _effectiveInputFormatters,
+          isError: hasError,
+          showErrorMessage: widget.showErrorMessage,
+          errorMessage: widget.errorMessage,
+          errorMessages: activeErrors,
+          errorIconWidget: widget.errorIconWidget,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          autofocus: widget.autofocus,
+          keyboardType: _effectiveKeyboardType,
+          textInputAction: widget.textInputAction,
+          onTap: widget.onTap,
+          onChanged: (text) {
+            if (text.isNotEmpty) {
+              _hasBeenTouched = true;
+            }
+            field.didChange(text);
+            widget.onChanged?.call(text);
+          },
+          onSubmitted: widget.onSubmitted,
+        );
+      },
+    );
   }
 }
