@@ -516,9 +516,13 @@ WidgetbookFolder inputCategory() {
                 initialValue: 'Feedback / Notes',
               );
               final lines = context.knobs.intOrNull.input(
-                label: 'Reserved Lines (Height)',
+                label: 'Lines (Reserved or Max Adaptive Height)',
                 initialValue: 4,
               ) ?? 4;
+              final minLines = context.knobs.intOrNull.input(
+                label: 'Min Lines (Set to enable Adaptive Height, null for Fixed)',
+                initialValue: null,
+              );
               final isRequired = context.knobs.boolean(
                 label: 'Is Required (Asterisk beside label)',
                 initialValue: false,
@@ -568,10 +572,11 @@ WidgetbookFolder inputCategory() {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 384),
                     child: TextArea(
-                      key: ValueKey('text_area_${type.name}_${lines}_${readOnly}_${label}_${charLimit}_$value'),
+                      key: ValueKey('text_area_${type.name}_${lines}_${minLines}_${readOnly}_${label}_${charLimit}_$value'),
                       label: label,
                       isRequired: isRequired,
                       lines: lines,
+                      minLines: minLines,
                       characterLimit: charLimit,
                       type: type,
                       placeholder: placeholder,
@@ -582,6 +587,41 @@ WidgetbookFolder inputCategory() {
                       enabled: enabled,
                       readOnly: readOnly,
                       onChanged: (v) => showExampleToast(context, 'TextArea length: ${v.length}'),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'Adaptive Height (Auto-expanding)',
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 384),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Adaptive Height (Starts at 1 line, expands up to 4 lines)'),
+                        SizedBox(height: 8),
+                        TextArea(
+                          label: 'Dynamic Notes',
+                          minLines: 1,
+                          lines: 4,
+                          placeholder: 'Type multi-line text to see height expand automatically...',
+                        ),
+                        SizedBox(height: 24),
+                        Text('Adaptive with Cap (Starts at 2 lines, max 5 lines)'),
+                        SizedBox(height: 8),
+                        TextArea(
+                          label: 'Capped Notes (2-5 lines)',
+                          minLines: 2,
+                          lines: 5,
+                          placeholder: 'Expands from 2 to 5 lines then scrolls...',
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -635,11 +675,32 @@ WidgetbookFolder inputCategory() {
                 label: 'Is Required (Asterisk beside label)',
                 initialValue: true,
               );
+              final characterLimit = context.knobs.intOrNull.input(
+                label: 'Character Limit (numeric)',
+                initialValue: null,
+              );
               final type = context.knobs.object.dropdown(
                 label: 'Type (Variant)',
                 options: InputControlType.values,
                 labelBuilder: (v) => v.name.toUpperCase(),
                 initialOption: InputControlType.gray,
+              );
+              final leftIcon = context.knobs.objectOrNull.dropdown<IconData?>(
+                label: 'Left Icon (null by default)',
+                options: const [
+                  null,
+                  Icons.lock_outline_rounded,
+                  Icons.key_rounded,
+                  Icons.shield_outlined,
+                ],
+                labelBuilder: (i) {
+                  if (i == null) return 'None (Default)';
+                  if (i == Icons.lock_outline_rounded) return 'Lock';
+                  if (i == Icons.key_rounded) return 'Key';
+                  if (i == Icons.shield_outlined) return 'Shield';
+                  return 'Custom';
+                },
+                initialOption: null,
               );
               final placeholder = context.knobs.string(
                 label: 'Placeholder',
@@ -653,8 +714,32 @@ WidgetbookFolder inputCategory() {
                 label: 'Show Eye Toggle',
                 initialValue: true,
               );
+              final allowSpaces = context.knobs.boolean(
+                label: 'Allow Spaces (Deny spaces by default)',
+                initialValue: false,
+              );
+              final minCharacters = context.knobs.intOrNull.input(
+                label: 'Min Characters',
+                initialValue: 8,
+              );
+              final requireNumber = context.knobs.boolean(
+                label: 'Require Number (0-9)',
+                initialValue: true,
+              );
+              final requireSpecialChar = context.knobs.boolean(
+                label: 'Require Special Character (!@#...)',
+                initialValue: true,
+              );
+              final requireUppercase = context.knobs.boolean(
+                label: 'Require Uppercase Letter (A-Z)',
+                initialValue: false,
+              );
+              final requireLowercase = context.knobs.boolean(
+                label: 'Require Lowercase Letter (a-z)',
+                initialValue: false,
+              );
               final isError = context.knobs.boolean(
-                label: 'Is Error',
+                label: 'Is Error (Manual Override)',
                 initialValue: false,
               );
               final showErrorMessage = context.knobs.boolean(
@@ -662,8 +747,8 @@ WidgetbookFolder inputCategory() {
                 initialValue: true,
               );
               final errorMessage = context.knobs.string(
-                label: 'Error Message',
-                initialValue: 'Password must be at least 8 characters',
+                label: 'Custom Error Message',
+                initialValue: 'Error Message',
               );
               final enabled = context.knobs.boolean(
                 label: 'Enabled',
@@ -680,13 +765,21 @@ WidgetbookFolder inputCategory() {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 384),
                     child: PasswordInput(
-                      key: ValueKey('password_input_${type.name}_${readOnly}_${label}_$value'),
+                      key: ValueKey('password_input_${type.name}_${readOnly}_${label}_${leftIcon?.codePoint}_${minCharacters}_${requireNumber}_${requireSpecialChar}_$value'),
                       label: label,
                       isRequired: isRequired,
+                      characterLimit: characterLimit,
                       type: type,
+                      leftIcon: leftIcon,
                       placeholder: placeholder,
                       value: value,
                       showEyeToggle: showEye,
+                      allowSpaces: allowSpaces,
+                      minCharacters: minCharacters,
+                      requireNumber: requireNumber,
+                      requireSpecialChar: requireSpecialChar,
+                      requireUppercase: requireUppercase,
+                      requireLowercase: requireLowercase,
                       isError: isError,
                       showErrorMessage: showErrorMessage,
                       errorMessage: errorMessage,
@@ -784,14 +877,6 @@ WidgetbookFolder inputCategory() {
                 label: 'Decimal Places (e.g. 2)',
                 initialValue: null,
               );
-              final showSteppers = context.knobs.boolean(
-                label: 'Show Steppers (+ / -)',
-                initialValue: true,
-              );
-              final step = context.knobs.intOrNull.input(
-                label: 'Stepper Step',
-                initialValue: 1,
-              ) ?? 1;
               final minValue = context.knobs.intOrNull.input(
                 label: 'Min Value',
                 initialValue: null,
@@ -839,8 +924,6 @@ WidgetbookFolder inputCategory() {
                       allowDecimals: allowDecimals,
                       allowNegative: allowNegative,
                       decimalPlaces: decimalPlaces,
-                      showSteppers: showSteppers,
-                      step: step,
                       minValue: minValue,
                       maxValue: maxValue,
                       initialValue: initialValue,
@@ -881,15 +964,6 @@ WidgetbookFolder inputCategory() {
                           label: 'Indian Number',
                           groupingSystem: NumberGroupingSystem.indian,
                           initialValue: 1000000.50,
-                        ),
-                        SizedBox(height: 24),
-                        Text('3. Steppers Enabled (Step: 5)'),
-                        SizedBox(height: 8),
-                        NumericInput(
-                          label: 'Stepper Counter',
-                          showSteppers: true,
-                          step: 5,
-                          initialValue: 25,
                         ),
                       ],
                     ),

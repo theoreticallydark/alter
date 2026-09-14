@@ -195,10 +195,12 @@ class GroupedNumberInputFormatter extends TextInputFormatter {
 /// - Reuses [InputControl] for full token fidelity and error displays.
 class NumericInput extends StatefulWidget {
   /// Component version for reference.
+  /// v2.3.0: Removed stepper controls in favor of standard rightButton (ButtonIconGhost) slot matching InputControl Figma spec.
+  /// v2.2.0: Added deferred isRequired validation on blur/touch, preventing premature errors on initial focus.
   /// v2.1.0: Aligned with InputControl v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
   /// v2.0.0: Aligned with InputControl v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
   /// v1.0.0: Initial release of NumericInput built directly on InputControl with live comma formatting.
-  static const String version = '2.1.0';
+  static const String version = '2.3.0';
 
   // Label Bar Properties
   final String? label;
@@ -215,8 +217,6 @@ class NumericInput extends StatefulWidget {
   final bool allowNegative;
   final num? minValue;
   final num? maxValue;
-  final num? step;
-  final bool showSteppers;
 
   // Left Section
   final IconData? leftIcon;
@@ -233,7 +233,7 @@ class NumericInput extends StatefulWidget {
   // Suffix & Action
   final String? suffix;
   final Widget? suffixWidget;
-  final ButtonIconGhost? customRightButton;
+  final ButtonIconGhost? rightButton;
 
   // Validation & Error
   final bool isError;
@@ -263,8 +263,6 @@ class NumericInput extends StatefulWidget {
     this.allowNegative = false,
     this.minValue,
     this.maxValue,
-    this.step = 1,
-    this.showSteppers = false,
     this.leftIcon,
     this.leftIconWidget,
     this.prefix,
@@ -275,7 +273,7 @@ class NumericInput extends StatefulWidget {
     this.focusNode,
     this.suffix,
     this.suffixWidget,
-    this.customRightButton,
+    this.rightButton,
     this.isError = false,
     this.showErrorMessage = true,
     this.errorMessage = 'Error Message',
@@ -302,6 +300,9 @@ class _NumericInputState extends State<NumericInput> {
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
+  bool _hasHadFocus = false;
+  bool _hasBeenTouched = false;
+
   @override
   void initState() {
     super.initState();
@@ -321,6 +322,7 @@ class _NumericInputState extends State<NumericInput> {
       _internalFocusNode = FocusNode();
     }
     _controller.addListener(_onTextChanged);
+    _focusNode.addListener(_onFocusChange);
   }
 
   @override
@@ -340,6 +342,19 @@ class _NumericInputState extends State<NumericInput> {
       }
       _controller.addListener(_onTextChanged);
     }
+
+    if (oldWidget.focusNode != widget.focusNode) {
+      oldWidget.focusNode?.removeListener(_onFocusChange);
+      _internalFocusNode?.removeListener(_onFocusChange);
+
+      if (widget.focusNode == null) {
+        _internalFocusNode ??= FocusNode();
+      } else {
+        _internalFocusNode?.dispose();
+        _internalFocusNode = null;
+      }
+      _focusNode.addListener(_onFocusChange);
+    }
   }
 
   @override
@@ -347,49 +362,32 @@ class _NumericInputState extends State<NumericInput> {
     if (widget.controller != null) {
       widget.controller!.removeListener(_onTextChanged);
     }
+    if (widget.focusNode != null) {
+      widget.focusNode!.removeListener(_onFocusChange);
+    }
     _internalController?.removeListener(_onTextChanged);
     _internalController?.dispose();
+    _internalFocusNode?.removeListener(_onFocusChange);
     _internalFocusNode?.dispose();
     super.dispose();
   }
 
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      _hasHadFocus = true;
+    } else if (_hasHadFocus) {
+      _hasBeenTouched = true;
+    }
+    setState(() {});
+  }
+
   void _onTextChanged() {
+    if (_controller.text.isNotEmpty) {
+      _hasBeenTouched = true;
+    }
     setState(() {});
     final numVal = NumericFormatterUtils.parse(_controller.text);
     widget.onNumberChanged?.call(numVal);
-  }
-
-  void _stepUp() {
-    final current = NumericFormatterUtils.parse(_controller.text) ?? 0;
-    final step = widget.step ?? 1;
-    num next = current + step;
-    if (widget.maxValue != null && next > widget.maxValue!) {
-      next = widget.maxValue!;
-    }
-    _updateNumericValue(next);
-  }
-
-  void _stepDown() {
-    final current = NumericFormatterUtils.parse(_controller.text) ?? 0;
-    final step = widget.step ?? 1;
-    num next = current - step;
-    if (widget.minValue != null && next < widget.minValue!) {
-      next = widget.minValue!;
-    }
-    _updateNumericValue(next);
-  }
-
-  void _updateNumericValue(num val) {
-    final formatted = NumericFormatterUtils.formatNumberString(
-      val.toString(),
-      groupingSystem: widget.groupingSystem,
-      allowDecimals: widget.allowDecimals,
-      decimalPlaces: widget.decimalPlaces,
-      allowNegative: widget.allowNegative,
-    );
-    _controller.text = formatted;
-    widget.onChanged?.call(formatted);
-    widget.onNumberChanged?.call(val);
   }
 
   List<String> get _activeValidationErrors {
@@ -398,6 +396,10 @@ class _NumericInputState extends State<NumericInput> {
       errors.addAll(widget.errorMessages!.where((e) => e.trim().isNotEmpty));
     } else if (widget.isError && widget.errorMessage.trim().isNotEmpty) {
       errors.add(widget.errorMessage);
+    }
+
+    if (widget.isRequired && _hasBeenTouched && _controller.text.trim().isEmpty) {
+      errors.add('${widget.label ?? "Field"} is required');
     }
 
     final parsed = NumericFormatterUtils.parse(_controller.text);
@@ -418,29 +420,6 @@ class _NumericInputState extends State<NumericInput> {
     final errors = _activeValidationErrors;
     final effectiveIsError = errors.isNotEmpty || widget.isError;
 
-    // Stepper controls
-    Widget? rightSlot;
-    if (widget.showSteppers && widget.enabled && !widget.readOnly) {
-      rightSlot = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ButtonIconGhost(
-            icon: Icons.remove_rounded,
-            type: ButtonIconGhostType.secondary,
-            onTap: _stepDown,
-          ),
-          const SizedBox(width: 4),
-          ButtonIconGhost(
-            icon: Icons.add_rounded,
-            type: ButtonIconGhostType.secondary,
-            onTap: _stepUp,
-          ),
-        ],
-      );
-    } else if (widget.customRightButton != null) {
-      rightSlot = widget.customRightButton;
-    }
-
     return InputControl(
       label: widget.label,
       isRequired: widget.isRequired,
@@ -455,7 +434,7 @@ class _NumericInputState extends State<NumericInput> {
       focusNode: _focusNode,
       suffix: widget.suffix,
       suffixWidget: widget.suffixWidget,
-      rightButton: rightSlot is ButtonIconGhost ? rightSlot : null,
+      rightButton: widget.rightButton,
       keyboardType: TextInputType.numberWithOptions(
         decimal: widget.allowDecimals,
         signed: widget.allowNegative,

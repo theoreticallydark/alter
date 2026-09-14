@@ -12,10 +12,11 @@ import 'numeric_input.dart';
 /// - Min/max currency bounds validation.
 class CurrencyInput extends StatelessWidget {
   /// Component version for reference.
+  /// v2.2.0: Removed stepper controls in favor of standard rightButton (ButtonIconGhost) slot matching InputControl Figma spec.
   /// v2.1.0: Aligned with InputControl v2.1.0 & NumericInput v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
   /// v2.0.0: Aligned with InputControl v2.0.0 & NumericInput v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
   /// v1.0.0: Initial release of CurrencyInput built on NumericInput with Euro default icon and International/Indian grouping.
-  static const String version = '2.1.0';
+  static const String version = '2.2.0';
 
   // Label Bar Properties
   final String? label;
@@ -31,8 +32,6 @@ class CurrencyInput extends StatelessWidget {
   final int? decimalPlaces;
   final num? minValue;
   final num? maxValue;
-  final num? step;
-  final bool showSteppers;
 
   // Left Section (Default: Euro icon)
   final IconData? leftIcon;
@@ -49,7 +48,7 @@ class CurrencyInput extends StatelessWidget {
   // Suffix & Action
   final String? suffix;
   final Widget? suffixWidget;
-  final ButtonIconGhost? customRightButton;
+  final ButtonIconGhost? rightButton;
 
   // Validation & Error
   final bool isError;
@@ -78,8 +77,6 @@ class CurrencyInput extends StatelessWidget {
     this.decimalPlaces = 2,
     this.minValue,
     this.maxValue,
-    this.step = 10,
-    this.showSteppers = false,
     this.leftIcon = Icons.euro_rounded,
     this.leftIconWidget,
     this.prefix,
@@ -90,7 +87,7 @@ class CurrencyInput extends StatelessWidget {
     this.focusNode,
     this.suffix,
     this.suffixWidget,
-    this.customRightButton,
+    this.rightButton,
     this.isError = false,
     this.showErrorMessage = true,
     this.errorMessage = 'Error Message',
@@ -117,8 +114,6 @@ class CurrencyInput extends StatelessWidget {
       decimalPlaces: decimalPlaces,
       minValue: minValue,
       maxValue: maxValue,
-      step: step,
-      showSteppers: showSteppers,
       leftIcon: leftIcon,
       leftIconWidget: leftIconWidget,
       prefix: prefix,
@@ -129,7 +124,7 @@ class CurrencyInput extends StatelessWidget {
       focusNode: focusNode,
       suffix: suffix,
       suffixWidget: suffixWidget,
-      customRightButton: customRightButton,
+      rightButton: rightButton,
       isError: isError,
       showErrorMessage: showErrorMessage,
       errorMessage: errorMessage,

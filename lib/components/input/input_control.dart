@@ -24,6 +24,7 @@ enum InputControlType {
 /// - `errorContainer`: Bottom row with 16px `error_outline` icon and caption text in `textDanger` (renders latest active error)
 class InputControl extends StatefulWidget {
   /// Component version for reference.
+  /// v2.3.0: Streamlined multiline sizing: Clean minLines and maxLines configuration without redundant boolean flags; multiline cross-axis start alignment.
   /// v2.1.0: Streamlined label & character limit UI: Removed showLabel and showCharacterLimit booleans. labelBar is rendered whenever label is provided (with characterLimit counter shown on UI during typing). Character limit validation continues to function in background even without a label.
   /// v2.0.0: Pure Flutter convention overhaul: Removed InputControlStatus enum (visual states are 100% dynamically driven by FocusNode and TextEditingController). Streamlined API by removing redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon in favor of clean nullable properties.
   /// v1.7.0: Removed redundant readonly and disabled from InputControlStatus; standardized on boolean enabled and readOnly properties.
@@ -34,7 +35,7 @@ class InputControl extends StatefulWidget {
   /// v1.2.0: Hide entire labelBar if showLabel is false. Replaced wordLimit with numeric characterLimit showing "x/characterLimit" dynamically only in typing (selected) state. Replaced error status with independent isError and showErrorMessage properties.
   /// v1.1.0: Replaced initialValue with clean value property; streamlined placeholder and value auto-transitions.
   /// v1.0.0: Initial recreation of InputControl matching Figma Node 470:436.
-  static const String version = '2.1.0';
+  static const String version = '2.3.0';
 
   // Label Bar Properties (Figma: label, isRequired, characterLimit)
   final String? label;
@@ -339,10 +340,24 @@ class _InputControlState extends State<InputControl> {
     );
   }
 
+  bool get _isMultiline =>
+      (widget.maxLines == null || widget.maxLines! > 1) ||
+      (widget.minLines != null && widget.minLines! > 1);
+
+  int? get _effectiveMinLines => widget.minLines;
+
+  int? get _effectiveMaxLines {
+    if (widget.maxLines == null) return null;
+    if (widget.minLines != null && widget.maxLines! < widget.minLines!) {
+      return widget.minLines;
+    }
+    return widget.maxLines;
+  }
+
   Widget _buildLeftSection() {
     return Expanded(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: _isMultiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           // Left Icon (24x24)
           if (widget.leftIconWidget != null) ...[
@@ -383,13 +398,14 @@ class _InputControlState extends State<InputControl> {
                 focusNode: _focusNode,
                 obscureText: widget.obscureText,
                 obscuringCharacter: widget.obscuringCharacter,
-                maxLines: widget.maxLines,
-                minLines: widget.minLines,
+                maxLines: _effectiveMaxLines,
+                minLines: _effectiveMinLines,
                 inputFormatters: widget.inputFormatters,
                 enabled: widget.enabled,
                 readOnly: widget.readOnly,
                 autofocus: widget.autofocus,
-                keyboardType: widget.keyboardType,
+                keyboardType: widget.keyboardType ??
+                    (_isMultiline ? TextInputType.multiline : TextInputType.text),
                 textInputAction: widget.textInputAction,
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
@@ -494,7 +510,7 @@ class _InputControlState extends State<InputControl> {
           ),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: _isMultiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
           children: [
             _buildLeftSection(),
             if (suffixWidget != null) ...[

@@ -1,12 +1,12 @@
 # InputControl
 
-**Version**: `2.1.0`  
+**Version**: `2.3.0`  
 **Figma Node**: [`470:436`](https://www.figma.com/design/zv3qKQ3LHZCA8hWFcsOMtH/Alter-Design-System?node-id=470-436)
 
 ---
 
 ## Overview
-`InputControl` is the lean visual primitive foundation for all text and numeric inputs in the Alter Design System. It manages the outer container (64px height, 20px border radius), label row (with required asterisk indicator), left icon, prefix/suffix slots, interactive right ghost button slot (`rightButton: ButtonIconGhost?`), border states, focus interactions, character limit overflow logic, and multiple error condition resolution.
+`InputControl` is the lean visual primitive foundation for all text and numeric inputs in the Alter Design System. It manages the outer container (64px height, 20px border radius), label row (with required asterisk indicator), left icon, prefix/suffix slots, interactive right ghost button slot (`rightButton: ButtonIconGhost?`), border states, focus interactions, character limit overflow logic, multiline start alignment, and multiple error condition resolution.
 
 ---
 
@@ -15,10 +15,10 @@
 
 - **`TextInput`**
   - **`SearchInput`** (wrapper of `TextInput`)
-  - **`TextArea`** (wrapper of `TextInput` using `maxLines`)
+  - **`TextArea`** (wrapper of `TextInput` supporting fixed lines or adaptive auto-expansion via `minLines`)
 - **`PasswordInput`** (manages `obscureText` toggle via right `ButtonIconGhost`)
 - **`NumericInput`** (manages formatters, parsing, commas)
-  - **`OTPInput`** (wrapper of `NumericInput`)
+  - **`OTPInput`** (digit grid)
   - **`CurrencyInput`** (wrapper of `NumericInput`)
 - **`DropdownInput`** (future)
 - **`CalendarInput`** (future)
@@ -33,14 +33,17 @@
    - `label`, `characterLimit`, `prefix`, `suffix`, `leftIcon` are clean nullable properties.
    - **Label & Character Counter Rule**: The top `labelBar` (and its right-side live counter) is rendered **only when `label` is non-null and non-empty**. If `label == null`, no top label bar is rendered on the UI.
    - **Character Limit Validation**: If `characterLimit` is set without a label, validation (e.g. error boundary and overflow message) continues to function in the background.
-3. **Boolean `enabled` and `readOnly`**:
+3. **Clean Multiline Sizing**:
+   - Accepts `minLines` and `maxLines` directly (defaulting to 1 for single-line inputs).
+   - Icons, prefixes, and suffixes automatically align to the top (`CrossAxisAlignment.start`) during multiline modes.
+4. **Boolean `enabled` and `readOnly`**:
    - `enabled: false`: Renders the component at **48% opacity** and blocks pointer interactions (`IgnorePointer`).
    - `readOnly: true`: Displays text in `AlterSemanticTokens.textSecondary` and border in `AlterSemanticTokens.textDisabled`, preventing keyboard editing while allowing text selection/copy.
-4. **Required Indicator**:
+5. **Required Indicator**:
    - When `isRequired == true`, an asterisk `*` is appended directly beside the label text (`"$label *"`) using the **exact same color as the label** (`AlterSemanticTokens.textSecondary`).
-5. **Interactive Right Button (`ButtonIconGhost`)**:
+6. **Interactive Right Button (`ButtonIconGhost`)**:
    - Accepts a [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) directly via `rightButton`.
-6. **Automatic Overflow Handling**:
+7. **Automatic Overflow Handling**:
    - If character count exceeds `characterLimit`:
      - `isError` becomes `true` (triggering red danger border).
      - Character counter text color changes to `AlterSemanticTokens.textDanger`.
@@ -67,7 +70,7 @@
 | `rightButton` | `ButtonIconGhost?` | `null` | Trailing interactive action slot |
 | `obscureText` | `bool` | `false` | Text obscuring flag for password inputs |
 | `obscuringCharacter` | `String` | `'•'` | Character used when obscured |
-| `maxLines` | `int?` | `1` | Max visible text lines (set > 1 for TextArea) |
+| `maxLines` | `int?` | `1` | Max visible text lines (or lines ceiling) |
 | `minLines` | `int?` | `1` | Min visible text lines |
 | `inputFormatters` | `List<TextInputFormatter>?` | `null` | Custom input formatters |
 | `isError` | `bool` | `false` | Sets border color to error danger token |

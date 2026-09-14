@@ -42,6 +42,8 @@ enum TextInputMode {
 /// - Built-in validation for required (deferred until touch/blur or Form submit), email, phone, and character limits.
 class TextInput extends StatefulWidget {
   /// Component version for reference.
+  /// v2.3.0: Streamlined multiline sizing: Clean minLines and maxLines configuration without redundant boolean flags.
+  /// v2.2.0: Fixed isRequired trigger lifecycle: Defer required error until blur (unfocus after focus) or explicit typing & clearing, preventing immediate error upon clicking into an empty field.
   /// v2.1.0: Aligned with InputControl v2.1.0: removed showLabel and showCharacterLimit booleans. Label bar and UI counter render when label is non-null.
   /// v2.0.0: Pure Flutter convention overhaul: Removed statusOverride and redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon flags in favor of clean nullable properties.
   /// v1.7.0: Removed redundant readonly and disabled status overrides; standardized on boolean enabled and readOnly properties.
@@ -52,7 +54,7 @@ class TextInput extends StatefulWidget {
   /// v1.2.0: Aligned character limit overflow behavior with InputControl v1.3.0 ('Character limit exceeded').
   /// v1.1.0: Updated to use InputControl v1.2.0 API: renamed wordLimit to characterLimit, hide labelBar if showLabel is false, dynamic characterLimit shown only in typing state, independent isError and showErrorMessage properties.
   /// v1.0.0: Initial release of recreated TextInput built on InputControl matching Figma Node 471:1547.
-  static const String version = '2.1.0';
+  static const String version = '2.3.0';
 
   // Label Bar Properties (Figma defaults: label='Label', characterLimit=32)
   final String? label;
@@ -177,6 +179,7 @@ class _TextInputState extends State<TextInput> {
       widget.controller ?? _internalController!;
   FocusNode get _focusNode => widget.focusNode ?? _internalFocusNode!;
 
+  bool _hasHadFocus = false;
   bool _hasBeenTouched = false;
 
   @override
@@ -253,7 +256,10 @@ class _TextInputState extends State<TextInput> {
   }
 
   void _onFocusChange() {
-    if (_focusNode.hasFocus || _controller.text.isNotEmpty) {
+    if (_focusNode.hasFocus) {
+      _hasHadFocus = true;
+    } else if (_hasHadFocus) {
+      // User entered the field and blurred (clicked away / lost focus)
       _hasBeenTouched = true;
     }
     setState(() {});
@@ -381,7 +387,7 @@ class _TextInputState extends State<TextInput> {
         return null;
       },
       onSaved: widget.onSaved,
-      autovalidateMode: widget.autovalidateMode ?? AutovalidateMode.onUserInteraction,
+      autovalidateMode: widget.autovalidateMode ?? AutovalidateMode.disabled,
       builder: (FormFieldState<String> field) {
         final activeErrors = _evaluateErrors(field);
         final hasError = activeErrors.isNotEmpty || widget.isError;
@@ -418,7 +424,9 @@ class _TextInputState extends State<TextInput> {
           textInputAction: widget.textInputAction,
           onTap: widget.onTap,
           onChanged: (text) {
-            _hasBeenTouched = true;
+            if (text.isNotEmpty) {
+              _hasBeenTouched = true;
+            }
             field.didChange(text);
             widget.onChanged?.call(text);
           },
