@@ -1,12 +1,12 @@
 # CurrencyInput
 
 **Version**: `2.2.0`  
-**Base**: [NumericInput](file:///c:/Vayu/Alter/lib/components/input/numeric_input.dart)
+**Base**: [NumericInput](file:///c:/Vayu/Alter/lib/components/inputs/numeric_input.dart)
 
 ---
 
 ## Overview
-`CurrencyInput` is a specialized financial currency entry component built on [NumericInput](file:///c:/Vayu/Alter/lib/components/input/numeric_input.dart). It features a default Euro icon, 2 decimal places, live comma grouping, and deferred required validation on blur.
+`CurrencyInput` is a specialized financial currency entry component built on [NumericInput](file:///c:/Vayu/Alter/lib/components/inputs/numeric_input.dart). It features a default Euro icon, 2 decimal places, live comma grouping, and deferred required validation on blur.
 
 ---
 
@@ -45,6 +45,6 @@
 ---
 
 ## Reused Child Components
-- [NumericInput](file:///c:/Vayu/Alter/lib/components/input/numeric_input.dart) (`v2.3.0`)
-- [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart) (`v2.3.0`)
+- [NumericInput](file:///c:/Vayu/Alter/lib/components/inputs/numeric_input.dart) (`v2.3.0`)
+- [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart) (`v2.3.0`)
 - [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) (`v1.1.0`)

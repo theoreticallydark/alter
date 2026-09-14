@@ -12,11 +12,12 @@ import 'text_input.dart';
 /// - Reuses [TextInput] and [InputControl] for full design system tokens, states, and error handling.
 class TextArea extends StatelessWidget {
   /// Component version for reference.
+  /// v2.4.0: Added optional keyboardType (TextInputType?) fallback passthrough.
   /// v2.3.0: Streamlined multiline sizing: Clean minLines and lines (max height) configuration. Non-adaptive fixed height when minLines is null; adaptive auto-expanding height up to lines when minLines is provided.
   /// v2.1.0: Aligned with InputControl v2.1.0 & TextInput v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
   /// v2.0.0: Aligned with InputControl v2.0.0 & TextInput v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
   /// v1.0.0: Initial release of TextArea wrapper built on TextInput with configurable lines height.
-  static const String version = '2.3.0';
+  static const String version = '2.4.0';
 
   // Label Bar Properties (default label: 'Description', characterLimit: 200)
   final String? label;
@@ -61,6 +62,7 @@ class TextArea extends StatelessWidget {
   final bool enabled;
   final bool readOnly;
   final bool autofocus;
+  final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -96,6 +98,7 @@ class TextArea extends StatelessWidget {
     this.enabled = true,
     this.readOnly = false,
     this.autofocus = false,
+    this.keyboardType,
     this.inputFormatters,
     this.onChanged,
     this.onSubmitted,
@@ -128,6 +131,7 @@ class TextArea extends StatelessWidget {
       maxLines: effectiveMaxLines,
       minLines: effectiveMinLines,
       inputMode: TextInputMode.all,
+      keyboardType: keyboardType,
       isError: isError,
       showErrorMessage: showErrorMessage,
       errorMessage: errorMessage,

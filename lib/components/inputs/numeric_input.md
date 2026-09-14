@@ -1,12 +1,12 @@
 # NumericInput
 
 **Version**: `2.3.0`  
-**Base**: [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart)
+**Base**: [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart)
 
 ---
 
 ## Overview
-`NumericInput` is a specialized numeric entry component built directly on [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart). It features live comma formatting (International and Indian systems), bounds validation, decimal control, and deferred required validation on blur.
+`NumericInput` is a specialized numeric entry component built directly on [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart). It features live comma formatting (International and Indian systems), bounds validation, decimal control, and deferred required validation on blur.
 
 ---
 
@@ -43,5 +43,5 @@
 ---
 
 ## Reused Child Components
-- [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart) (`v2.3.0`)
+- [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart) (`v2.3.0`)
 - [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) (`v1.1.0`)

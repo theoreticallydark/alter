@@ -1,7 +1,7 @@
 # PasswordInput
 
 **Version**: `2.2.0`  
-**Base**: [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart)
+**Base**: [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart)
 
 ---
 
@@ -56,5 +56,5 @@
 ---
 
 ## Reused Child Components
-- [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart) (`v2.1.0`)
+- [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart) (`v2.1.0`)
 - [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) (`v1.1.0`)

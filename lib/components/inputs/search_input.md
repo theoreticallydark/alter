@@ -1,12 +1,12 @@
 # SearchInput
 
 **Version**: `2.0.0`  
-**Base**: [TextInput](file:///c:/Vayu/Alter/lib/components/input/text_input.dart)
+**Base**: [TextInput](file:///c:/Vayu/Alter/lib/components/inputs/text_input.dart)
 
 ---
 
 ## Overview
-`SearchInput` is a specialized search entry field built on top of [TextInput](file:///c:/Vayu/Alter/lib/components/input/text_input.dart). It comes pre-configured with a search left icon (`Icons.search_rounded`), dynamic clear button (`ButtonIconGhost` with `Icons.close_rounded`), and search keyboard actions.
+`SearchInput` is a specialized search entry field built on top of [TextInput](file:///c:/Vayu/Alter/lib/components/inputs/text_input.dart). It comes pre-configured with a search left icon (`Icons.search_rounded`), dynamic clear button (`ButtonIconGhost` with `Icons.close_rounded`), and search keyboard actions.
 
 ---
 
@@ -27,5 +27,5 @@
 ---
 
 ## Reused Child Components
-- [TextInput](file:///c:/Vayu/Alter/lib/components/input/text_input.dart) (`v2.0.0`)
+- [TextInput](file:///c:/Vayu/Alter/lib/components/inputs/text_input.dart) (`v2.0.0`)
 - [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) (`v1.1.0`)

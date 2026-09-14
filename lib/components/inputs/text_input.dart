@@ -46,17 +46,21 @@ class TextInput extends StatefulWidget {
   /// v2.2.0: Fixed isRequired trigger lifecycle: Defer required error until blur (unfocus after focus) or explicit typing & clearing, preventing immediate error upon clicking into an empty field.
   /// v2.1.0: Aligned with InputControl v2.1.0: removed showLabel and showCharacterLimit booleans. Label bar and UI counter render when label is non-null.
   /// v2.0.0: Pure Flutter convention overhaul: Removed statusOverride and redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon flags in favor of clean nullable properties.
-  /// v1.7.0: Removed redundant readonly and disabled status overrides; standardized on boolean enabled and readOnly properties.
   /// v1.6.0: Streamlined right action slot to accept ButtonIconGhost? rightButton directly (matching InputControl v1.6.0).
   /// v1.5.0: Integrated ButtonIconGhost rightIcon configuration (rightIconType, onRightIconTap), maxLines/minLines, and inputFormatters passthrough to InputControl v1.5.0.
   /// v1.4.0: Deferred isRequired validation until touch/blur or explicit Form validation (preventing immediate errors on pristine load).
   /// v1.3.0: Added support for multiple error conditions rendering the latest error in order; integrated InputControl v1.4.0 isRequired asterisk styling.
   /// v1.2.0: Aligned character limit overflow behavior with InputControl v1.3.0 ('Character limit exceeded').
   /// v1.1.0: Updated to use InputControl v1.2.0 API: renamed wordLimit to characterLimit, hide labelBar if showLabel is false, dynamic characterLimit shown only in typing state, independent isError and showErrorMessage properties.
-  /// v1.0.0: Initial release of recreated TextInput built on InputControl matching Figma Node 471:1547.
-  static const String version = '2.3.0';
+  /// v2.4.0: Added optional keyboardType (TextInputType?) fallback for direct native virtual keyboard override.
+  /// v2.3.0: Multiline sizing support: Added minLines and maxLines passthrough with safe bounds guarding.
+  /// v2.2.0: Added TextInputMode enum (all, numeric, email, phone, decimal, alphanumeric, onlyAlphabets, onlyNumbers) with automatic formatters, autocorrect, autofillHints, enableSuggestions, and phone/email validation.
+  /// v2.1.0: Aligned with InputControl v2.1.0 (removed showLabel/showCharacterLimit; labelBar renders when label is provided).
+  /// v2.0.0: Aligned with InputControl v2.0.0 (removed statusOverride and redundant hasX booleans in favor of clean nullable props).
+  /// v1.0.0: Initial release of TextInput built on InputControl.
+  static const String version = '2.4.0';
 
-  // Label Bar Properties (Figma defaults: label='Label', characterLimit=32)
+  // Label Bar Properties (Figma default: label='Label', isRequired=false, characterLimit=32)
   final String? label;
   final int? characterLimit;
 
@@ -88,6 +92,7 @@ class TextInput extends StatefulWidget {
 
   // Text Mode, Limits & Filtering
   final TextInputMode inputMode;
+  final TextInputType? keyboardType;
   final bool? autocorrect;
   final bool? enableSuggestions;
   final Iterable<String>? autofillHints;
@@ -140,6 +145,7 @@ class TextInput extends StatefulWidget {
     this.minLines = 1,
     this.inputFormatters,
     this.inputMode = TextInputMode.all,
+    this.keyboardType,
     this.autocorrect,
     this.enableSuggestions,
     this.autofillHints,
@@ -299,8 +305,12 @@ class _TextInputState extends State<TextInput> {
     return formatters;
   }
 
-  /// Keyboard type matching [widget.inputMode].
+  /// Resolved keyboard type: uses [widget.keyboardType] if explicitly provided,
+  /// otherwise derives from [widget.inputMode] and multiline state.
   TextInputType get _effectiveKeyboardType {
+    if (widget.keyboardType != null) {
+      return widget.keyboardType!;
+    }
     switch (widget.inputMode) {
       case TextInputMode.onlyNumbers:
         return TextInputType.number;

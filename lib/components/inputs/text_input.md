@@ -1,12 +1,12 @@
 # TextInput
 
-**Version**: `2.1.0`  
+**Version**: `2.4.0`  
 **Figma Node**: [`471:1547`](https://www.figma.com/design/zv3qKQ3LHZCA8hWFcsOMtH/Alter-Design-System?node-id=471-1547)
 
 ---
 
 ## Overview
-`TextInput` is the primary text entry field in the Alter Design System built on top of [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart). It integrates full Flutter `FormField<String>` support (`validator`, `onSaved`, `autovalidateMode`), built-in text input filtering (`TextInputMode`), deferred `isRequired` validation, and multi-error condition rendering.
+`TextInput` is the primary text entry field in the Alter Design System built on top of [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart). It integrates full Flutter `FormField<String>` support (`validator`, `onSaved`, `autovalidateMode`), built-in text input filtering (`TextInputMode`), direct `keyboardType` override, deferred `isRequired` validation, and multi-error condition rendering.
 
 ---
 
@@ -38,6 +38,7 @@
 | `characterLimit` | `int?` | `32` | Maximum character count limit |
 | `type` | `InputControlType` | `gray` | Surface variant (`gray` or `white`) |
 | `inputMode` | `TextInputMode` | `all` | Character filtering & keyboard mode |
+| `keyboardType` | `TextInputType?` | `null` | Direct native virtual keyboard override |
 | `placeholder` | `String` | `'Input'` | Placeholder text |
 | `value` | `String?` | `null` | Current input value |
 | `leftIcon` | `IconData?` | `Icons.face_5_outlined` | Leading static icon |
@@ -66,7 +67,7 @@
 ## Design Tokens & Variables Used
 
 ### Child Components Reused
-- [InputControl](file:///c:/Vayu/Alter/lib/components/input/input_control.dart) (`v2.1.0`)
+- [InputControl](file:///c:/Vayu/Alter/lib/components/inputs/input_control.dart) (`v2.1.0`)
 - [ButtonIconGhost](file:///c:/Vayu/Alter/lib/components/buttons/button_icon_ghost.dart) (`v1.1.0`)
 
 ### Typography
