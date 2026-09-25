@@ -15,11 +15,19 @@ class Switch extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 167:9665.
   static const String version = '1.1.0';
 
+  /// Whether the switch is in the 'on' state.
   final bool isSelected;
+
+  /// Callback executed when the switch state is toggled.
   final ValueChanged<bool>? onChanged;
+
+  /// Custom active color for the toggle when turned on.
   final Color? activeColor;
+
+  /// Width and height bounding dimensions of the switch icon (defaults to 24.0).
   final double size;
 
+  /// Creates a [Switch] toggle instance.
   const Switch({
     super.key,
     this.isSelected = false,

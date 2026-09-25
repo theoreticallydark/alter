@@ -5,7 +5,10 @@ import '../buttons/button_icon_ghost.dart';
 
 /// Style variants for [AdvancedPill].
 enum AdvancedPillType {
+  /// Subtle gray surface variant.
   gray,
+
+  /// Elevated white background variant.
   white,
 }
 
@@ -28,16 +31,34 @@ class AdvancedPill extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 349:15869.
   static const String version = '1.1.0';
 
+  /// Primary label text displayed in the pill.
   final String title;
+
+  /// Optional secondary subtitle displayed below the title.
   final String? subtitle;
+
+  /// Visual theme style type.
   final AdvancedPillType type;
+
+  /// Whether the leading slot should be rendered.
   final bool hasLeftSlot;
+
+  /// Icon to show in the leading slot if [leftSlot] is not provided.
   final IconData? leftIcon;
+
+  /// Custom widget for the leading slot.
   final Widget? leftSlot;
+
+  /// Whether the trailing slot should be rendered.
   final bool hasRightSlot;
+
+  /// Icon to show in the trailing slot if [rightSlot] is not provided.
   final IconData? rightIcon;
+
+  /// Custom widget for the trailing slot.
   final Widget? rightSlot;
 
+  /// Creates an [AdvancedPill] instance.
   const AdvancedPill({
     super.key,
     this.title = 'Title',

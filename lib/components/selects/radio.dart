@@ -15,14 +15,28 @@ class Radio<T> extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 130:4532.
   static const String version = '1.1.0';
 
+  /// Whether the radio is explicitly selected (standalone mode).
   final bool isSelected;
+
+  /// The value represented by this radio button in a group.
   final T? value;
+
+  /// The currently selected value of the radio group.
   final T? groupValue;
+
+  /// Callback executed with [value] when tapped in group mode.
   final ValueChanged<T?>? onChanged;
+
+  /// Callback executed with boolean selection state when tapped.
   final ValueChanged<bool>? onSelectedChanged;
+
+  /// Color applied when the radio button is selected.
   final Color? activeColor;
+
+  /// Width and height dimensions of the radio button (defaults to 24.0).
   final double size;
 
+  /// Creates a [Radio] selection instance.
   const Radio({
     super.key,
     this.isSelected = false,

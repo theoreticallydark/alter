@@ -1,3 +1,6 @@
+/// A lightweight, mobile-first Flutter design system featuring curated Geist typography, semantic tokens, and modular UI components.
+library;
+
 export 'components/buttons/button_graphic_image.dart';
 export 'components/buttons/button_graphic_text.dart';
 export 'components/buttons/button_icon.dart';

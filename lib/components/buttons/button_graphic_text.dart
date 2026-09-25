@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 
+/// A graphic badge button displaying structured title and subtitle text.
 class ButtonGraphicText extends StatelessWidget {
   /// Component version for reference.
   /// v1.0.2: Fine-tuned padding to exact Figma specification (7px top, 9px bottom, 10px horizontal).
   /// v1.0.1: Bound container background to `AlterColors.colorsGreen900` with `AlterColors.colorsGreen500` border.
   static const String version = '1.0.2';
 
+  /// Primary upper label text (e.g. 'STREAK').
   final String title;
+
+  /// Secondary lower highlight text (e.g. '7 DAYS').
   final String subtitle;
+
+  /// Callback executed when the graphic text button is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [ButtonGraphicText] instance.
   const ButtonGraphicText({
     super.key,
     this.title = 'STREAK',

@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../styles/tokens.dart';
 
-enum BottomNavigationButtonType { primary, secondary }
+/// Style variants for [BottomNavigationButton].
+enum BottomNavigationButtonType {
+  /// Prominent dark primary button.
+  primary,
 
+  /// Neutral gray secondary button.
+  secondary,
+}
+
+/// A circular action button designed to accompany bottom navigation bars.
 class BottomNavigationButton extends StatelessWidget {
   /// Component version for reference.
   static const String version = '1.0.1';
 
+  /// Icon rendered inside the button.
   final IconData icon;
+
+  /// Visual style variant of the button.
   final BottomNavigationButtonType type;
+
+  /// Callback executed when the button is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [BottomNavigationButton] instance.
   const BottomNavigationButton({
     super.key,
     this.icon = Icons.add,

@@ -38,55 +38,112 @@ class InputControl extends StatefulWidget {
   static const String version = '2.3.0';
 
   // Label Bar Properties (Figma: label, isRequired, characterLimit)
+  /// Optional label text displayed above the input field.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface (Figma: type)
+  /// Visual background and border surface variant.
   final InputControlType type;
 
   // Left Section Properties (Figma: leftIcon, prefix, input)
+  /// Icon displayed on the leading side of the input.
   final IconData? leftIcon;
+
+  /// Custom leading icon widget override.
   final Widget? leftIconWidget;
 
+  /// Prefix text string displayed before the input text.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
+  /// Placeholder hint text displayed when input is empty.
   final String placeholder;
+
+  /// Initial or bound value string for the text field.
   final String? value;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling focus state.
   final FocusNode? focusNode;
 
   // Right Section Properties (Figma: suffix, rightButton)
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
 
+  /// Trailing action button (e.g. [ButtonIconGhost]).
   final ButtonIconGhost? rightButton;
 
   // Core Text & Format Passthroughs
+  /// Whether the text is masked (e.g. for password inputs).
   final bool obscureText;
+
+  /// Character used to mask obscured text (defaults to '•').
   final String obscuringCharacter;
+
+  /// Maximum number of lines for multiline text input.
   final int? maxLines;
+
+  /// Minimum number of lines for multiline text input.
   final int? minLines;
+
+  /// Formatters applied to the text field input.
   final List<TextInputFormatter>? inputFormatters;
 
   // Error Properties (Multiple error support & latest error rendering)
+  /// Whether the field is in an error state.
   final bool isError;
+
+  /// Whether the error message banner should be rendered beneath the field.
   final bool showErrorMessage;
+
+  /// Primary or default error message string.
   final String errorMessage;
+
+  /// Optional list of multiple error messages (latest active rendered).
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message row.
   final Widget? errorIconWidget;
 
   // Interactivity & Callbacks
+  /// Whether the input control is enabled for interaction.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Callback executed when the text content changes.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed when text is submitted via keyboard.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
+
+  /// Virtual keyboard type for software keyboards.
   final TextInputType? keyboardType;
+
+  /// Action button type on the software keyboard (e.g. done, search).
   final TextInputAction textInputAction;
+
+  /// Whether the text field should autofocus on initial build.
   final bool autofocus;
 
+  /// Creates an [InputControl] instance.
   const InputControl({
     super.key,
     this.label = 'Label',

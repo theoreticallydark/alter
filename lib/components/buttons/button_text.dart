@@ -3,20 +3,49 @@ import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
-enum ButtonType { gray, white, primary, red }
+/// Visual style variants for [ButtonText].
+enum ButtonType {
+  /// Gray subtle background variant.
+  gray,
 
-enum ButtonSize { normal, large }
+  /// White surface background variant.
+  white,
 
+  /// High-contrast primary dark variant.
+  primary,
+
+  /// Destructive red variant.
+  red,
+}
+
+/// Size variants for [ButtonText].
+enum ButtonSize {
+  /// Standard button height with compact padding.
+  normal,
+
+  /// Taller button height with extended vertical padding.
+  large,
+}
+
+/// A text-based button adhering to Alter Design System tokens.
 class ButtonText extends StatelessWidget {
   /// Component version for reference.
   /// v1.1.0: Added ButtonType.red destructive variant using AlterSemanticTokens.statusDanger.
   static const String version = '1.1.0';
 
+  /// The text displayed inside the button.
   final String label;
+
+  /// The visual style type of the button.
   final ButtonType type;
+
+  /// The size variation determining the button's padding.
   final ButtonSize size;
+
+  /// Callback executed when the button is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [ButtonText] instance.
   const ButtonText({
     super.key,
     required this.label,

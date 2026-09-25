@@ -4,7 +4,10 @@ import '../../styles/typography.dart';
 
 /// Style variants for [ToggleText].
 enum ToggleTextType {
+  /// Gray subtle background variant.
   gray,
+
+  /// White surface background variant.
   white,
 }
 
@@ -26,14 +29,28 @@ class ToggleText extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 167:9709.
   static const String version = '1.0.0';
 
+  /// Text label string.
   final String label;
+
+  /// Whether the option is selected.
   final bool isSelected;
+
+  /// Whether the leading icon should be rendered.
   final bool hasIcon;
+
+  /// The icon data displayed in the toggle button.
   final IconData icon;
+
+  /// Visual theme style type.
   final ToggleTextType type;
+
+  /// Callback executed with boolean state when toggled.
   final ValueChanged<bool>? onChanged;
+
+  /// Callback executed when tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [ToggleText] instance.
   const ToggleText({
     super.key,
     this.label = 'Option',

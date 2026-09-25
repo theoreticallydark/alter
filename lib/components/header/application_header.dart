@@ -6,6 +6,7 @@ import '../buttons/button_graphic_text.dart';
 import '../buttons/button_icon.dart';
 import '../buttons/button_icon_ghost.dart';
 
+/// An application app-bar / header with title, subtitle, navigation return button, action slots, and profile trigger.
 class ApplicationHeader extends StatelessWidget {
   /// Component version for reference.
   /// v1.1.0: Added `hasReturnButton`, `onReturnTap`, custom action icons, and `profileImage` matching Figma node 119:5716.
@@ -13,31 +14,61 @@ class ApplicationHeader extends StatelessWidget {
   /// v1.0.1: Updated outer layout to 24px padding all around and 16px itemSpacing between headerContainer and Slot as per Figma node 119:5716.
   static const String version = '1.1.0';
 
+  /// Primary headline text.
   final String title;
+
+  /// Secondary subtitle or brand tag text.
   final String subtitle;
 
+  /// Whether the leading return/back button is displayed.
   final bool hasReturnButton;
+
+  /// Callback executed when the return button is tapped.
   final VoidCallback? onReturnTap;
 
+  /// Whether the streak/graphic style badge button is shown.
   final bool hasStyleButton;
+
+  /// Title of the streak/graphic style badge.
   final String styleButtonTitle;
+
+  /// Subtitle of the streak/graphic style badge.
   final String styleButtonSubtitle;
+
+  /// Callback executed when the style button is tapped.
   final VoidCallback? onStyleButtonTap;
 
+  /// Whether the first generic action button is shown.
   final bool hasActionOne;
+
+  /// Icon rendered in the first action button.
   final IconData actionOneIcon;
+
+  /// Callback executed when the first action button is tapped.
   final VoidCallback? onActionOneTap;
 
+  /// Whether the second generic action button is shown.
   final bool hasActionTwo;
+
+  /// Icon rendered in the second action button.
   final IconData actionTwoIcon;
+
+  /// Callback executed when the second action button is tapped.
   final VoidCallback? onActionTwoTap;
 
+  /// Whether the user profile avatar button is shown.
   final bool hasProfileAction;
+
+  /// Image provider for the profile avatar.
   final ImageProvider? profileImage;
+
+  /// Callback executed when the profile avatar is tapped.
   final VoidCallback? onProfileTap;
 
+  /// Optional widget slot embedded below the header bar.
   final Widget? slot;
 
+  /// Creates an [ApplicationHeader] instance.
   const ApplicationHeader({
     super.key,
     this.title = 'Alter',

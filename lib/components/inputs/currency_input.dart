@@ -19,53 +19,110 @@ class CurrencyInput extends StatelessWidget {
   static const String version = '2.2.0';
 
   // Label Bar Properties
+  /// Label text displayed above the currency input.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Currency & Grouping Configuration
+  /// Digit separator format (International vs Indian numbering system).
   final NumberGroupingSystem groupingSystem;
+
+  /// Whether decimal fractions are permitted.
   final bool allowDecimals;
+
+  /// Fixed or max number of allowed decimal digits.
   final int? decimalPlaces;
+
+  /// Minimum allowed numeric amount value.
   final num? minValue;
+
+  /// Maximum allowed numeric amount value.
   final num? maxValue;
 
   // Left Section (Default: Euro icon)
+  /// Leading currency icon (defaults to [Icons.euro_rounded]).
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
+
+  /// Currency prefix text string.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
   // Content
+  /// Hint placeholder text.
   final String placeholder;
+
+  /// Initial numeric amount.
   final num? initialValue;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Suffix & Action
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
+
+  /// Trailing action button (e.g. [ButtonIconGhost]).
   final ButtonIconGhost? rightButton;
 
   // Validation & Error
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
 
   // Callbacks
+  /// Whether the currency input is interactive.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Whether the input field autofocuses.
   final bool autofocus;
+
+  /// Callback returning parsed numeric amount on change.
   final ValueChanged<num?>? onAmountChanged;
+
+  /// Callback returning raw string value on change.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [CurrencyInput] instance.
   const CurrencyInput({
     super.key,
     this.label = 'Amount',

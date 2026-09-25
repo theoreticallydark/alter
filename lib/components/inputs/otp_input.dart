@@ -17,19 +17,43 @@ class OTPInput extends StatefulWidget {
   /// v1.0.0: Initial release of OTPInput supporting auto-focus progression, paste, and Alter styling tokens.
   static const String version = '1.0.0';
 
+  /// Total number of OTP pin digits/cells (defaults to 4).
   final int length;
+
+  /// Surface background and border style variant.
   final InputControlType type;
+
+  /// Whether the entered digits should be obscured.
   final bool obscureOtp;
+
+  /// Obscuring character glyph (defaults to '•').
   final String obscuringCharacter;
+
+  /// Whether the first digit cell should autofocus on render.
   final bool autofocus;
+
+  /// Whether the OTP input is interactive.
   final bool enabled;
+
+  /// Whether the OTP input is read-only.
   final bool readOnly;
+
+  /// Whether the component is in an error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the cells.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Callback executed with current concatenated OTP string on change.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed when all OTP digits have been filled.
   final ValueChanged<String>? onCompleted;
 
+  /// Creates an [OTPInput] verification instance.
   const OTPInput({
     super.key,
     this.length = 4,

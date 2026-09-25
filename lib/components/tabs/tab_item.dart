@@ -4,7 +4,10 @@ import '../../styles/typography.dart';
 
 /// Style variants for [TabItem].
 enum TabItemType {
+  /// Gray subtle background variant when selected.
   gray,
+
+  /// White surface background variant when selected.
   white,
 }
 
@@ -29,11 +32,19 @@ class TabItem extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 336:10501 (.TabItem).
   static const String version = '1.0.2';
 
+  /// Text label displayed in the tab.
   final String label;
+
+  /// Whether this tab is currently selected.
   final bool isSelected;
+
+  /// Visual theme style type.
   final TabItemType type;
+
+  /// Callback executed when the tab item is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [TabItem] instance.
   const TabItem({
     super.key,
     this.label = 'Label',

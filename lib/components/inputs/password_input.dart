@@ -23,71 +23,154 @@ class PasswordInput extends StatefulWidget {
   static const String version = '2.2.1';
 
   // Label Bar Properties
+  /// Label text displayed above the password field.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Left Section (default leftIcon: null)
+  /// Leading icon data.
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
+
+  /// Prefix text displayed before the input value.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
   // Content
+  /// Hint placeholder text.
   final String placeholder;
+
+  /// Initial or bound value string.
   final String? value;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Suffix & Visibility Toggle
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
+
+  /// Whether the eye show/hide password toggle button is displayed.
   final bool showEyeToggle;
+
+  /// Whether the text is initially masked.
   final bool initiallyObscured;
+
+  /// Character used to mask obscured text (defaults to '•').
   final String obscuringCharacter;
+
+  /// Callback executed when the visibility toggle is clicked.
   final ValueChanged<bool>? onToggleObscure;
 
   // Formatting
+  /// Whether spaces are allowed in the password field.
   final bool allowSpaces;
+
+  /// Formatters applied to the text field input.
   final List<TextInputFormatter>? inputFormatters;
 
   // Strength & Validation Rules
+  /// Minimum character count required for valid password.
   final int? minCharacters;
+
+  /// Whether at least one digit is required.
   final bool requireNumber;
+
+  /// Whether at least one special character is required.
   final bool requireSpecialChar;
+
+  /// Whether at least one uppercase letter is required.
   final bool requireUppercase;
+
+  /// Whether at least one lowercase letter is required.
   final bool requireLowercase;
+
+  /// Whether built-in password validation rules run automatically.
   final bool autoValidateRules;
 
   // Custom Error Texts
+  /// Custom error message when minimum characters are not met.
   final String? minCharactersErrorText;
+
+  /// Custom error message when required number is missing.
   final String? requireNumberErrorText;
+
+  /// Custom error message when required special character is missing.
   final String? requireSpecialCharErrorText;
+
+  /// Custom error message when required uppercase letter is missing.
   final String? requireUppercaseErrorText;
+
+  /// Custom error message when required lowercase letter is missing.
   final String? requireLowercaseErrorText;
+
+  /// Custom error message when required field is empty.
   final String? requiredErrorText;
 
   // Validation & Error
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
+
+  /// Form field validation callback.
   final FormFieldValidator<String>? validator;
+
+  /// Form field on-saved callback.
   final FormFieldSetter<String>? onSaved;
+
+  /// Autovalidate mode for form integration.
   final AutovalidateMode? autovalidateMode;
 
   // Callbacks
+  /// Whether the password input is interactive.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Whether the input field autofocuses.
   final bool autofocus;
+
+  /// Callback executed on value changes.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [PasswordInput] instance.
   const PasswordInput({
     super.key,
     this.label = 'Password',

@@ -61,70 +61,147 @@ class TextInput extends StatefulWidget {
   static const String version = '2.4.0';
 
   // Label Bar Properties (Figma default: label='Label', isRequired=false, characterLimit=32)
+  /// Label text displayed above the input field.
   final String? label;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Left Section Slots (Figma default: leftIcon=Icons.face_5_outlined, prefix=null)
+  /// Leading icon data.
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
 
+  /// Prefix text displayed before the input value.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
+  /// Hint placeholder text.
   final String placeholder;
+
+  /// Initial or bound value string.
   final String? value;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Right Section Slots (Figma default: suffix=null, rightButton=null)
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
 
+  /// Trailing action button (e.g. [ButtonIconGhost]).
   final ButtonIconGhost? rightButton;
 
   // Core Text & Format Passthroughs
+  /// Maximum number of lines for multiline input.
   final int? maxLines;
+
+  /// Minimum number of lines for multiline input.
   final int? minLines;
+
+  /// Formatters applied to the text field input.
   final List<TextInputFormatter>? inputFormatters;
 
   // Text Mode, Limits & Filtering
+  /// Preset filtering and keyboard mode (e.g. email, phone, alphanumeric).
   final TextInputMode inputMode;
+
+  /// Virtual keyboard type for software keyboards.
   final TextInputType? keyboardType;
+
+  /// Whether autocorrection is enabled.
   final bool? autocorrect;
+
+  /// Whether input suggestions are enabled.
   final bool? enableSuggestions;
+
+  /// Autofill hints for autofill services.
   final Iterable<String>? autofillHints;
 
   // Validation & Multiple Error Support
+  /// Whether to enforce required field validation and show red asterisk.
   final bool isRequired;
+
+  /// Whether built-in validation rules (email, phone, required) run automatically.
   final bool autoValidateRules;
+
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom error text when a required field is left empty.
   final String? requiredErrorText;
+
+  /// Custom error text for invalid email formats.
   final String? emailErrorText;
+
+  /// Custom error text for invalid phone formats.
   final String? phoneErrorText;
+
+  /// Custom error text when character limit is exceeded.
   final String? characterLimitErrorText;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
 
   // Interactivity & Callbacks
+  /// Whether the input field is interactive.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Whether the input field autofocuses.
   final bool autofocus;
+
+  /// Callback executed on value changes.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when editing is completed.
   final VoidCallback? onEditingComplete;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
+
+  /// Keyboard action button (e.g. done, search).
   final TextInputAction textInputAction;
 
   // Form Integration
+  /// Form field validation callback.
   final FormFieldValidator<String>? validator;
+
+  /// Form field on-saved callback.
   final FormFieldSetter<String>? onSaved;
+
+  /// Autovalidate mode for form integration.
   final AutovalidateMode? autovalidateMode;
 
+  /// Creates a [TextInput] instance.
   const TextInput({
     super.key,
     this.label = 'Label',

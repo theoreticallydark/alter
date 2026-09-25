@@ -5,12 +5,25 @@ import '../../styles/typography.dart';
 
 /// Status variants for [Toast].
 enum ToastStatus {
+  /// Neutral dark toast variant.
   neutral,
+
+  /// Gray subtle toast variant.
   gray,
+
+  /// White surface toast variant.
   white,
+
+  /// Danger red alert toast variant.
   danger,
+
+  /// Warning orange alert toast variant.
   warning,
+
+  /// Caution yellow alert toast variant.
   caution,
+
+  /// Success green alert toast variant.
   success,
 }
 
@@ -35,12 +48,22 @@ class Toast extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 342:12219.
   static const String version = '1.0.0';
 
+  /// Message string displayed in the toast.
   final String label;
+
+  /// Visual status theme variant of the toast.
   final ToastStatus status;
+
+  /// Whether the leading icon should be rendered.
   final bool hasIcon;
+
+  /// Icon data for the leading status icon.
   final IconData icon;
+
+  /// Optional fixed width of the toast (defaults to 320.0).
   final double? width;
 
+  /// Creates a [Toast] alert instance.
   const Toast({
     super.key,
     this.label = 'Feedback Text',

@@ -20,54 +20,113 @@ class TextArea extends StatelessWidget {
   static const String version = '2.4.0';
 
   // Label Bar Properties (default label: 'Description', characterLimit: 200)
+  /// Label text displayed above the text area.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Multiline Sizing
+  /// Number of text lines determining the height of the area.
   final int lines;
+
+  /// Optional minimum number of lines for dynamic expansion.
   final int? minLines;
 
   // Left Section (default leftIcon: null for clean text areas)
+  /// Leading icon data.
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
+
+  /// Prefix text displayed before the input value.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
   // Content
+  /// Hint placeholder text.
   final String placeholder;
+
+  /// Initial or bound value string.
   final String? value;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Suffix & Action
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
+
+  /// Trailing action button (e.g. [ButtonIconGhost]).
   final ButtonIconGhost? rightButton;
 
   // Validation & Error
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
+
+  /// Form field validation callback.
   final FormFieldValidator<String>? validator;
+
+  /// Form field on-saved callback.
   final FormFieldSetter<String>? onSaved;
+
+  /// Autovalidate mode for form integration.
   final AutovalidateMode? autovalidateMode;
 
   // Callbacks & Interactivity
+  /// Whether the text area is interactive.
   final bool enabled;
+
+  /// Whether the text area is read-only.
   final bool readOnly;
+
+  /// Whether the text area autofocuses.
   final bool autofocus;
+
+  /// Virtual keyboard type for software keyboards.
   final TextInputType? keyboardType;
+
+  /// Formatters applied to the text field input.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// Callback executed on value changes.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [TextArea] multiline input instance.
   const TextArea({
     super.key,
     this.label = 'Description',

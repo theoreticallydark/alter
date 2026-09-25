@@ -4,23 +4,58 @@ import '../../styles/typography.dart';
 
 /// Color variants for [Badge] component matching Alter Design System.
 enum BadgeColor {
+  /// Gray color variant.
   gray,
+
+  /// White surface color variant.
   white,
+
+  /// Red color variant.
   red,
+
+  /// Orange color variant.
   orange,
+
+  /// Yellow color variant.
   yellow,
+
+  /// Green color variant.
   green,
+
+  /// Teal color variant.
   teal,
+
+  /// Indigo color variant.
   indigo,
+
+  /// Purple color variant.
   purple,
+
+  /// Pink color variant.
   pink,
+
+  /// Amber color variant.
   amber,
+
+  /// Lime color variant.
   lime,
+
+  /// Emerald color variant.
   emerald,
+
+  /// Cyan color variant.
   cyan,
+
+  /// Sky blue color variant.
   sky,
+
+  /// Brand blue color variant.
   brand,
+
+  /// Slate color variant.
   slate,
+
+  /// Zinc color variant.
   zinc,
 }
 
@@ -43,16 +78,34 @@ class Badge extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 124:4003.
   static const String version = '1.1.0';
 
+  /// Text string displayed inside the badge.
   final String label;
+
+  /// The color swatch variant applied to background, text, and border.
   final BadgeColor color;
+
+  /// Whether the leading left icon should be rendered.
   final bool hasLeftIcon;
+
+  /// The icon data for the leading icon.
   final IconData? leftIcon;
+
+  /// Whether the trailing right icon should be rendered.
   final bool hasRightIcon;
+
+  /// The icon data for the trailing icon.
   final IconData? rightIcon;
+
+  /// Whether the trailing action button should be rendered.
   final bool hasAction;
+
+  /// Custom icon data for the action button (defaults to clear/close).
   final IconData? actionIcon;
+
+  /// Callback executed when the trailing action button is pressed.
   final VoidCallback? onActionTap;
 
+  /// Creates a [Badge] instance.
   const Badge({
     super.key,
     this.label = 'Label',

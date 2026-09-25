@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
+/// An individual clickable item within the [AlterBottomNavigationBar].
 class BottomNavigationItem extends StatelessWidget {
   /// Component version for reference.
   static const String version = '1.0.1';
 
+  /// Text label displayed under the icon.
   final String label;
+
+  /// Icon rendered in the item.
   final IconData icon;
+
+  /// Whether this item is currently selected.
   final bool isSelected;
+
+  /// Callback executed when the item is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [BottomNavigationItem] instance.
   const BottomNavigationItem({
     super.key,
     required this.label,

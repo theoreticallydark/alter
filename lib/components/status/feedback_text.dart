@@ -4,9 +4,16 @@ import '../../styles/typography.dart';
 
 /// Status variants for [FeedbackText].
 enum FeedbackTextStatus {
+  /// Destructive danger status.
   danger,
+
+  /// Alert warning status.
   warning,
+
+  /// Caution advisory status.
   caution,
+
+  /// Positive success status.
   success,
 }
 
@@ -27,11 +34,19 @@ class FeedbackText extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 339:11991.
   static const String version = '1.0.0';
 
+  /// Message string displayed.
   final String text;
+
+  /// Semantic status styling type.
   final FeedbackTextStatus status;
+
+  /// Whether the leading status icon should be displayed.
   final bool hasIcon;
+
+  /// Icon data for the status icon.
   final IconData icon;
 
+  /// Creates a [FeedbackText] instance.
   const FeedbackText({
     super.key,
     this.text = 'Feedback Text',

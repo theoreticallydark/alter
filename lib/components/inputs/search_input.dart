@@ -18,48 +18,100 @@ class SearchInput extends StatefulWidget {
   static const String version = '2.1.0';
 
   // Label Bar Properties (default label: null for search inputs)
+  /// Optional label text displayed above the search field.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Left Section
+  /// Leading icon data (defaults to [Icons.search_rounded]).
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
+
+  /// Prefix text displayed before the input value.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
   // Content
+  /// Hint placeholder text (defaults to 'Search...').
   final String placeholder;
+
+  /// Initial or bound value string.
   final String? value;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Suffix & Custom Right Action
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
+
+  /// Whether to display the clear 'X' button when text is entered.
   final bool showClearButton;
+
+  /// Custom trailing action button override.
   final ButtonIconGhost? customRightButton;
 
   // Validation & Error
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
 
   // Callbacks
+  /// Whether the search input is interactive.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Whether the input field autofocuses.
   final bool autofocus;
+
+  /// Callback executed on value changes.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when search is triggered.
   final ValueChanged<String>? onSearch;
+
+  /// Callback executed when the clear button is pressed.
   final VoidCallback? onClear;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [SearchInput] instance.
   const SearchInput({
     super.key,
     this.label,

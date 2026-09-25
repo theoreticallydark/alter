@@ -113,12 +113,22 @@ class NumericFormatterUtils {
 
 /// Live text input formatter that manages comma grouping and decimal rules.
 class GroupedNumberInputFormatter extends TextInputFormatter {
+  /// Number grouping system used for digit formatting.
   final NumberGroupingSystem groupingSystem;
+
+  /// Whether decimal fractions are permitted.
   final bool allowDecimals;
+
+  /// Maximum number of decimal places allowed.
   final int? decimalPlaces;
+
+  /// Whether negative numbers are permitted.
   final bool allowNegative;
+
+  /// Maximum numeric value constraint.
   final num? maxValue;
 
+  /// Creates a [GroupedNumberInputFormatter] instance.
   GroupedNumberInputFormatter({
     required this.groupingSystem,
     required this.allowDecimals,
@@ -203,54 +213,113 @@ class NumericInput extends StatefulWidget {
   static const String version = '2.3.0';
 
   // Label Bar Properties
+  /// Label text displayed above the numeric field.
   final String? label;
+
+  /// Whether to display a red required asterisk next to the label.
   final bool isRequired;
+
+  /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
   // Variant & Surface
+  /// Surface background and border style variant.
   final InputControlType type;
 
   // Numeric Rules & Grouping
+  /// Grouping format (none, international, or indian).
   final NumberGroupingSystem groupingSystem;
+
+  /// Whether decimal numbers are allowed.
   final bool allowDecimals;
+
+  /// Maximum allowed decimal fraction digits.
   final int? decimalPlaces;
+
+  /// Whether negative numbers are allowed.
   final bool allowNegative;
+
+  /// Minimum numeric value bound.
   final num? minValue;
+
+  /// Maximum numeric value bound.
   final num? maxValue;
 
   // Left Section
+  /// Leading icon data.
   final IconData? leftIcon;
+
+  /// Custom leading widget override.
   final Widget? leftIconWidget;
+
+  /// Prefix text string.
   final String? prefix;
+
+  /// Custom prefix widget override.
   final Widget? prefixWidget;
 
   // Content
+  /// Hint placeholder text.
   final String placeholder;
+
+  /// Initial numeric value.
   final num? initialValue;
+
+  /// External text editing controller.
   final TextEditingController? controller;
+
+  /// Focus node controlling input focus.
   final FocusNode? focusNode;
 
   // Suffix & Action
+  /// Suffix descriptor text displayed at the trailing end.
   final String? suffix;
+
+  /// Custom suffix widget override.
   final Widget? suffixWidget;
+
+  /// Trailing action button (e.g. [ButtonIconGhost]).
   final ButtonIconGhost? rightButton;
 
   // Validation & Error
+  /// Whether the input is in an explicit error state.
   final bool isError;
+
+  /// Whether to render the error message beneath the field.
   final bool showErrorMessage;
+
+  /// Default error message text.
   final String errorMessage;
+
+  /// Optional list of multiple error messages.
   final List<String>? errorMessages;
+
+  /// Custom icon widget override for the error message banner.
   final Widget? errorIconWidget;
 
   // Callbacks
+  /// Whether the numeric input is interactive.
   final bool enabled;
+
+  /// Whether the field is read-only.
   final bool readOnly;
+
+  /// Whether the input field autofocuses.
   final bool autofocus;
+
+  /// Callback returning parsed numeric value on change.
   final ValueChanged<num?>? onNumberChanged;
+
+  /// Callback returning raw text string on change.
   final ValueChanged<String>? onChanged;
+
+  /// Callback executed on keyboard submit.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback executed when the input container is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [NumericInput] instance.
   const NumericInput({
     super.key,
     this.label = 'Number',

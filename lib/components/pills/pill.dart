@@ -2,27 +2,64 @@ import 'package:flutter/material.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
-enum PillSize { defaultSize, compact }
+/// Size variants for [Pill].
+enum PillSize {
+  /// Standard height pill.
+  defaultSize,
 
-enum PillColor { gray, neutral }
+  /// Compact smaller height pill.
+  compact,
+}
 
+/// Color variants for [Pill].
+enum PillColor {
+  /// Gray theme variant.
+  gray,
+
+  /// Neutral surface variant.
+  neutral,
+}
+
+/// A compact rounded status and label pill.
 class Pill extends StatelessWidget {
   /// Component version for reference.
   /// v1.0.3: Enhanced smooth size and label showcase transitions with synchronized AnimatedCrossFade and cubic interpolation.
   static const String version = '1.0.3';
 
+  /// Primary label text.
   final String label;
+
+  /// Optional numeric or secondary value text.
   final String? value;
+
+  /// Size variant of the pill.
   final PillSize size;
+
+  /// Color palette variant of the pill.
   final PillColor color;
+
+  /// Whether the label is rendered.
   final bool hasLabel;
+
+  /// Whether the value is rendered.
   final bool hasValue;
+
+  /// Whether the pill is in a selected state with an active outline border.
   final bool isSelected;
+
+  /// Whether the pill represents a completed status.
   final bool isCompleted;
+
+  /// Whether the pill responds to tap gestures.
   final bool isInteractive;
+
+  /// Custom horizontal padding override.
   final double? horizontalPadding;
+
+  /// Callback executed when the pill is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a [Pill] instance.
   const Pill({
     super.key,
     this.label = 'Label',

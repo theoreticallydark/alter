@@ -3,7 +3,10 @@ import 'tab_item.dart';
 
 /// Style variants for [Tabs].
 enum TabsType {
+  /// Gray subtle background variant.
   gray,
+
+  /// White surface background variant.
   white,
 }
 
@@ -21,11 +24,19 @@ class Tabs extends StatelessWidget {
   /// v1.0.0: Initial release matching Figma Node 336:10524.
   static const String version = '1.0.0';
 
+  /// List of tab label strings.
   final List<String> tabs;
+
+  /// Index of the currently active tab.
   final int selectedIndex;
+
+  /// Visual theme style type.
   final TabsType type;
+
+  /// Callback executed when a tab is selected.
   final ValueChanged<int>? onTabSelected;
 
+  /// Creates a [Tabs] navigation instance.
   const Tabs({
     super.key,
     this.tabs = const ['Tab 1', 'Tab 2', 'Tab 3'],

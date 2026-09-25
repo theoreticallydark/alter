@@ -2,26 +2,49 @@ import 'package:flutter/material.dart';
 import '../../styles/tokens.dart';
 import '../../styles/swatches.dart';
 
+/// State of a [ToggleIcon].
 enum ToggleIconState {
+  /// Unchecked / inactive state.
   unchecked,
+
+  /// Checked / active state.
   checked,
 }
 
+/// A toggling icon button (e.g. favorite star or heart).
 class ToggleIcon extends StatelessWidget {
   /// Component version for reference.
   /// v1.1.0: Added `icon` (default border), `selectedIcon` (filled), `isSelected` / `onSelectedChanged`, and `activeColor` following MUI convention with graceful fallback.
   static const String version = '1.1.0';
 
+  /// Boolean active selection state.
   final bool isSelected;
+
+  /// Optional enum state representing checked/unchecked.
   final ToggleIconState? state;
+
+  /// Callback executed with boolean state when toggled.
   final ValueChanged<bool>? onSelectedChanged;
+
+  /// Callback executed with [ToggleIconState] when toggled.
   final ValueChanged<ToggleIconState>? onChanged;
+
+  /// Default icon displayed when unselected.
   final IconData icon;
+
+  /// Icon displayed when selected (falls back to [icon] if not provided).
   final IconData? selectedIcon;
+
+  /// Custom active color when toggled on.
   final Color? activeColor;
+
+  /// Custom inactive color when toggled off.
   final Color? inactiveColor;
+
+  /// Dimensions (width & height) of the toggle button container (defaults to 24.0).
   final double size;
 
+  /// Creates a [ToggleIcon] instance.
   const ToggleIcon({
     super.key,
     this.isSelected = false,
