@@ -573,6 +573,77 @@ void main() {
       expect(typedValue, equals('Hello World'));
     });
 
+    testWidgets('InputControl renders default and compact sizes with placeholder and input', (WidgetTester tester) async {
+      String typedText = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  InputControl(
+                    placeholder: 'Default Input',
+                    size: InputControlSize.defaultSize,
+                    onChanged: (val) => typedText = val,
+                  ),
+                  const InputControl(
+                    placeholder: 'Compact Input',
+                    size: InputControlSize.compact,
+                    suffix: 'USD',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Default Input'), findsOneWidget);
+      expect(find.text('Compact Input'), findsOneWidget);
+      expect(find.text('USD'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField).first, 'Testing InputControl');
+      await tester.pump();
+      expect(typedText, equals('Testing InputControl'));
+    });
+
+    testWidgets('InputControl renders vertical slots (upSlot, downSlot) and right button', (WidgetTester tester) async {
+      bool buttonTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: InputControl(
+                placeholder: 'Slot Test',
+                hasUpSlot: true,
+                upSlot: const Text('Up Slot Header'),
+                hasDownSlot: true,
+                downSlot: const Text('Down Slot Footer'),
+                rightButton: ButtonIconGhost(
+                  icon: Icons.arrow_upward,
+                  onTap: () {
+                    buttonTapped = true;
+                  },
+                ),
+                isSelected: true,
+                isHovered: true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Up Slot Header'), findsOneWidget);
+      expect(find.text('Down Slot Footer'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_upward), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.arrow_upward));
+      await tester.pump();
+      expect(buttonTapped, isTrue);
+    });
+
     testWidgets('TextArea renders with multiline sizing', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(

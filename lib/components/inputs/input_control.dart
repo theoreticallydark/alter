@@ -6,24 +6,34 @@ import '../buttons/button_icon_ghost.dart';
 
 /// Surface variant types for [InputControl] as defined in Figma Node `470:436`.
 enum InputControlType {
-  /// Gray surface (`#F9FAFB`, `AlterSemanticTokens.baseGray`) with `stroke200` border.
+  /// Gray surface (`#F9FAFB`, `AlterSemanticTokens.baseGray`) with `baseBorder` border.
   gray,
 
-  /// White surface (`#FFFFFF`, `AlterSemanticTokens.baseWhite`) with `stroke100` border.
+  /// White surface (`#FFFFFF`, `AlterSemanticTokens.baseWhite`) with `baseBorder` border.
   white,
+}
+
+/// Sizing variants for [InputControl] as defined in Figma Node `470:436`.
+enum InputControlSize {
+  /// Standard 20px vertical, 24px horizontal padding, 20px corner radius, 16px typography.
+  defaultSize,
+
+  /// Compact 12px padding, 14px corner radius, 14px typography.
+  compact,
 }
 
 /// A highly configurable, multi-slot input control primitive for the Alter Design System.
 ///
 /// Direct 1:1 implementation of Figma Node `470:436` (`InputControl`):
 /// - `labelBar`: Top row containing `label` on left (`isRequired`) and `characterLimit` on right (rendered on UI when label is present)
-/// - `inputContainer`: 64px box (`padding: 20px 24px`, `borderRadius: 20px`, `gap: 16px`)
-/// - `leftSection`: Row containing `leftIcon`, `prefix`, and editable `input` / placeholder
-/// - `suffix`: Trailing unit or descriptor text
-/// - `rightButton`: Trailing interactive action slot accepting [ButtonIconGhost] directly
+/// - `inputContainer`: Box (`padding: 20px 24px` or `12px`, `borderRadius: 20px` or `14px`)
+///   - `upSlot`: Optional vertical slot above levelOne (e.g. preview content, chips, header metadata)
+///   - `levelOne`: Row containing `leftIcon`, `prefix`, editable `input` / placeholder, `suffix`, and `rightButton`
+///   - `downSlot`: Optional vertical slot below levelOne (e.g. secondary controls, hints, attachments)
 /// - `errorContainer`: Bottom row with 16px `error_outline` icon and caption text in `textDanger` (renders latest active error)
 class InputControl extends StatefulWidget {
   /// Component version for reference.
+  /// v3.0.0: Added InputControlSize enum (defaultSize, compact), vertical slot hierarchy for upSlot and downSlot, and unified Active state support across hover (MouseRegion) and selection/focus per Figma Node 470:436.
   /// v2.3.0: Streamlined multiline sizing: Clean minLines and maxLines configuration without redundant boolean flags; multiline cross-axis start alignment.
   /// v2.1.0: Streamlined label & character limit UI: Removed showLabel and showCharacterLimit booleans. labelBar is rendered whenever label is provided (with characterLimit counter shown on UI during typing). Character limit validation continues to function in background even without a label.
   /// v2.0.0: Pure Flutter convention overhaul: Removed InputControlStatus enum (visual states are 100% dynamically driven by FocusNode and TextEditingController). Streamlined API by removing redundant hasLabel, hasCharacterLimit, hasPrefix, hasSuffix, and hasLeftIcon in favor of clean nullable properties.
@@ -35,7 +45,7 @@ class InputControl extends StatefulWidget {
   /// v1.2.0: Hide entire labelBar if showLabel is false. Replaced wordLimit with numeric characterLimit showing "x/characterLimit" dynamically only in typing (selected) state. Replaced error status with independent isError and showErrorMessage properties.
   /// v1.1.0: Replaced initialValue with clean value property; streamlined placeholder and value auto-transitions.
   /// v1.0.0: Initial recreation of InputControl matching Figma Node 470:436.
-  static const String version = '2.3.0';
+  static const String version = '3.0.0';
 
   // Label Bar Properties (Figma: label, isRequired, characterLimit)
   /// Optional label text displayed above the input field.
@@ -47,9 +57,25 @@ class InputControl extends StatefulWidget {
   /// Maximum allowed character limit counter displayed on typing.
   final int? characterLimit;
 
-  // Variant & Surface (Figma: type)
+  // Variant & Surface (Figma: type, size)
   /// Visual background and border surface variant.
   final InputControlType type;
+
+  /// Sizing variant determining padding, corner radius, and typography.
+  final InputControlSize size;
+
+  // Slot Properties (Figma: hasUpSlot, hasDownSlot)
+  /// Whether the upper slot above the input row should be rendered.
+  final bool hasUpSlot;
+
+  /// Optional widget displayed in the upper slot.
+  final Widget? upSlot;
+
+  /// Whether the lower slot below the input row should be rendered.
+  final bool hasDownSlot;
+
+  /// Optional widget displayed in the lower slot.
+  final Widget? downSlot;
 
   // Left Section Properties (Figma: leftIcon, prefix, input)
   /// Icon displayed on the leading side of the input.
@@ -75,6 +101,12 @@ class InputControl extends StatefulWidget {
 
   /// Focus node controlling focus state.
   final FocusNode? focusNode;
+
+  /// Whether the field is explicitly selected/active.
+  final bool isSelected;
+
+  /// Optional manual override for hover state.
+  final bool? isHovered;
 
   // Right Section Properties (Figma: suffix, rightButton)
   /// Suffix descriptor text displayed at the trailing end.
@@ -150,6 +182,11 @@ class InputControl extends StatefulWidget {
     this.isRequired = false,
     this.characterLimit = 32,
     this.type = InputControlType.gray,
+    this.size = InputControlSize.defaultSize,
+    this.hasUpSlot = false,
+    this.upSlot,
+    this.hasDownSlot = false,
+    this.downSlot,
     this.leftIcon = Icons.face_5_outlined,
     this.leftIconWidget,
     this.prefix = 'Prefix',
@@ -158,6 +195,8 @@ class InputControl extends StatefulWidget {
     this.value,
     this.controller,
     this.focusNode,
+    this.isSelected = false,
+    this.isHovered,
     this.suffix = 'Suffix',
     this.suffixWidget,
     this.rightButton,
@@ -188,6 +227,7 @@ class InputControl extends StatefulWidget {
 class _InputControlState extends State<InputControl> {
   TextEditingController? _internalController;
   FocusNode? _internalFocusNode;
+  bool _internalHovered = false;
 
   TextEditingController get _controller =>
       widget.controller ?? _internalController!;
@@ -268,6 +308,11 @@ class _InputControlState extends State<InputControl> {
 
   bool get _isFocused => _focusNode.hasFocus;
   bool get _isFilled => _controller.text.isNotEmpty;
+  bool get _isActive =>
+      widget.isSelected ||
+      _isFocused ||
+      (widget.isHovered == true) ||
+      _internalHovered;
 
   /// Checks if character limit is exceeded.
   bool get _isLimitExceeded =>
@@ -317,20 +362,15 @@ class _InputControlState extends State<InputControl> {
 
   Color get _borderColor {
     if (_effectiveIsError) {
-      return AlterSemanticTokens.textDanger; // #EF4444 / #E7000B
+      return AlterSemanticTokens.textDanger; // #E7000B
     }
     if (widget.readOnly) {
       return AlterSemanticTokens.textDisabled; // #99A1AF (stroke 1px)
     }
-    if (_isFocused) {
-      return AlterSemanticTokens.stroke1000; // #000000 (active typing border)
+    if (_isActive) {
+      return AlterSemanticTokens.interactivePrimaryBorder; // #030712
     }
-    switch (widget.type) {
-      case InputControlType.gray:
-        return AlterSemanticTokens.stroke200; // #E5E7EB
-      case InputControlType.white:
-        return AlterSemanticTokens.stroke100; // #F3F4F6
-    }
+    return AlterSemanticTokens.baseBorder; // #E5E7EB
   }
 
   Color get _contentColor {
@@ -340,10 +380,55 @@ class _InputControlState extends State<InputControl> {
     if (!widget.enabled) {
       return AlterSemanticTokens.textDisabled; // #99A1AF
     }
-    if (_isFocused || _isFilled) {
+    if (_isActive || _isFilled) {
       return AlterSemanticTokens.textPrimary; // #000000
     }
     return AlterSemanticTokens.textDisabled; // #99A1AF
+  }
+
+  EdgeInsets get _containerPadding {
+    switch (widget.size) {
+      case InputControlSize.defaultSize:
+        return const EdgeInsets.symmetric(horizontal: 24, vertical: 20);
+      case InputControlSize.compact:
+        return const EdgeInsets.all(12);
+    }
+  }
+
+  double get _borderRadius {
+    switch (widget.size) {
+      case InputControlSize.defaultSize:
+        return 20.0;
+      case InputControlSize.compact:
+        return 14.0;
+    }
+  }
+
+  TextStyle get _inputTextStyle {
+    switch (widget.size) {
+      case InputControlSize.defaultSize:
+        return AlterTypography.bodyLg;
+      case InputControlSize.compact:
+        return AlterTypography.body;
+    }
+  }
+
+  double get _leftIconSize {
+    switch (widget.size) {
+      case InputControlSize.defaultSize:
+        return 24.0;
+      case InputControlSize.compact:
+        return 20.0;
+    }
+  }
+
+  double get _itemSpacing {
+    switch (widget.size) {
+      case InputControlSize.defaultSize:
+        return 16.0;
+      case InputControlSize.compact:
+        return 8.0;
+    }
   }
 
   Widget? _buildLabelBar() {
@@ -368,6 +453,10 @@ class _InputControlState extends State<InputControl> {
         ? '${widget.label} *'
         : widget.label!;
 
+    final textStyle = widget.size == InputControlSize.compact
+        ? AlterTypography.body
+        : AlterTypography.bodyLg;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -376,7 +465,7 @@ class _InputControlState extends State<InputControl> {
         Expanded(
           child: Text(
             labelText,
-            style: AlterTypography.bodyLg.copyWith(
+            style: textStyle.copyWith(
               color: AlterSemanticTokens.textSecondary, // #4A5565
             ),
           ),
@@ -388,7 +477,7 @@ class _InputControlState extends State<InputControl> {
           Text(
             charLimitText,
             textAlign: TextAlign.right,
-            style: AlterTypography.bodyLg.copyWith(
+            style: textStyle.copyWith(
               color: charLimitColor,
             ),
           ),
@@ -416,14 +505,14 @@ class _InputControlState extends State<InputControl> {
       child: Row(
         crossAxisAlignment: _isMultiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
-          // Left Icon (24x24)
+          // Left Icon
           if (widget.leftIconWidget != null) ...[
             widget.leftIconWidget!,
             const SizedBox(width: 8),
           ] else if (widget.leftIcon != null) ...[
             Icon(
               widget.leftIcon,
-              size: 24,
+              size: _leftIconSize,
               color: _contentColor,
             ),
             const SizedBox(width: 8),
@@ -438,7 +527,7 @@ class _InputControlState extends State<InputControl> {
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text(
                 widget.prefix!,
-                style: AlterTypography.bodyLg.copyWith(
+                style: _inputTextStyle.copyWith(
                   color: _contentColor,
                 ),
               ),
@@ -467,7 +556,7 @@ class _InputControlState extends State<InputControl> {
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
                 cursorColor: AlterSemanticTokens.textPrimary,
-                style: AlterTypography.bodyLg.copyWith(
+                style: _inputTextStyle.copyWith(
                   color: !_isFilled && !_isFocused
                       ? AlterSemanticTokens.textDisabled
                       : _contentColor,
@@ -481,7 +570,7 @@ class _InputControlState extends State<InputControl> {
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
                   hintText: widget.placeholder,
-                  hintStyle: AlterTypography.bodyLg.copyWith(
+                  hintStyle: _inputTextStyle.copyWith(
                     color: AlterSemanticTokens.textDisabled, // #99A1AF
                   ),
                 ),
@@ -504,7 +593,7 @@ class _InputControlState extends State<InputControl> {
         child: Text(
           widget.suffix!,
           textAlign: TextAlign.right,
-          style: AlterTypography.bodyLg.copyWith(
+          style: _inputTextStyle.copyWith(
             color: _contentColor,
           ),
         ),
@@ -549,36 +638,75 @@ class _InputControlState extends State<InputControl> {
         effectiveMsg.isNotEmpty;
     final isDisabled = !widget.enabled;
 
-    Widget containerContent = GestureDetector(
-      onTap: isDisabled
-          ? null
-          : () {
-              widget.onTap?.call();
-              _focusNode.requestFocus();
-            },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        decoration: BoxDecoration(
-          color: _backgroundColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: _borderColor,
-            width: 1,
+    final bool showUpSlot =
+        (widget.hasUpSlot || widget.upSlot != null) && widget.upSlot != null;
+    final bool showDownSlot =
+        (widget.hasDownSlot || widget.downSlot != null) && widget.downSlot != null;
+
+    Widget containerContent = MouseRegion(
+      onEnter: (_) {
+        if (!_internalHovered) {
+          setState(() {
+            _internalHovered = true;
+          });
+        }
+      },
+      onExit: (_) {
+        if (_internalHovered) {
+          setState(() {
+            _internalHovered = false;
+          });
+        }
+      },
+      child: GestureDetector(
+        onTap: isDisabled
+            ? null
+            : () {
+                widget.onTap?.call();
+                _focusNode.requestFocus();
+              },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          padding: _containerPadding,
+          decoration: BoxDecoration(
+            color: _backgroundColor,
+            borderRadius: BorderRadius.circular(_borderRadius),
+            border: Border.all(
+              color: _borderColor,
+              width: 1,
+            ),
           ),
-        ),
-        child: Row(
-          crossAxisAlignment: _isMultiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-          children: [
-            _buildLeftSection(),
-            if (suffixWidget != null) ...[
-              const SizedBox(width: 16),
-              suffixWidget,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (showUpSlot) ...[
+                widget.upSlot!,
+                const SizedBox(height: 16),
+              ],
+              Row(
+                crossAxisAlignment: _isMultiline
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.center,
+                children: [
+                  _buildLeftSection(),
+                  if (suffixWidget != null) ...[
+                    SizedBox(width: _itemSpacing),
+                    suffixWidget,
+                  ],
+                  if (widget.rightButton != null) ...[
+                    SizedBox(width: _itemSpacing),
+                    widget.rightButton!,
+                  ],
+                ],
+              ),
+              if (showDownSlot) ...[
+                const SizedBox(height: 16),
+                widget.downSlot!,
+              ],
             ],
-            if (widget.rightButton != null) ...[
-              const SizedBox(width: 16),
-              widget.rightButton!,
-            ],
-          ],
+          ),
         ),
       ),
     );

@@ -32,6 +32,28 @@ WidgetbookFolder inputCategory() {
                 labelBuilder: (v) => v.name.toUpperCase(),
                 initialOption: InputControlType.gray,
               );
+              final size = context.knobs.object.dropdown(
+                label: 'Size',
+                options: InputControlSize.values,
+                labelBuilder: (s) => s.name,
+                initialOption: InputControlSize.defaultSize,
+              );
+              final isSelected = context.knobs.boolean(
+                label: 'Is Selected (Active Border)',
+                initialValue: false,
+              );
+              final isHovered = context.knobs.boolean(
+                label: 'Force Hover State',
+                initialValue: false,
+              );
+              final hasUpSlot = context.knobs.boolean(
+                label: 'Has Up Slot',
+                initialValue: false,
+              );
+              final hasDownSlot = context.knobs.boolean(
+                label: 'Has Down Slot',
+                initialValue: false,
+              );
               final placeholder = context.knobs.string(
                 label: 'Placeholder',
                 initialValue: 'Input',
@@ -92,6 +114,27 @@ WidgetbookFolder inputCategory() {
                 initialValue: false,
               );
 
+              Widget buildSlotPreview(String text) {
+                return Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AlterSemanticTokens.baseActive,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AlterSemanticTokens.baseBorder,
+                      width: 1,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    text,
+                    style: AlterTypography.captionBold.copyWith(
+                      color: AlterSemanticTokens.textSecondary,
+                    ),
+                  ),
+                );
+              }
+
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -99,17 +142,24 @@ WidgetbookFolder inputCategory() {
                     constraints: const BoxConstraints(maxWidth: 384),
                     child: InputControl(
                       key: ValueKey(
-                        'input_control_${type.name}_${readOnly}_${isError}_${hasRightButton}_${leftIcon?.codePoint}_${label}_${characterLimit}_$value',
+                        'input_control_${type.name}_${size.name}_${readOnly}_${isError}_${hasRightButton}_${hasUpSlot}_${hasDownSlot}_${isSelected}_${isHovered}_${leftIcon?.codePoint}_${label}_${characterLimit}_$value',
                       ),
                       label: label,
                       isRequired: isRequired,
                       characterLimit: characterLimit,
                       type: type,
+                      size: size,
+                      hasUpSlot: hasUpSlot,
+                      upSlot: hasUpSlot ? buildSlotPreview('Up Slot Preview') : null,
+                      hasDownSlot: hasDownSlot,
+                      downSlot: hasDownSlot ? buildSlotPreview('Down Slot Preview') : null,
                       placeholder: placeholder,
                       value: value,
                       leftIcon: leftIcon,
                       prefix: prefix,
                       suffix: suffix,
+                      isSelected: isSelected,
+                      isHovered: isHovered ? true : null,
                       rightButton: hasRightButton
                           ? ButtonIconGhost(
                               icon: Icons.face_5_outlined,
@@ -232,6 +282,49 @@ WidgetbookFolder inputCategory() {
                         const InputControl(
                           type: InputControlType.white,
                           placeholder: 'White surface input...',
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'COMPACT SIZE (12px padding, 14px radius)',
+                          style: AlterTypography.h4Bold.copyWith(
+                            color: AlterSemanticTokens.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const InputControl(
+                          size: InputControlSize.compact,
+                          placeholder: 'Compact input control...',
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'VERTICAL SLOTS (UpSlot & DownSlot)',
+                          style: AlterTypography.h4Bold.copyWith(
+                            color: AlterSemanticTokens.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        InputControl(
+                          hasUpSlot: true,
+                          upSlot: Container(
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AlterSemanticTokens.baseActive,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Text('Upper Slot Preview (e.g. metadata)'),
+                          ),
+                          placeholder: 'Main input row (levelOne)...',
+                          hasDownSlot: true,
+                          downSlot: Container(
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AlterSemanticTokens.baseActive,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Text('Lower Slot Preview (e.g. actions)'),
+                          ),
                         ),
                       ],
                     ),
