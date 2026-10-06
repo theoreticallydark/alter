@@ -168,7 +168,7 @@ WidgetbookFolder pillsCategory() {
             },
           ),
           WidgetbookUseCase(
-            name: 'All 18 Colors Matrix',
+            name: 'All 21 Colors Matrix',
             builder: (context) {
               return Center(
                 child: SingleChildScrollView(
@@ -211,6 +211,10 @@ WidgetbookFolder pillsCategory() {
                 label: 'Subtitle',
                 initialValue: 'ALA 20% • Zinc 10%',
               );
+              final hasSubtitle = context.knobs.boolean(
+                label: 'Has Subtitle',
+                initialValue: true,
+              );
               final type = context.knobs.object.dropdown(
                 label: 'Type',
                 options: AdvancedPillType.values,
@@ -229,6 +233,7 @@ WidgetbookFolder pillsCategory() {
                 child: AdvancedPill(
                   title: title,
                   subtitle: subtitle,
+                  hasSubtitle: hasSubtitle,
                   type: type,
                   hasLeftSlot: hasLeftSlot,
                   leftSlot: hasLeftSlot

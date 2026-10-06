@@ -1,6 +1,6 @@
 # AdvancedPill
 
-> Current Version: `v1.1.0`  
+> Current Version: `v1.2.0`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/pills/advancedpill)
 
 ## Overview
@@ -11,6 +11,7 @@
 AdvancedPill(
   title: 'Guava, 100g',
   subtitle: 'ALA 20% • Zinc 10%',
+  hasSubtitle: true,
   type: AdvancedPillType.gray,
   hasLeftSlot: true,
   leftSlot: ButtonIconGhost(
@@ -30,6 +31,7 @@ AdvancedPill(
 | :--- | :--- | :--- | :--- |
 | `title` | `String` | `'Title'` | Primary bold caption title using `AlterTypography.captionBold`. |
 | `subtitle` | `String?` | `'Subtitle'` | Secondary caption subtitle using `AlterTypography.caption` with `AlterSemanticTokens.textDisabled`. |
+| `hasSubtitle` | `bool` | `true` | Visibility toggle for the subtitle text. |
 | `type` | `AdvancedPillType` | `AdvancedPillType.gray` | Color/surface variant (`gray` or `white`). |
 | `hasLeftSlot` | `bool` | `true` | Visibility flag for leading slot. |
 | `leftIcon` | `IconData?` | `null` | Icon for the default `ButtonIconGhost` in the left slot (falls back to `Icons.add_circle_outline`). |
@@ -50,13 +52,14 @@ AdvancedPill(
   - Row gap: 8px.
   - Text column gap: 2px.
 - **Color Variables**:
-  - `gray`: Surface `AlterSemanticTokens.baseGray` (`#F9FAFB`), Border 1px `AlterSemanticTokens.stroke200` (`#E5E7EB`).
-  - `white`: Surface `AlterSemanticTokens.baseWhite` (`#FFFFFF`), Border 1px `AlterSemanticTokens.stroke100` (`#F3F4F6`).
+  - `gray`: Surface `AlterSemanticTokens.baseGray` (`#F9FAFB`), Border 1px `AlterSemanticTokens.baseBorder` (`#E5E7EB`).
+  - `white`: Surface `AlterSemanticTokens.baseWhite` (`#FFFFFF`), Border 1px `AlterSemanticTokens.baseBorder` (`#E5E7EB`).
 - **Child Components**: Reuses `ButtonIconGhost` (`24x24px`, `ButtonIconGhostType.secondary`) for slot interactions.
 
 ---
 
 ## Component Changelog
+* **`v1.2.0`**: Added explicit `hasSubtitle` boolean property matching Figma Node `349:15869` and aligned `White` variant border with `AlterSemanticTokens.baseBorder`.
 * **`v1.1.0`**: Removed container `onTap` and slot callback wrappers (`onLeftTap`, `onRightTap`). Child slot widgets (such as `ButtonIconGhost`) directly handle their own tap interactions. Generic defaults (`'Title'`, `'Subtitle'`) applied.
 * **`v1.0.0`**: Initial release matching Figma Node `349:15869`.
 

@@ -14,8 +14,10 @@ enum BottomNavigationButtonType {
 /// A circular action button designed to accompany bottom navigation bars.
 class BottomNavigationButton extends StatelessWidget {
   /// Component version for reference.
+  /// v1.0.4: Wrapped in MouseRegion and upgraded container to AnimatedContainer for responsive pointer feedback across Web and Mobile.
+  /// v1.0.3: Aligned primary border with AlterSemanticTokens.interactivePrimaryBorder (#030712) and secondary border with AlterSemanticTokens.baseBorder (#E5E7EB) per Figma Node 60:1950.
   /// v1.0.2: Replaced baseBlack token reference with AlterColors.colorsGray800 swatch.
-  static const String version = '1.0.2';
+  static const String version = '1.0.4';
 
   /// Icon rendered inside the button.
   final IconData icon;
@@ -46,9 +48,9 @@ class BottomNavigationButton extends StatelessWidget {
   Color get _borderColor {
     switch (type) {
       case BottomNavigationButtonType.primary:
-        return AlterSemanticTokens.stroke1000;
+        return AlterSemanticTokens.interactivePrimaryBorder;
       case BottomNavigationButtonType.secondary:
-        return AlterSemanticTokens.stroke100;
+        return AlterSemanticTokens.baseBorder;
     }
   }
 
@@ -63,26 +65,31 @@ class BottomNavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(30),
-      child: Container(
-        width: 72,
-        height: 72,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: _backgroundColor,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: _borderColor,
-            width: 1,
+    return MouseRegion(
+      cursor: onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(30),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          width: 72,
+          height: 72,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: _backgroundColor,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: _borderColor,
+              width: 1,
+            ),
           ),
-        ),
-        child: Center(
-          child: Icon(
-            icon,
-            color: _iconColor,
-            size: 28,
+          child: Center(
+            child: Icon(
+              icon,
+              color: _iconColor,
+              size: 28,
+            ),
           ),
         ),
       ),

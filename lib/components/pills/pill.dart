@@ -24,9 +24,10 @@ enum PillColor {
 /// A compact rounded status and label pill.
 class Pill extends StatelessWidget {
   /// Component version for reference.
+  /// v1.1.0: Added MouseRegion cursor support for cross-platform pointer handling and aligned border tokens with AlterSemanticTokens.baseBorder and AlterSemanticTokens.interactivePrimaryBorder per Figma Node 23:270.
   /// v1.0.4: Replaced legacy tokens (statusTeal, ui1, ui2, ui4) with AlterColors swatches.
   /// v1.0.3: Enhanced smooth size and label showcase transitions with synchronized AnimatedCrossFade and cubic interpolation.
-  static const String version = '1.0.4';
+  static const String version = '1.1.0';
 
   /// Primary label text.
   final String label;
@@ -90,13 +91,13 @@ class Pill extends StatelessWidget {
 
   Color? get _borderColor {
     if (isSelected) {
-      return AlterSemanticTokens.stroke1000;
+      return AlterSemanticTokens.interactivePrimaryBorder;
     }
     if (isCompleted) {
       return null;
     }
     return color == PillColor.gray
-        ? AlterSemanticTokens.stroke200
+        ? AlterSemanticTokens.baseBorder
         : AlterColors.colorsGray400;
   }
 
@@ -191,10 +192,13 @@ class Pill extends StatelessWidget {
       return content;
     }
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: content,
+    return MouseRegion(
+      cursor: onTap != null ? SystemMouseCursors.click : MouseCursor.defer,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: content,
+      ),
     );
   }
 }

@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart' hide Badge;
 import '../../styles/swatches.dart';
+import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Color variants for [Badge] component matching Alter Design System.
 enum BadgeColor {
+  /// Base subtle gray variant with 1px border.
+  baseGray,
+
+  /// Base elevated white variant with 1px border.
+  baseWhite,
+
+  /// Base high-contrast primary variant with 1px border.
+  basePrimary,
+
   /// Gray color variant.
   gray,
 
@@ -62,7 +72,7 @@ enum BadgeColor {
 /// Reusable Badge component for the Alter Design System.
 ///
 /// Figma Specifications (Node `124:4003`):
-/// - Variants: 18 color variants (gray, white, red, orange, yellow, green, teal, indigo, purple, pink, amber, lime, emerald, cyan, sky, brand, slate, zinc)
+/// - Variants: 21 color variants (baseGray, baseWhite, basePrimary, gray, white, red, orange, yellow, green, teal, indigo, purple, pink, amber, lime, emerald, cyan, sky, brand, slate, zinc)
 /// - Typography: Body/caption (Geist 12px, Regular 400, line-height 16px)
 /// - Padding: 6px vertical, 8px horizontal
 /// - Border Radius: 12px
@@ -72,11 +82,12 @@ enum BadgeColor {
 /// - Action Button: 16x16px container with 6px border radius, containing 12x12px clear icon
 class Badge extends StatelessWidget {
   /// Component version for reference.
+  /// v1.2.0: Added baseGray, baseWhite, and basePrimary color variants with 1px border strokes, and wrapped dismiss action button in MouseRegion pointer handler per Figma Node 124:4003.
   /// v1.1.0: Removed body tap interaction and isInteractive property; Badge now exclusively uses hasAction and onActionTap for action button interactions.
   /// v1.0.2: Decoupled main badge onTap from action button onActionTap with independent hit regions.
   /// v1.0.1: Fixed `hasAction`, `hasLeftIcon`, and `hasRightIcon` to strictly respect their boolean visibility flags.
   /// v1.0.0: Initial release matching Figma Node 124:4003.
-  static const String version = '1.1.0';
+  static const String version = '1.2.0';
 
   /// Text string displayed inside the badge.
   final String label;
@@ -121,6 +132,12 @@ class Badge extends StatelessWidget {
 
   Color get _backgroundColor {
     switch (color) {
+      case BadgeColor.baseGray:
+        return AlterSemanticTokens.baseGray;
+      case BadgeColor.baseWhite:
+        return AlterSemanticTokens.baseWhite;
+      case BadgeColor.basePrimary:
+        return AlterColors.colorsGray800;
       case BadgeColor.gray:
         return AlterColors.colorsGray100;
       case BadgeColor.white:
@@ -160,10 +177,26 @@ class Badge extends StatelessWidget {
     }
   }
 
+  Color? get _borderColor {
+    switch (color) {
+      case BadgeColor.baseGray:
+      case BadgeColor.baseWhite:
+        return AlterSemanticTokens.baseBorder;
+      case BadgeColor.basePrimary:
+        return AlterSemanticTokens.interactivePrimaryBorder;
+      default:
+        return null;
+    }
+  }
+
   Color get _foregroundColor {
     switch (color) {
-      case BadgeColor.gray:
+      case BadgeColor.baseGray:
+      case BadgeColor.baseWhite:
         return AlterColors.colorsGray800;
+      case BadgeColor.basePrimary:
+        return AlterSemanticTokens.textInverse;
+      case BadgeColor.gray:
       case BadgeColor.white:
         return AlterColors.colorsGray800;
       case BadgeColor.red:
@@ -204,6 +237,7 @@ class Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fgColor = _foregroundColor;
+    final borderColor = _borderColor;
 
     final contentWidget = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -242,6 +276,12 @@ class Badge extends StatelessWidget {
       decoration: BoxDecoration(
         color: _backgroundColor,
         borderRadius: BorderRadius.circular(12),
+        border: borderColor != null
+            ? Border.all(
+                color: borderColor,
+                width: 1,
+              )
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -251,17 +291,22 @@ class Badge extends StatelessWidget {
           contentWidget,
           if (hasAction) ...[
             const SizedBox(width: 4),
-            InkWell(
-              onTap: onActionTap,
-              borderRadius: BorderRadius.circular(6),
-              child: SizedBox(
-                width: 16,
-                height: 16,
-                child: Center(
-                  child: Icon(
-                    actionIcon ?? Icons.close,
-                    size: 12,
-                    color: fgColor,
+            MouseRegion(
+              cursor: onActionTap != null
+                  ? SystemMouseCursors.click
+                  : MouseCursor.defer,
+              child: InkWell(
+                onTap: onActionTap,
+                borderRadius: BorderRadius.circular(6),
+                child: SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: Center(
+                    child: Icon(
+                      actionIcon ?? Icons.close,
+                      size: 12,
+                      color: fgColor,
+                    ),
                   ),
                 ),
               ),

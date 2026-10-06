@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Checkbox;
+import 'package:flutter/material.dart' hide Checkbox, Badge;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:alter/alter.dart';
@@ -44,6 +44,10 @@ void main() {
               child: ButtonText(
                 label: 'Click Me',
                 type: ButtonType.red,
+                size: ButtonSize.large,
+                isSelected: true,
+                hasIcon: true,
+                icon: Icons.check,
                 onTap: () {
                   tapped = true;
                 },
@@ -54,11 +58,73 @@ void main() {
       );
 
       expect(find.text('Click Me'), findsOneWidget);
+      expect(find.byIcon(Icons.check), findsOneWidget);
 
       await tester.tap(find.text('Click Me'));
       await tester.pump();
 
       expect(tapped, isTrue);
+    });
+
+    testWidgets('ButtonText renders with hover state and type variations', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  ButtonText(
+                    label: 'White Normal',
+                    type: ButtonType.white,
+                    size: ButtonSize.normal,
+                  ),
+                  ButtonText(
+                    label: 'Gray Hovered',
+                    type: ButtonType.gray,
+                    isHovered: true,
+                  ),
+                  ButtonText(
+                    label: 'Primary Selected',
+                    type: ButtonType.primary,
+                    isSelected: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('White Normal'), findsOneWidget);
+      expect(find.text('Gray Hovered'), findsOneWidget);
+      expect(find.text('Primary Selected'), findsOneWidget);
+    });
+
+    testWidgets('ButtonText honors hasIcon false override and infers icon', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  ButtonText(
+                    label: 'Hidden Icon',
+                    hasIcon: false,
+                    icon: Icons.add,
+                  ),
+                  ButtonText(
+                    label: 'Inferred Icon',
+                    icon: Icons.search,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsNothing);
+      expect(find.byIcon(Icons.search), findsOneWidget);
     });
 
     testWidgets('ButtonIcon renders and handles tap for red type', (WidgetTester tester) async {
@@ -84,6 +150,39 @@ void main() {
       await tester.tap(find.byIcon(Icons.delete_outline));
       await tester.pump();
       expect(tapped, isTrue);
+    });
+
+    testWidgets('ButtonIcon renders ghost variant and handles hover and selection', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  ButtonIcon(
+                    icon: Icons.close,
+                    type: ButtonIconType.ghost,
+                  ),
+                  ButtonIcon(
+                    icon: Icons.favorite,
+                    type: ButtonIconType.white,
+                    isHovered: true,
+                  ),
+                  ButtonIcon(
+                    icon: Icons.check,
+                    type: ButtonIconType.primary,
+                    isSelected: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.close), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsOneWidget);
+      expect(find.byIcon(Icons.check), findsOneWidget);
     });
 
     testWidgets('ButtonIconGhost renders and handles tap and long press', (WidgetTester tester) async {
@@ -194,6 +293,110 @@ void main() {
       await tester.tap(find.byType(Pill));
       await tester.pump();
       expect(tapped, isTrue);
+    });
+
+    testWidgets('Pill renders neutral compact and handles non-interactive mode', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  Pill(
+                    label: 'Compact Neutral',
+                    size: PillSize.compact,
+                    color: PillColor.neutral,
+                  ),
+                  Pill(
+                    label: 'Non-interactive',
+                    isInteractive: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Compact Neutral'), findsOneWidget);
+      expect(find.text('Non-interactive'), findsOneWidget);
+    });
+
+    testWidgets('Badge renders 21 color variants and triggers dismiss action', (WidgetTester tester) async {
+      bool actionTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  Badge(
+                    label: 'Base Primary',
+                    color: BadgeColor.basePrimary,
+                    hasLeftIcon: true,
+                    hasRightIcon: true,
+                    hasAction: true,
+                    onActionTap: () {
+                      actionTapped = true;
+                    },
+                  ),
+                  const Badge(
+                    label: 'Base Gray',
+                    color: BadgeColor.baseGray,
+                  ),
+                  const Badge(
+                    label: 'Base White',
+                    color: BadgeColor.baseWhite,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Base Primary'), findsOneWidget);
+      expect(find.text('Base Gray'), findsOneWidget);
+      expect(find.text('Base White'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pump();
+      expect(actionTapped, isTrue);
+    });
+
+    testWidgets('AdvancedPill renders with slots and respects hasSubtitle toggle', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  AdvancedPill(
+                    title: 'Guava, 100g',
+                    subtitle: 'ALA 20%',
+                    type: AdvancedPillType.white,
+                    hasSubtitle: true,
+                    hasLeftSlot: true,
+                    hasRightSlot: true,
+                  ),
+                  AdvancedPill(
+                    title: 'No Subtitle Pill',
+                    subtitle: 'Hidden',
+                    type: AdvancedPillType.gray,
+                    hasSubtitle: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Guava, 100g'), findsOneWidget);
+      expect(find.text('ALA 20%'), findsOneWidget);
+      expect(find.text('No Subtitle Pill'), findsOneWidget);
+      expect(find.text('Hidden'), findsNothing);
     });
 
     testWidgets('ApplicationHeader renders with return button and custom slot', (WidgetTester tester) async {
@@ -506,6 +709,54 @@ void main() {
       await tester.enterText(find.byType(TextField).first, '1');
       await tester.pump();
       expect(completedPin, isEmpty);
+    });
+
+    testWidgets('AlterBottomNavigationBar renders tabs and handles tap', (WidgetTester tester) async {
+      int tappedIndex = -1;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: AlterBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) => tappedIndex = index,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Home'), findsOneWidget);
+      expect(find.text('Search'), findsOneWidget);
+      expect(find.text('Profile'), findsOneWidget);
+
+      await tester.tap(find.text('Search'));
+      await tester.pump();
+      expect(tappedIndex, equals(1));
+    });
+
+    testWidgets('BottomNavigationButton renders primary and secondary and handles tap', (WidgetTester tester) async {
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: BottomNavigationButton(
+                icon: Icons.add,
+                type: BottomNavigationButtonType.primary,
+                onTap: () => tapped = true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(tapped, isTrue);
     });
   });
 }

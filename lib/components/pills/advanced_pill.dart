@@ -16,8 +16,8 @@ enum AdvancedPillType {
 ///
 /// Figma Specifications (Node `349:15869`):
 /// - Variants:
-///   - `type=Gray` (`130:8539`): Fill `baseGray` (`#F9FAFB`), Border 1px `stroke200` (`#E5E7EB`)
-///   - `type=White` (`349:15870`): Fill `baseWhite` (`#FFFFFF`), Border 1px `stroke100` (`#F3F4F6`)
+///   - `type=Gray` (`130:8539`): Fill `baseGray` (`#F9FAFB`), Border 1px `baseBorder` (`#E5E7EB`)
+///   - `type=White` (`349:15870`): Fill `baseWhite` (`#FFFFFF`), Border 1px `baseBorder` (`#E5E7EB`)
 /// - Border Radius: 24px
 /// - Padding: 12px vertical, 16px horizontal
 /// - Gap: 8px
@@ -27,15 +27,19 @@ enum AdvancedPillType {
 /// - Subtitle: Geist 12px Regular 400 (`AlterTypography.caption`), Text `textDisabled` (`#99A1AF`)
 class AdvancedPill extends StatelessWidget {
   /// Component version for reference.
+  /// v1.2.0: Added explicit hasSubtitle boolean property matching Figma Node 349:15869 and aligned White variant border with AlterSemanticTokens.baseBorder.
   /// v1.1.0: Removed onTap, onLeftTap, onRightTap. Slots now directly receive child widgets (such as ButtonIconGhost) that manage their own interactions. Set generic default strings for title and subtitle.
   /// v1.0.0: Initial release matching Figma Node 349:15869.
-  static const String version = '1.1.0';
+  static const String version = '1.2.0';
 
   /// Primary label text displayed in the pill.
   final String title;
 
   /// Optional secondary subtitle displayed below the title.
   final String? subtitle;
+
+  /// Whether the subtitle should be rendered when available.
+  final bool hasSubtitle;
 
   /// Visual theme style type.
   final AdvancedPillType type;
@@ -63,6 +67,7 @@ class AdvancedPill extends StatelessWidget {
     super.key,
     this.title = 'Title',
     this.subtitle = 'Subtitle',
+    this.hasSubtitle = true,
     this.type = AdvancedPillType.gray,
     this.hasLeftSlot = true,
     this.leftIcon,
@@ -84,9 +89,8 @@ class AdvancedPill extends StatelessWidget {
   Color get _borderColor {
     switch (type) {
       case AdvancedPillType.gray:
-        return AlterSemanticTokens.stroke200;
       case AdvancedPillType.white:
-        return AlterSemanticTokens.stroke100;
+        return AlterSemanticTokens.baseBorder;
     }
   }
 
@@ -138,7 +142,7 @@ class AdvancedPill extends StatelessWidget {
                   color: AlterSemanticTokens.textPrimary,
                 ),
               ),
-              if (subtitle != null && subtitle!.isNotEmpty) ...[
+              if (hasSubtitle && subtitle != null && subtitle!.isNotEmpty) ...[
                 const SizedBox(height: 2),
                 Text(
                   subtitle!,

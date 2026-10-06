@@ -1,16 +1,16 @@
 # Badge
 
-> Current Version: `v1.1.0`  
+> Current Version: `v1.2.0`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/pills/badge)
 
 ## Overview
-`Badge` is a compact status, tag, and indicator component in the Alter Design System. It supports 18 curated color variants, optional leading (`hasLeftIcon`) and trailing (`hasRightIcon`) icons, and an integrated dismissible action button (`hasAction` / `onActionTap`).
+`Badge` is a compact status, tag, and indicator component in the Alter Design System. It supports 21 curated color variants (including border-supported `baseGray`, `baseWhite`, and `basePrimary`), optional leading (`hasLeftIcon`) and trailing (`hasRightIcon`) icons, and an integrated dismissible action button (`hasAction` / `onActionTap`).
 
 ## Usage
 ```dart
 Badge(
   label: 'Status',
-  color: BadgeColor.brand,
+  color: BadgeColor.basePrimary,
   hasLeftIcon: true,
   leftIcon: Icons.star_border,
   hasAction: true,
@@ -24,7 +24,7 @@ Badge(
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `label` | `String` | `'Label'` | Text content inside the badge. |
-| `color` | `BadgeColor` | `BadgeColor.gray` | Color variant (18 options: `gray`, `white`, `red`, `orange`, `yellow`, `green`, `teal`, `indigo`, `purple`, `pink`, `amber`, `lime`, `emerald`, `cyan`, `sky`, `brand`, `slate`, `zinc`). |
+| `color` | `BadgeColor` | `BadgeColor.gray` | Color variant (21 options: `baseGray`, `baseWhite`, `basePrimary`, `gray`, `white`, `red`, `orange`, `yellow`, `green`, `teal`, `indigo`, `purple`, `pink`, `amber`, `lime`, `emerald`, `cyan`, `sky`, `brand`, `slate`, `zinc`). |
 | `hasLeftIcon` | `bool` | `false` | Visibility toggle for leading icon. |
 | `leftIcon` | `IconData?` | `null` | Leading icon (defaults to `Icons.grid_view` if `hasLeftIcon` is true). |
 | `hasRightIcon` | `bool` | `false` | Visibility toggle for trailing icon. |
@@ -43,6 +43,9 @@ Badge(
   - Main row gap: 4px.
   - Content container padding: 0px vertical, 2px horizontal (gap: 2px).
 - **Color Variables**:
+  - `baseGray`: BG `AlterSemanticTokens.baseGray` (`#F9FAFB`), Border `AlterSemanticTokens.baseBorder` (`#E5E7EB`, 1px), Text `AlterColors.colorsGray800` (`#1E2939`)
+  - `baseWhite`: BG `AlterSemanticTokens.baseWhite` (`#FFFFFF`), Border `AlterSemanticTokens.baseBorder` (`#E5E7EB`, 1px), Text `AlterColors.colorsGray800` (`#1E2939`)
+  - `basePrimary`: BG `AlterColors.colorsGray800` (`#1E2939`), Border `AlterSemanticTokens.interactivePrimaryBorder` (`#030712`, 1px), Text `AlterSemanticTokens.textInverse` (`#FFFFFF`)
   - `gray`: BG `AlterColors.colorsGray100` (`#F3F4F6`), Text `AlterColors.colorsGray800` (`#1E2939`)
   - `white`: BG `AlterColors.white` (`#FFFFFF`), Text `AlterColors.colorsGray800` (`#1E2939`)
   - `red`: BG `AlterColors.colorsRed100` (`#FFE2E2`), Text `AlterColors.colorsRed800` (`#9F0712`)
@@ -65,6 +68,7 @@ Badge(
 ---
 
 ## Component Changelog
+* **`v1.2.0`**: Added `baseGray`, `baseWhite`, and `basePrimary` color variants with 1px border strokes, and wrapped dismiss action button in `MouseRegion` pointer handler per Figma Node `124:4003`.
 * **`v1.1.0`**: Removed body tap interaction and `isInteractive` property; Badge now exclusively uses `hasAction` and `onActionTap` for action button interactions.
 * **`v1.0.2`**: Decoupled main badge `onTap` from action button `onActionTap` with independent hit regions.
 * **`v1.0.1`**: Fixed `hasAction`, `hasLeftIcon`, and `hasRightIcon` to strictly respect their boolean visibility flags.

@@ -1,6 +1,6 @@
 # BottomNavigationItem
 
-> Current Version: `v1.0.2`  
+> Current Version: `v1.0.4`  
 > Internal sub-component for [AlterBottomNavigationBar](file:///c:/Vayu/Alter/lib/components/navigation/bottom_navigation_bar.md)
 
 ## Overview
@@ -16,7 +16,7 @@
 ### State & Token Mapping
 | State | Container Fill | Icon Color | Text Color |
 | :--- | :--- | :--- | :--- |
-| **Selected (`true`)** | `AlterColors.colorsGray100` (`#F3F4F6`) | `AlterSemanticTokens.textPrimary` (`#000000`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
+| **Selected (`true`)** | `AlterSemanticTokens.baseActive` (`#E5E7EB`) | `AlterSemanticTokens.textPrimary` (`#000000`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
 | **Unselected (`false`)** | `Colors.transparent` | `AlterColors.colorsGray600` (`#4A5565`) | `AlterSemanticTokens.textSecondary` (`#4A5565`) |
 
 ---
@@ -42,6 +42,12 @@ BottomNavigationItem(
 ---
 
 ## Component Changelog
+
+### `v1.0.4`
+* **Interaction**: Wrapped in `MouseRegion` (`SystemMouseCursors.click`) and upgraded container to `AnimatedContainer` (`150ms`, `Curves.easeOut`) for smooth cross-platform tab transitions across Web and Mobile.
+
+### `v1.0.3`
+* **Tokens**: Updated selected background fill to `AlterSemanticTokens.baseActive` (`#E5E7EB`) per Figma Node `1:392`.
 
 ### `v1.0.2`
 * **Tokens**: Replaced legacy `ui1` and `ui6` token references with `AlterColors.colorsGray100` and `AlterColors.colorsGray600` swatches.

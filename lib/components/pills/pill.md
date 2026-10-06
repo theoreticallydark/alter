@@ -1,6 +1,6 @@
 # Pill
 
-> Current Version: `v1.0.4`  
+> Current Version: `v1.1.0`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/pills/pill)
 
 ## Overview
@@ -28,15 +28,16 @@ Pill(
 | `color` | `PillColor` | `PillColor.gray` | Color variant (`gray`, `neutral`). |
 | `hasLabel` | `bool` | `true` | Visibility toggle for label text. |
 | `hasValue` | `bool` | `true` | Visibility toggle for value text. |
-| `isSelected` | `bool` | `false` | Highlighted selection state with `stroke1000` 2px border. |
+| `isSelected` | `bool` | `false` | Highlighted selection state with `interactivePrimaryBorder` 2px border. |
 | `isCompleted` | `bool` | `false` | Completed status with fill color (`statusSuccess` or `AlterColors.colorsTeal600`). |
-| `isInteractive` | `bool` | `true` | When true, wraps the container in an `InkWell`. |
+| `isInteractive` | `bool` | `true` | When true, wraps the container in an `InkWell` and `MouseRegion`. |
 | `horizontalPadding` | `double?` | `null` | Custom horizontal padding (defaults to 16.0). |
 | `onTap` | `VoidCallback?` | `null` | Tap callback. |
 
 ---
 
 ## Component Changelog
+* **`v1.1.0`**: Added `MouseRegion` pointer hover handling and aligned border tokens to `AlterSemanticTokens.baseBorder` and `AlterSemanticTokens.interactivePrimaryBorder` per Figma Node `23:270`.
 * **`v1.0.4`**: Replaced deprecated tokens (`statusTeal`, `ui1`, `ui2`, `ui4`) with `AlterColors` swatches.
 * **`v1.0.3`**: Enhanced smooth size and label showcase transitions with synchronized `AnimatedCrossFade` and cubic interpolation.
 * **`v1.0.2`**: Added `horizontalPadding` and `isInteractive` properties for non-clickable indicator usages.

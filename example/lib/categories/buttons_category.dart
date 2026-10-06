@@ -27,15 +27,42 @@ WidgetbookFolder buttonsCategory() {
                 options: ButtonSize.values,
                 labelBuilder: (size) => size.name,
               );
+              final isSelected = context.knobs.boolean(
+                label: 'Is Selected',
+                initialValue: false,
+              );
+              final isHovered = context.knobs.boolean(
+                label: 'Force Hover State',
+                initialValue: false,
+              );
+              final hasIcon = context.knobs.boolean(
+                label: 'Has Icon',
+                initialValue: false,
+              );
+              final iconMap = {
+                'face_5': Icons.face_5_outlined,
+                'add': Icons.add,
+                'check': Icons.check,
+                'arrow_forward': Icons.arrow_forward,
+                'favorite': Icons.favorite_border,
+              };
+              final iconKey = context.knobs.object.dropdown(
+                label: 'Icon Choice',
+                options: iconMap.keys.toList(),
+              );
 
               return Center(
                 child: ButtonText(
                   label: label,
                   type: type,
                   size: size,
+                  isSelected: isSelected,
+                  isHovered: isHovered ? true : null,
+                  hasIcon: hasIcon,
+                  icon: iconMap[iconKey],
                   onTap: () => showExampleToast(
                     context,
-                    'Clicked ButtonText: "$label" (${type.name}, ${size.name})',
+                    'Clicked ButtonText: "$label" (${type.name}, ${size.name}, selected: $isSelected, hovered: $isHovered, hasIcon: $hasIcon)',
                   ),
                 ),
               );
@@ -44,50 +71,170 @@ WidgetbookFolder buttonsCategory() {
           WidgetbookUseCase(
             name: 'All Variants Matrix',
             builder: (context) {
-              return Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Normal Size', style: AlterTypography.h3),
-                      const SizedBox(height: 12),
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: ButtonType.values.map((type) {
-                          return ButtonText(
-                            label: type.name.toUpperCase(),
-                            type: type,
-                            size: ButtonSize.normal,
-                            onTap: () => showExampleToast(
-                              context,
-                              'Clicked Normal ButtonText: ${type.name.toUpperCase()}',
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                      const SizedBox(height: 32),
-                      const Text('Large Size', style: AlterTypography.h3),
-                      const SizedBox(height: 12),
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: ButtonType.values.map((type) {
-                          return ButtonText(
-                            label: '${type.name.toUpperCase()} LARGE',
-                            type: type,
-                            size: ButtonSize.large,
-                            onTap: () => showExampleToast(
-                              context,
-                              'Clicked Large ButtonText: ${type.name.toUpperCase()}',
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Normal Size (Default)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: type.name.toUpperCase(),
+                          type: type,
+                          size: ButtonSize.normal,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Normal ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Normal Size (Hover State)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} (HOVER)',
+                          type: type,
+                          size: ButtonSize.normal,
+                          isHovered: true,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Normal Hover ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Normal Size (With Leading Icon)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: type.name.toUpperCase(),
+                          type: type,
+                          size: ButtonSize.normal,
+                          hasIcon: true,
+                          icon: Icons.face_5_outlined,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Normal Icon ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Normal Size (Selected State)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} (SELECTED)',
+                          type: type,
+                          size: ButtonSize.normal,
+                          isSelected: true,
+                          hasIcon: true,
+                          icon: Icons.check,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Selected Normal ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 36),
+                    const Divider(),
+                    const SizedBox(height: 24),
+                    const Text('Large Size (Default)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} LARGE',
+                          type: type,
+                          size: ButtonSize.large,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Large ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Large Size (Hover State)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} (HOVER)',
+                          type: type,
+                          size: ButtonSize.large,
+                          isHovered: true,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Large Hover ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Large Size (With Leading Icon)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} LARGE',
+                          type: type,
+                          size: ButtonSize.large,
+                          hasIcon: true,
+                          icon: Icons.face_5_outlined,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Large Icon ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Large Size (Selected State)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: ButtonType.values.map((type) {
+                        return ButtonText(
+                          label: '${type.name.toUpperCase()} LARGE (SELECTED)',
+                          type: type,
+                          size: ButtonSize.large,
+                          isSelected: true,
+                          hasIcon: true,
+                          icon: Icons.check,
+                          onTap: () => showExampleToast(
+                            context,
+                            'Clicked Selected Large ButtonText: ${type.name.toUpperCase()}',
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               );
             },
@@ -121,6 +268,10 @@ WidgetbookFolder buttonsCategory() {
                 label: 'Is Selected',
                 initialValue: false,
               );
+              final isHovered = context.knobs.boolean(
+                label: 'Force Hover State',
+                initialValue: false,
+              );
               final size = context.knobs.double.input(
                 label: 'Size',
                 initialValue: 48.0,
@@ -131,11 +282,99 @@ WidgetbookFolder buttonsCategory() {
                   icon: icons[selectedIconKey]!,
                   type: type,
                   isSelected: isSelected,
+                  isHovered: isHovered ? true : null,
                   size: size,
                   onTap: () => showExampleToast(
                     context,
-                    'Clicked ButtonIcon: $selectedIconKey (${type.name}, size: ${size.toInt()}px)',
+                    'Clicked ButtonIcon: $selectedIconKey (${type.name}, size: ${size.toInt()}px, selected: $isSelected, hovered: $isHovered)',
                   ),
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Matrix',
+            builder: (context) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Default State (48x48)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: ButtonIconType.values.map((type) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ButtonIcon(
+                              icon: Icons.favorite_border,
+                              type: type,
+                              onTap: () => showExampleToast(
+                                context,
+                                'Clicked ${type.name.toUpperCase()} ButtonIcon',
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(type.name, style: AlterTypography.caption),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Hover State (48x48)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: ButtonIconType.values.map((type) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ButtonIcon(
+                              icon: Icons.favorite_border,
+                              type: type,
+                              isHovered: true,
+                              onTap: () => showExampleToast(
+                                context,
+                                'Clicked ${type.name.toUpperCase()} (Hover) ButtonIcon',
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text('${type.name} (hover)', style: AlterTypography.caption),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text('Selected State (48x48)', style: AlterTypography.h3),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: ButtonIconType.values.map((type) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ButtonIcon(
+                              icon: Icons.favorite_border,
+                              type: type,
+                              isSelected: true,
+                              onTap: () => showExampleToast(
+                                context,
+                                'Clicked ${type.name.toUpperCase()} (Selected) ButtonIcon',
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text('${type.name} (selected)', style: AlterTypography.caption),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               );
             },
