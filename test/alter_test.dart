@@ -829,6 +829,103 @@ void main() {
       await tester.pump();
       expect(tapped, isTrue);
     });
+
+    testWidgets('TabItem renders label, icon, handles tap and active state', (WidgetTester tester) async {
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  TabItem(
+                    label: 'Standard Tab',
+                    isSelected: true,
+                    type: TabItemType.gray,
+                    onTap: () => tapped = true,
+                  ),
+                  const TabItem(
+                    label: 'Icon Tab',
+                    hasIcon: true,
+                    icon: Icons.face_5_outlined,
+                    isSelected: false,
+                    type: TabItemType.white,
+                  ),
+                  const TabItem(
+                    hasIcon: true,
+                    hasLabel: false,
+                    icon: Icons.star,
+                    isSelected: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Standard Tab'), findsOneWidget);
+      expect(find.text('Icon Tab'), findsOneWidget);
+      expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.star), findsOneWidget);
+
+      await tester.tap(find.text('Standard Tab'));
+      await tester.pump();
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('Tabs renders items and handles selection', (WidgetTester tester) async {
+      int selected = -1;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Tabs(
+                tabs: const ['Tab 1', 'Tab 2', 'Tab 3'],
+                selectedIndex: 0,
+                onTabSelected: (i) => selected = i,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Tab 1'), findsOneWidget);
+      expect(find.text('Tab 2'), findsOneWidget);
+      expect(find.text('Tab 3'), findsOneWidget);
+
+      await tester.tap(find.text('Tab 2'));
+      await tester.pump();
+      expect(selected, equals(1));
+    });
+
+    testWidgets('Tabs renders with hasIcon and handles icon-only mode', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Tabs(
+                tabs: ['Home', 'Search', 'Profile'],
+                hasIcon: true,
+                icons: [
+                  Icons.home_outlined,
+                  Icons.search_rounded,
+                  Icons.face_5_outlined,
+                ],
+                selectedIndex: 0,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.home_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.search_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
+      expect(find.text('Home'), findsOneWidget);
+    });
   });
 }
 

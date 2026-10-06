@@ -28,6 +28,7 @@ export 'components/selects/toggle_icon.dart';
 export 'components/selects/toggle_text.dart';
 export 'components/status/feedback_text.dart';
 export 'components/status/toast.dart';
+export 'components/tabs/tab_item.dart';
 export 'components/tabs/tabs.dart';
 export 'components/utilities/list_item.dart';
 export 'styles/swatches.dart';
