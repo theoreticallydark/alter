@@ -468,4 +468,6 @@ abstract class AlterColors {
   static const Color colorsRose950 = Color(0xFF4D0218);
   /// `colorsRose050` swatch (#FEF0F2).
   static const Color colorsRose050 = Color(0xFFFEF0F2);
+  /// `neutral050` swatch (#FAFAF8) (Figma VariableID:669:2780).
+  static const Color neutral050 = Color(0xFFFAFAF8);
 }

@@ -1,6 +1,6 @@
 # ButtonIcon
 
-> Current Version: `v1.3.0`  
+> Current Version: `v1.3.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/buttons/buttonicon)
 
 ## Overview
@@ -30,6 +30,7 @@ ButtonIcon(
 ---
 
 ## Component Changelog
+* **`v1.3.1`**: Replaced deprecated `baseBlack` token reference with `AlterColors.colorsGray800` swatch for `primary` variant.
 * **`v1.3.0`**: Added `ButtonIconType.red` variant matching Figma Design System.
 * **`v1.2.0`**: Added customizable `size` and `iconSize` properties for flexible layout integration.
 * **`v1.1.0`**: Added `isSelected` active border highlight support.

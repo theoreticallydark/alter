@@ -1,6 +1,6 @@
 # Pill
 
-> Current Version: `v1.0.3`  
+> Current Version: `v1.0.4`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/pills/pill)
 
 ## Overview
@@ -29,7 +29,7 @@ Pill(
 | `hasLabel` | `bool` | `true` | Visibility toggle for label text. |
 | `hasValue` | `bool` | `true` | Visibility toggle for value text. |
 | `isSelected` | `bool` | `false` | Highlighted selection state with `stroke1000` 2px border. |
-| `isCompleted` | `bool` | `false` | Completed status with fill color (`statusSuccess` or `statusTeal`). |
+| `isCompleted` | `bool` | `false` | Completed status with fill color (`statusSuccess` or `AlterColors.colorsTeal600`). |
 | `isInteractive` | `bool` | `true` | When true, wraps the container in an `InkWell`. |
 | `horizontalPadding` | `double?` | `null` | Custom horizontal padding (defaults to 16.0). |
 | `onTap` | `VoidCallback?` | `null` | Tap callback. |
@@ -37,6 +37,7 @@ Pill(
 ---
 
 ## Component Changelog
+* **`v1.0.4`**: Replaced deprecated tokens (`statusTeal`, `ui1`, `ui2`, `ui4`) with `AlterColors` swatches.
 * **`v1.0.3`**: Enhanced smooth size and label showcase transitions with synchronized `AnimatedCrossFade` and cubic interpolation.
 * **`v1.0.2`**: Added `horizontalPadding` and `isInteractive` properties for non-clickable indicator usages.
 * **`v1.0.1`**: Bound `statusSuccess` and `statusTeal` semantic color tokens for completed state.

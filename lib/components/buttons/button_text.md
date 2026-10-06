@@ -1,6 +1,6 @@
 # ButtonText
 
-> Current Version: `v1.1.0`  
+> Current Version: `v1.1.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/buttons/buttontext)
 
 ## Overview
@@ -21,7 +21,7 @@
 ### Type & Token Mapping
 | Type (`type`) | Surface Fill | Border Stroke | Text Color |
 | :--- | :--- | :--- | :--- |
-| **`primary`** | `AlterSemanticTokens.baseBlack` (`#1E2939`) | `AlterSemanticTokens.stroke1000` (`#000000`) | `AlterSemanticTokens.textInverse` (`#FFFFFF`) |
+| **`primary`** | `AlterColors.colorsGray800` (`#1E2939`) | `AlterSemanticTokens.stroke1000` (`#000000`) | `AlterSemanticTokens.textInverse` (`#FFFFFF`) |
 | **`white`** | `AlterSemanticTokens.baseWhite` (`#FFFFFF`) | `AlterSemanticTokens.stroke100` (`#F3F4F6`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
 | **`gray`** | `AlterSemanticTokens.baseGray` (`#F9FAFB`) | `AlterSemanticTokens.stroke100` (`#F3F4F6`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
 | **`red`** | `AlterSemanticTokens.statusDanger` (`#E7000B`) | `AlterColors.colorsRed800` (`#9F0712`) | `AlterSemanticTokens.statusDangerContrast` (`#FFFFFF`) |
@@ -49,6 +49,9 @@ ButtonText(
 ---
 
 ## Component Changelog
+
+### `v1.1.1`
+* **Tokens**: Replaced deprecated `baseBlack` token reference with `AlterColors.colorsGray800` swatch.
 
 ### `v1.1.0`
 * **Variants**: Added `ButtonType.red` destructive variant using `AlterSemanticTokens.statusDanger` and `AlterSemanticTokens.statusDangerContrast`.

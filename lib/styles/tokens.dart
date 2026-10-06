@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'swatches.dart';
 
 /// Alter Design System Semantic Theme Tokens
-/// Mapped to Figma Variable definitions and Swatches (Light Mode).
+/// Mapped to Figma Variable definitions and Swatches (Light Mode / Light Gray Mode).
 abstract class AlterSemanticTokens {
+  // ==========================================
   // Text Tokens
+  // ==========================================
   /// Figma: VariableID:103:9007 -> black (#000000)
   static const Color textPrimary = AlterColors.black;
 
@@ -13,6 +15,12 @@ abstract class AlterSemanticTokens {
 
   /// Figma: VariableID:103:9014 -> colors/gray/400 (#99A1AF)
   static const Color textDisabled = AlterColors.colorsGray400;
+
+  /// Figma: VariableID:669:6971 -> interactive.primary -> colors/gray/800 (#1E2939)
+  static const Color textInteractive = interactivePrimary;
+
+  /// Figma: VariableID:669:6972 -> interactive.primary-active -> colors/gray/900 (#101828)
+  static const Color textInteractiveHover = interactivePrimaryActive;
 
   /// Figma: VariableID:103:9013 -> white (#FFFFFF)
   static const Color textInverse = AlterColors.white;
@@ -29,7 +37,9 @@ abstract class AlterSemanticTokens {
   /// Figma: VariableID:103:9009 -> colors/green/600 (#00A63E)
   static const Color textSuccess = AlterColors.colorsGreen600;
 
+  // ==========================================
   // Status Tokens
+  // ==========================================
   /// Figma: VariableID:349:15957 -> colors/red/600 (#E7000B)
   static const Color statusDanger = AlterColors.colorsRed600;
 
@@ -54,23 +64,48 @@ abstract class AlterSemanticTokens {
   /// Figma: VariableID:183:9414 -> white (#FFFFFF)
   static const Color statusSuccessContrast = AlterColors.white;
 
-  /// Figma: VariableID:183:9415 -> colors/teal/600 (#009689)
-  static const Color statusTeal = AlterColors.colorsTeal600;
+  /// Figma: VariableID:183:9415 -> interactive.primary -> colors/gray/800 (#1E2939)
+  static const Color statusBrand = interactivePrimary;
 
-  /// Figma: VariableID:183:9416 -> white (#FFFFFF)
-  static const Color statusTealContrast = AlterColors.white;
+  /// Figma: VariableID:183:9416 -> brand.brand-contrast -> white (#FFFFFF)
+  static const Color statusBrandContrast = brandContrast;
 
+  // ==========================================
+  // Interactive Tokens
+  // ==========================================
+  /// Figma: VariableID:198:10630 -> brand.brand-800 -> colors/gray/800 (#1E2939)
+  static const Color interactivePrimary = AlterColors.colorsGray800;
+
+  /// Figma: VariableID:616:1065 -> brand.brand-900 -> colors/gray/900 (#101828)
+  static const Color interactivePrimaryActive = AlterColors.colorsGray900;
+
+  /// Figma: VariableID:669:6970 -> brand.brand-950 -> colors/gray/950 (#030712)
+  static const Color interactivePrimaryBorder = AlterColors.colorsGray950;
+
+  /// Figma: VariableID:669:6974 -> brand.brand-contrast -> white (#FFFFFF)
+  static const Color interactivePrimaryContrast = AlterColors.white;
+
+  // ==========================================
   // Base Surface Tokens
-  /// Figma: VariableID:183:9417 -> colors/gray/050 (#F9FAFB)
-  static const Color baseGray = AlterColors.colorsGray050;
+  // ==========================================
+  /// Figma: VariableID:669:2780 -> base-neutral (#FAFAF8)
+  static const Color baseNeutral = AlterColors.neutral050;
 
   /// Figma: VariableID:183:9418 -> white (#FFFFFF)
   static const Color baseWhite = AlterColors.white;
 
-  /// Figma: VariableID:198:10630 -> colors/gray/800 (#1E2939)
-  static const Color baseBlack = AlterColors.colorsGray800;
+  /// Figma: VariableID:183:9417 -> colors/gray/050 (#F9FAFB)
+  static const Color baseGray = AlterColors.colorsGray050;
 
+  /// Figma: VariableID:603:854 -> colors/gray/200 (#E5E7EB)
+  static const Color baseActive = AlterColors.colorsGray200;
+
+  /// Figma: VariableID:706:13423 -> colors/gray/200 (#E5E7EB)
+  static const Color baseBorder = AlterColors.colorsGray200;
+
+  // ==========================================
   // Stroke Tokens
+  // ==========================================
   /// Figma: VariableID:183:9420 -> colors/gray/100 (#F3F4F6)
   static const Color stroke100 = AlterColors.colorsGray100;
 
@@ -80,16 +115,42 @@ abstract class AlterSemanticTokens {
   /// Figma: VariableID:183:9422 -> black (#000000)
   static const Color stroke1000 = AlterColors.black;
 
-  // UI Element Tokens
-  /// Figma: VariableID:183:9637 -> colors/gray/100 (#F3F4F6)
-  static const Color ui1 = AlterColors.colorsGray100;
+  // ==========================================
+  // Brand Palette Semantic Tokens (Light Gray Mode)
+  // ==========================================
+  /// Figma: VariableID:669:2769 -> colors/gray/050 (#F9FAFB)
+  static const Color brand50 = AlterColors.colorsGray050;
 
-  /// Figma: VariableID:183:9481 -> colors/gray/200 (#E5E7EB)
-  static const Color ui2 = AlterColors.colorsGray200;
+  /// Figma: VariableID:669:2770 -> colors/gray/100 (#F3F4F6)
+  static const Color brand100 = AlterColors.colorsGray100;
 
-  /// Figma: VariableID:183:9483 -> colors/gray/400 (#99A1AF)
-  static const Color ui4 = AlterColors.colorsGray400;
+  /// Figma: VariableID:669:2771 -> colors/gray/200 (#E5E7EB)
+  static const Color brand200 = AlterColors.colorsGray200;
 
-  /// Figma: VariableID:183:9484 -> colors/gray/600 (#4A5565)
-  static const Color ui6 = AlterColors.colorsGray600;
+  /// Figma: VariableID:669:2772 -> colors/gray/300 (#D1D5DC)
+  static const Color brand300 = AlterColors.colorsGray300;
+
+  /// Figma: VariableID:669:2773 -> colors/gray/400 (#99A1AF)
+  static const Color brand400 = AlterColors.colorsGray400;
+
+  /// Figma: VariableID:669:2774 -> colors/gray/500 (#6A7282)
+  static const Color brand500 = AlterColors.colorsGray500;
+
+  /// Figma: VariableID:669:2775 -> colors/gray/600 (#4A5565)
+  static const Color brand600 = AlterColors.colorsGray600;
+
+  /// Figma: VariableID:669:2776 -> colors/gray/700 (#333E4F)
+  static const Color brand700 = AlterColors.colorsGray700;
+
+  /// Figma: VariableID:669:2777 -> colors/gray/800 (#1E2939)
+  static const Color brand800 = AlterColors.colorsGray800;
+
+  /// Figma: VariableID:669:2778 -> colors/gray/900 (#101828)
+  static const Color brand900 = AlterColors.colorsGray900;
+
+  /// Figma: VariableID:669:2779 -> colors/gray/950 (#030712)
+  static const Color brand950 = AlterColors.colorsGray950;
+
+  /// Figma: VariableID:669:6973 -> white (#FFFFFF)
+  static const Color brandContrast = AlterColors.white;
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 
 /// A rounded image or avatar button following Alter Design System tokens.
 class ButtonGraphicImage extends StatelessWidget {
   /// Component version for reference.
+  /// v1.1.1: Replaced ui1 and ui6 tokens with AlterColors.colorsGray100 and AlterColors.colorsGray600 swatches.
   /// v1.1.0: Added `image`, `child`, and `size` properties to support avatars, cover images, and custom children.
   /// v1.0.1: Configured 20px border radius with stroke200 border styling.
-  static const String version = '1.1.0';
+  static const String version = '1.1.1';
 
   /// Image provider to render in the button (e.g. [NetworkImage], [AssetImage]).
   final ImageProvider? image;
@@ -45,7 +47,7 @@ class ButtonGraphicImage extends StatelessWidget {
       content = const Center(
         child: Icon(
           Icons.image_outlined,
-          color: AlterSemanticTokens.ui6,
+          color: AlterColors.colorsGray600,
           size: 24,
         ),
       );
@@ -59,7 +61,7 @@ class ButtonGraphicImage extends StatelessWidget {
         height: size,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: AlterSemanticTokens.ui1,
+          color: AlterColors.colorsGray100,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: AlterSemanticTokens.stroke200,

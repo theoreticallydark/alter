@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// An individual clickable item within the [AlterBottomNavigationBar].
 class BottomNavigationItem extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.1';
+  /// v1.0.2: Replaced ui1 and ui6 tokens with AlterColors.colorsGray100 and AlterColors.colorsGray600 swatches.
+  static const String version = '1.0.2';
 
   /// Text label displayed under the icon.
   final String label;
@@ -36,10 +38,10 @@ class BottomNavigationItem extends StatelessWidget {
 
     final iconColor = isSelected
         ? AlterSemanticTokens.textPrimary
-        : AlterSemanticTokens.ui6;
+        : AlterColors.colorsGray600;
 
     final backgroundColor = isSelected
-        ? AlterSemanticTokens.ui1
+        ? AlterColors.colorsGray100
         : Colors.transparent;
 
     return InkWell(

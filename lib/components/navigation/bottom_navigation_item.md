@@ -1,6 +1,6 @@
 # BottomNavigationItem
 
-> Current Version: `v1.0.1`  
+> Current Version: `v1.0.2`  
 > Internal sub-component for [AlterBottomNavigationBar](file:///c:/Vayu/Alter/lib/components/navigation/bottom_navigation_bar.md)
 
 ## Overview
@@ -16,8 +16,8 @@
 ### State & Token Mapping
 | State | Container Fill | Icon Color | Text Color |
 | :--- | :--- | :--- | :--- |
-| **Selected (`true`)** | `AlterSemanticTokens.ui1` (`#F3F4F6`) | `AlterSemanticTokens.textPrimary` (`#000000`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
-| **Unselected (`false`)** | `Colors.transparent` | `AlterSemanticTokens.ui6` (`#4A5565`) | `AlterSemanticTokens.textSecondary` (`#4A5565`) |
+| **Selected (`true`)** | `AlterColors.colorsGray100` (`#F3F4F6`) | `AlterSemanticTokens.textPrimary` (`#000000`) | `AlterSemanticTokens.textPrimary` (`#000000`) |
+| **Unselected (`false`)** | `Colors.transparent` | `AlterColors.colorsGray600` (`#4A5565`) | `AlterSemanticTokens.textSecondary` (`#4A5565`) |
 
 ---
 
@@ -42,6 +42,9 @@ BottomNavigationItem(
 ---
 
 ## Component Changelog
+
+### `v1.0.2`
+* **Tokens**: Replaced legacy `ui1` and `ui6` token references with `AlterColors.colorsGray100` and `AlterColors.colorsGray600` swatches.
 
 ### `v1.0.1`
 * **Tokens**: Bound selection background to `AlterSemanticTokens.ui1` with 24px border radius and `AlterSemanticTokens.ui6` for inactive icon.

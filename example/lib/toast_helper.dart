@@ -126,7 +126,7 @@ class _ToastOverlayWidgetState extends State<_ToastOverlayWidget>
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: AlterSemanticTokens.baseBlack,
+                    color: AlterColors.colorsGray800,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(

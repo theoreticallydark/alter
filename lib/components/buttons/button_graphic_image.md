@@ -1,6 +1,6 @@
 # ButtonGraphicImage
 
-> Current Version: `v1.1.0`  
+> Current Version: `v1.1.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/buttons/buttongraphicimage)
 
 ## Overview
@@ -26,6 +26,7 @@ ButtonGraphicImage(
 ---
 
 ## Component Changelog
+* **`v1.1.1`**: Replaced legacy `ui1` and `ui6` token references with `AlterColors.colorsGray100` and `AlterColors.colorsGray600` swatches.
 * **`v1.1.0`**: Added `image`, `child`, and `size` properties with `Clip.antiAlias` for avatar and image rendering.
 * **`v1.0.1`**: Configured 20px border radius with `stroke200` border styling.
 * **`v1.0.0`**: Initial release.

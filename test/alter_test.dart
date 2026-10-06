@@ -14,12 +14,22 @@ void main() {
 
     test('AlterSemanticTokens are defined', () {
       expect(AlterSemanticTokens.baseWhite, equals(const Color(0xFFFFFFFF)));
-      expect(AlterSemanticTokens.baseBlack, equals(AlterColors.colorsGray800));
+      expect(AlterSemanticTokens.baseNeutral, equals(const Color(0xFFFAFAF8)));
+      expect(AlterSemanticTokens.baseGray, equals(AlterColors.colorsGray050));
+      expect(AlterSemanticTokens.baseActive, equals(AlterColors.colorsGray200));
+      expect(AlterSemanticTokens.baseBorder, equals(AlterColors.colorsGray200));
       expect(AlterSemanticTokens.textPrimary, equals(AlterColors.black));
+      expect(AlterSemanticTokens.textInteractive, equals(AlterSemanticTokens.interactivePrimary));
       expect(AlterSemanticTokens.textWarning, equals(AlterColors.colorsOrange800));
       expect(AlterSemanticTokens.statusDanger, equals(AlterColors.colorsRed600));
       expect(AlterSemanticTokens.statusCaution, equals(AlterColors.colorsYellow400));
       expect(AlterSemanticTokens.statusCautionContrast, equals(AlterColors.black));
+      expect(AlterSemanticTokens.statusBrand, equals(AlterColors.colorsGray800));
+      expect(AlterSemanticTokens.statusBrandContrast, equals(AlterColors.white));
+      expect(AlterSemanticTokens.interactivePrimary, equals(AlterColors.colorsGray800));
+      expect(AlterSemanticTokens.interactivePrimaryActive, equals(AlterColors.colorsGray900));
+      expect(AlterSemanticTokens.brand800, equals(AlterColors.colorsGray800));
+      expect(AlterSemanticTokens.brandContrast, equals(AlterColors.white));
     });
   });
 

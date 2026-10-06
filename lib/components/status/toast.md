@@ -1,6 +1,6 @@
 # Toast
 
-> Current Version: `v1.0.0`  
+> Current Version: `v1.0.1`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/status/toast)
 
 ## Overview
@@ -37,7 +37,7 @@ Toast(
 - **Typography**:
   - `Body/caption` -> `AlterTypography.caption` (Geist 12px, Regular 400, line-height 16px).
 - **Status Variants & Colors**:
-  - **`neutral`**: Background `AlterSemanticTokens.baseBlack` (`#1E2939`), Foreground `AlterSemanticTokens.textInverse` (`#FFFFFF`).
+  - **`neutral`**: Background `AlterColors.colorsGray800` (`#1E2939`), Foreground `AlterSemanticTokens.textInverse` (`#FFFFFF`).
   - **`gray`**: Background `AlterSemanticTokens.baseGray` (`#F9FAFB`), Border 1px `AlterSemanticTokens.stroke200` (`#E5E7EB`), Foreground `AlterSemanticTokens.textPrimary` (`#000000`).
   - **`white`**: Background `AlterSemanticTokens.baseWhite` (`#FFFFFF`), Border 1px `AlterSemanticTokens.stroke100` (`#F3F4F6`), Foreground `AlterSemanticTokens.textPrimary` (`#000000`).
   - **`danger`**: Background `AlterColors.colorsRed800` (`#9F0712`), Foreground `AlterSemanticTokens.textInverse` (`#FFFFFF`).
@@ -48,4 +48,5 @@ Toast(
 ---
 
 ## Component Changelog
+* **`v1.0.1`**: Replaced deprecated `baseBlack` token reference with `AlterColors.colorsGray800` swatch.
 * **`v1.0.0`**: Initial release matching Figma Node `342:12219`.

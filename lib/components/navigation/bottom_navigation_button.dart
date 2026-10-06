@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 
 /// Style variants for [BottomNavigationButton].
@@ -13,7 +14,8 @@ enum BottomNavigationButtonType {
 /// A circular action button designed to accompany bottom navigation bars.
 class BottomNavigationButton extends StatelessWidget {
   /// Component version for reference.
-  static const String version = '1.0.1';
+  /// v1.0.2: Replaced baseBlack token reference with AlterColors.colorsGray800 swatch.
+  static const String version = '1.0.2';
 
   /// Icon rendered inside the button.
   final IconData icon;
@@ -35,7 +37,7 @@ class BottomNavigationButton extends StatelessWidget {
   Color get _backgroundColor {
     switch (type) {
       case BottomNavigationButtonType.primary:
-        return AlterSemanticTokens.baseBlack;
+        return AlterColors.colorsGray800;
       case BottomNavigationButtonType.secondary:
         return AlterSemanticTokens.baseGray;
     }

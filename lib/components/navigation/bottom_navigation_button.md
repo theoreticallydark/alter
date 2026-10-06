@@ -1,6 +1,6 @@
 # BottomNavigationButton
 
-> Current Version: `v1.0.1`  
+> Current Version: `v1.0.2`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/navigation/bottomnavigationbutton)
 
 ## Overview
@@ -25,5 +25,6 @@ BottomNavigationButton(
 ---
 
 ## Component Changelog
+* **`v1.0.2`**: Replaced deprecated `baseBlack` token reference with `AlterColors.colorsGray800` swatch.
 * **`v1.0.1`**: Bound semantic color tokens (`baseBlack`, `baseGray`, `stroke1000`, `stroke100`).
 * **`v1.0.0`**: Initial release.

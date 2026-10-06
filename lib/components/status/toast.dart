@@ -45,8 +45,9 @@ enum ToastStatus {
 /// - Typography: `Body/caption` -> [AlterTypography.caption] (Geist 12px, Regular 400, line-height 16px)
 class Toast extends StatelessWidget {
   /// Component version for reference.
+  /// v1.0.1: Replaced baseBlack token reference with AlterColors.colorsGray800 swatch.
   /// v1.0.0: Initial release matching Figma Node 342:12219.
-  static const String version = '1.0.0';
+  static const String version = '1.0.1';
 
   /// Message string displayed in the toast.
   final String label;
@@ -76,7 +77,7 @@ class Toast extends StatelessWidget {
   Color get _backgroundColor {
     switch (status) {
       case ToastStatus.neutral:
-        return AlterSemanticTokens.baseBlack; // #1E2939
+        return AlterColors.colorsGray800; // #1E2939
       case ToastStatus.gray:
         return AlterSemanticTokens.baseGray; // #F9FAFB
       case ToastStatus.white:

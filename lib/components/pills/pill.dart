@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../styles/swatches.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
@@ -23,8 +24,9 @@ enum PillColor {
 /// A compact rounded status and label pill.
 class Pill extends StatelessWidget {
   /// Component version for reference.
+  /// v1.0.4: Replaced legacy tokens (statusTeal, ui1, ui2, ui4) with AlterColors swatches.
   /// v1.0.3: Enhanced smooth size and label showcase transitions with synchronized AnimatedCrossFade and cubic interpolation.
-  static const String version = '1.0.3';
+  static const String version = '1.0.4';
 
   /// Primary label text.
   final String label;
@@ -79,11 +81,11 @@ class Pill extends StatelessWidget {
     if (isCompleted) {
       return color == PillColor.gray
           ? AlterSemanticTokens.statusSuccess
-          : AlterSemanticTokens.statusTeal;
+          : AlterColors.colorsTeal600;
     }
     return color == PillColor.gray
-        ? AlterSemanticTokens.ui1
-        : AlterSemanticTokens.ui2;
+        ? AlterColors.colorsGray100
+        : AlterColors.colorsGray200;
   }
 
   Color? get _borderColor {
@@ -95,7 +97,7 @@ class Pill extends StatelessWidget {
     }
     return color == PillColor.gray
         ? AlterSemanticTokens.stroke200
-        : AlterSemanticTokens.ui4;
+        : AlterColors.colorsGray400;
   }
 
   double get _borderWidth {

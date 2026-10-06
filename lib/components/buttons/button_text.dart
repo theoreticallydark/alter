@@ -30,8 +30,9 @@ enum ButtonSize {
 /// A text-based button adhering to Alter Design System tokens.
 class ButtonText extends StatelessWidget {
   /// Component version for reference.
+  /// v1.1.1: Replaced baseBlack token reference with AlterColors.colorsGray800 swatch.
   /// v1.1.0: Added ButtonType.red destructive variant using AlterSemanticTokens.statusDanger.
-  static const String version = '1.1.0';
+  static const String version = '1.1.1';
 
   /// The text displayed inside the button.
   final String label;
@@ -61,7 +62,7 @@ class ButtonText extends StatelessWidget {
       case ButtonType.white:
         return AlterSemanticTokens.baseWhite;
       case ButtonType.primary:
-        return AlterSemanticTokens.baseBlack;
+        return AlterColors.colorsGray800;
       case ButtonType.red:
         return AlterSemanticTokens.statusDanger;
     }

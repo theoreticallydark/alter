@@ -41,7 +41,7 @@ MaterialApp(
 Alter organizes design tokens into foundational layers:
 
 * **`AlterColors`**: 234 raw color palette swatches extracted from Figma design variables.
-* **`AlterSemanticTokens`**: Semantic color mappings (`baseWhite`, `baseGray`, `baseBlack`, `textPrimary`, `stroke100`, `statusSuccess`, etc.).
+* **`AlterSemanticTokens`**: Semantic color mappings (`baseWhite`, `baseGray`, `interactivePrimary`, `textPrimary`, `stroke100`, `statusSuccess`, etc.).
 * **`AlterTypography`**: Text style scale tokens (`display`, `displayXl`, `h1Serif`, `h1Bold`, `h2`, `h3`, `bodyLgBold`, `body`, `caption`, etc.).
 
 ---

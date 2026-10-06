@@ -20,9 +20,10 @@ enum ButtonIconType {
 /// A square, rounded icon button following Alter Design System tokens.
 class ButtonIcon extends StatelessWidget {
   /// Component version for reference.
+  /// v1.3.1: Replaced baseBlack token reference with AlterColors.colorsGray800 swatch.
   /// v1.3.0: Added `ButtonIconType.red` variant matching Figma Design System.
   /// v1.2.0: Added customizable `size` (e.g. 64x64) and `iconSize` properties.
-  static const String version = '1.3.0';
+  static const String version = '1.3.1';
 
   /// The icon displayed inside the button.
   final IconData icon;
@@ -60,7 +61,7 @@ class ButtonIcon extends StatelessWidget {
       case ButtonIconType.white:
         return AlterSemanticTokens.baseWhite;
       case ButtonIconType.primary:
-        return AlterSemanticTokens.baseBlack;
+        return AlterColors.colorsGray800;
       case ButtonIconType.red:
         return AlterSemanticTokens.statusDanger;
     }
