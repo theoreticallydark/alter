@@ -4,6 +4,7 @@ import 'package:alter/alter.dart';
 
 import 'categories/buttons_category.dart';
 import 'categories/foundations_category.dart';
+import 'categories/grids_category.dart';
 import 'categories/header_category.dart';
 import 'categories/input_category.dart';
 import 'categories/navigation_category.dart';
@@ -12,6 +13,7 @@ import 'categories/selects_category.dart';
 import 'categories/status_category.dart';
 import 'categories/tabs_category.dart';
 import 'categories/utilities_category.dart';
+import 'categories/web_category.dart';
 
 void main() {
   runApp(const AlterWidgetbookApp());
@@ -34,6 +36,8 @@ class AlterWidgetbookApp extends StatelessWidget {
         statusCategory(),
         tabsCategory(),
         utilitiesCategory(),
+        webCategory(),
+        gridsCategory(),
       ],
       addons: [
         MaterialThemeAddon(
@@ -44,6 +48,8 @@ class AlterWidgetbookApp extends StatelessWidget {
                 brightness: Brightness.light,
                 fontFamily: 'packages/alter/Geist',
                 scaffoldBackgroundColor: AlterSemanticTokens.baseWhite,
+                // ignore: deprecated_member_use
+                useMaterial3: true,
               ),
             ),
           ],

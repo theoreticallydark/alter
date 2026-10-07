@@ -1098,6 +1098,519 @@ void main() {
       final RenderBox horizontalBox = tester.renderObject(find.byType(Divider).first);
       expect(horizontalBox.size.height, equals(2.0));
     });
+
+    testWidgets('BioMarker renders title, subtitle, badges, divider, description, and adapts to layout', (WidgetTester tester) async {
+      bool logoTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: BioMarker(
+              title: 'Alter Web Marker',
+              subtitle: 'Senior Designer',
+              description: 'Designing scalable Flutter components.',
+              hasBadgeOne: true,
+              badge1Label: 'Staff',
+              badge2Label: 'Flutter',
+              badge3Label: 'Full-time',
+              onLogoTap: () => logoTapped = true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Alter Web Marker'), findsOneWidget);
+      expect(find.text('Senior Designer'), findsOneWidget);
+      expect(find.text('Designing scalable Flutter components.'), findsOneWidget);
+      expect(find.text('Staff'), findsOneWidget);
+      expect(find.text('Flutter'), findsOneWidget);
+      expect(find.text('Full-time'), findsOneWidget);
+      expect(find.byType(Divider), findsOneWidget);
+
+      await tester.tap(find.byType(InkWell).first);
+      await tester.pump();
+      expect(logoTapped, isTrue);
+    });
+
+    testWidgets('CarouselControl renders previous and next buttons and responds to taps', (WidgetTester tester) async {
+      bool prevTapped = false;
+      bool nextTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CarouselControl(
+              position: CarouselControlPosition.middle,
+              onPrevious: () => prevTapped = true,
+              onNext: () => nextTapped = true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.chevron_left), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.chevron_left));
+      await tester.pump();
+      expect(prevTapped, isTrue);
+
+      await tester.tap(find.byIcon(Icons.chevron_right));
+      await tester.pump();
+      expect(nextTapped, isTrue);
+    });
+
+    testWidgets('ProjectMarker renders single image mode and responds to interaction', (WidgetTester tester) async {
+      int tappedIndex = -1;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ProjectMarker(
+              title: 'Project Title',
+              subtitle: 'Project Subtitle',
+              isCarousel: false,
+              onImageTap: (index) => tappedIndex = index,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Project Title'), findsOneWidget);
+      expect(find.text('Project Subtitle'), findsOneWidget);
+      expect(find.byType(BioMarker), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.image_outlined));
+      await tester.pump();
+      expect(tappedIndex, equals(0));
+    });
+
+    testWidgets('ProjectMarker renders carousel mode with CarouselControl', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 896,
+              child: ProjectMarker(
+                title: 'Carousel Project',
+                subtitle: 'Two columns PC view',
+                isCarousel: true,
+                device: ProjectMarkerDevice.pc,
+                pcItemsPerView: 2,
+                carouselItems: [
+                  Container(key: const Key('item1'), color: Colors.blue),
+                  Container(key: const Key('item2'), color: Colors.red),
+                  Container(key: const Key('item3'), color: Colors.green),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Carousel Project'), findsOneWidget);
+      expect(find.byType(CarouselControl), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+    });
+
+    testWidgets('ProjectMarker supports configurable pcItemsPerView (3 columns)', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 896,
+              child: ProjectMarker(
+                title: '3-Column Carousel',
+                subtitle: 'Three items per row',
+                isCarousel: true,
+                device: ProjectMarkerDevice.pc,
+                pcItemsPerView: 3,
+                carouselItems: [
+                  Container(key: const Key('c1'), color: Colors.blue),
+                  Container(key: const Key('c2'), color: Colors.red),
+                  Container(key: const Key('c3'), color: Colors.green),
+                  Container(key: const Key('c4'), color: Colors.yellow),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(const Key('c1')), findsOneWidget);
+      expect(find.byKey(const Key('c2')), findsOneWidget);
+      expect(find.byKey(const Key('c3')), findsOneWidget);
+      expect(find.byType(CarouselControl), findsOneWidget);
+    });
+
+    testWidgets('ProjectMarker renders mobile carousel with touch PageView and peek', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 316,
+              child: ProjectMarker(
+                title: 'Mobile Carousel',
+                subtitle: 'Swipe with peek cue',
+                isCarousel: true,
+                device: ProjectMarkerDevice.mobile,
+                mobileViewportFraction: 0.86,
+                carouselItems: [
+                  Container(key: const Key('m1'), color: Colors.blue),
+                  Container(key: const Key('m2'), color: Colors.red),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(PageView), findsOneWidget);
+      expect(find.byType(CarouselControl), findsNothing); // No chevrons on mobile
+      expect(find.byKey(const Key('m1')), findsOneWidget);
+    });
+
+    testWidgets('MobileMarker renders scale=width and responds to tap', (WidgetTester tester) async {
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: MobileMarker(
+                scale: MobileMarkerScale.width,
+                width: 320,
+                title: 'Mobile App',
+                subtitle: 'Scale width',
+                hasDescription: true,
+                description: 'Mobile App Description',
+                onImageTap: () => tapped = true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Mobile App'), findsOneWidget);
+      expect(find.text('Scale width'), findsOneWidget);
+      expect(find.text('Mobile App Description'), findsOneWidget);
+      expect(find.byType(BioMarker), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.image_outlined));
+      await tester.pump();
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('MobileMarker renders scale=height without BioMarker when toggled', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: MobileMarker(
+              scale: MobileMarkerScale.height,
+              height: 500,
+              hasBioMarker: false,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.image_outlined), findsOneWidget);
+      expect(find.byType(BioMarker), findsNothing);
+    });
+
+    testWidgets('ProjectGrid renders PC 2-column layout and mobile 1-column layout', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 896,
+                child: ProjectGrid(
+                  device: ProjectGridDevice.pc,
+                  projects: const [
+                    ProjectMarker(title: 'Project 1'),
+                    ProjectMarker(title: 'Project 2'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Project 1'), findsOneWidget);
+      expect(find.text('Project 2'), findsOneWidget);
+      expect(find.byType(Row), findsWidgets); // 2-column row layout on PC
+    });
+
+    testWidgets('ProjectGrid.builder generates items correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 316,
+                child: ProjectGrid.builder(
+                  device: ProjectGridDevice.mobile,
+                  count: 3,
+                  builder: (context, index) {
+                    return ProjectMarker(title: 'Dynamic Project #$index');
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Dynamic Project #0'), findsOneWidget);
+      expect(find.text('Dynamic Project #1'), findsOneWidget);
+      expect(find.text('Dynamic Project #2'), findsOneWidget);
+    });
+
+    testWidgets('MobileGrid renders PC 4-column layout and fixed count of 4 when isCarousel is false', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 896,
+                child: MobileGrid(
+                  device: MobileGridDevice.pc,
+                  isCarousel: false,
+                  title: 'Fintech Suite',
+                  subtitle: 'Desktop 4-Column Grid',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Fintech Suite'), findsOneWidget);
+      expect(find.text('Desktop 4-Column Grid'), findsOneWidget);
+      expect(find.byType(MobileMarker), findsNWidgets(4));
+    });
+
+    testWidgets('MobileGrid renders PC carousel with CarouselControl and slides', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 896,
+                child: MobileGrid.builder(
+                  device: MobileGridDevice.pc,
+                  isCarousel: true,
+                  count: 6,
+                  builder: (context, index) {
+                    return MobileMarker(
+                      title: 'Screen #$index',
+                      hasBioMarker: false,
+                    );
+                  },
+                  title: 'PC Carousel',
+                  subtitle: 'Sliding with chevrons',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('PC Carousel'), findsOneWidget);
+      expect(find.byType(CarouselControl), findsOneWidget);
+    });
+
+    testWidgets('MobileGrid renders mobile swipe carousel with viewport fraction cue', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 316,
+                child: MobileGrid.builder(
+                  device: MobileGridDevice.mobile,
+                  isCarousel: true,
+                  mobileViewportFraction: 0.78,
+                  count: 3,
+                  builder: (context, index) {
+                    return const MobileMarker(
+                      hasBioMarker: false,
+                    );
+                  },
+                  title: 'Mobile Wallet',
+                  subtitle: 'Swipeable Carousel',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Mobile Wallet'), findsOneWidget);
+      expect(find.byType(PageView), findsOneWidget);
+    });
+
+    testWidgets('BioMarker derives device mode directly from ambient AlterDeviceScope', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AlterDeviceScope(
+              device: AlterDevice.pc,
+              child: SizedBox(
+                width: 300, // narrow width that would otherwise trigger mobile auto-mode
+                child: BioMarker(
+                  title: 'Ambient PC Bio',
+                  subtitle: 'Inherited from Scope',
+                  hasBadgeTwo: true,
+                  badge2Label: 'Desktop Badge',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Ambient PC Bio'), findsOneWidget);
+      expect(find.text('Desktop Badge'), findsOneWidget);
+    });
+
+    testWidgets('ProjectGrid propagates PC device mode to child ProjectMarkers and BioMarkers', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 896,
+                child: ProjectGrid(
+                  device: ProjectGridDevice.pc,
+                  projects: [
+                    ProjectMarker(
+                      title: 'Project In PC Grid',
+                      subtitle: 'Should have badges & logo in 424px cell',
+                      hasBadgeTwo: true,
+                      badgeTwoLabel: 'Active Badge',
+                    ),
+                    ProjectMarker(
+                      title: 'Project 2 In PC Grid',
+                      subtitle: 'Cell 2',
+                      hasBadgeTwo: true,
+                      badgeTwoLabel: 'Badge 2',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Project In PC Grid'), findsOneWidget);
+      expect(find.text('Active Badge'), findsOneWidget);
+      expect(find.text('Badge 2'), findsOneWidget);
+    });
+
+    testWidgets('AlterMediaView renders image, custom widget and handles video gracefully', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                AlterMediaView(
+                  url: 'https://example.com/animation.gif',
+                ),
+                AlterMediaView(
+                  customWidget: Text('Custom Media Layer'),
+                ),
+                AlterMediaView(
+                  url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                  autoPlay: true,
+                  playInViewportOnly: true,
+                  autoPlayDelay: Duration(milliseconds: 1200),
+                  loop: true,
+                  isMuted: true,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Custom Media Layer'), findsOneWidget);
+      expect(find.byType(AlterMediaView), findsNWidgets(3));
+    });
+
+    testWidgets('ProjectMarker renders single video and carousel videos', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ProjectMarker(
+                    videoUrl: 'https://example.com/project_preview.mp4',
+                    title: 'Video Project Marker',
+                    subtitle: 'Single video banner',
+                  ),
+                  ProjectMarker(
+                    isCarousel: true,
+                    carouselVideoUrls: [
+                      'https://example.com/clip1.mp4',
+                      'https://example.com/clip2.mp4',
+                    ],
+                    title: 'Carousel Video Project',
+                    subtitle: 'Multi video slides',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Video Project Marker'), findsOneWidget);
+      expect(find.text('Carousel Video Project'), findsOneWidget);
+      expect(find.byType(AlterMediaView), findsAtLeastNWidgets(1));
+    });
+
+    testWidgets('MobileMarker and MobileGrid render with video mockups', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  MobileMarker(
+                    scale: MobileMarkerScale.width,
+                    videoUrl: 'https://example.com/app_demo.mp4',
+                    title: 'App Demo Video',
+                    subtitle: 'iPhone 14 Plus container',
+                  ),
+                  MobileGrid(
+                    videoUrls: [
+                      'https://example.com/app_demo1.mp4',
+                      'https://example.com/app_demo2.mp4',
+                      'https://example.com/app_demo3.mp4',
+                      'https://example.com/app_demo4.mp4',
+                    ],
+                    title: 'Mobile Grid With Videos',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('App Demo Video'), findsOneWidget);
+      expect(find.text('Mobile Grid With Videos'), findsOneWidget);
+      expect(find.byType(AlterMediaView), findsAtLeastNWidgets(4));
+    });
   });
 }
+
+
+
+
 

@@ -93,8 +93,23 @@ Alter organizes design tokens into foundational layers:
 
 ### Utilities (`lib/components/utilities/`)
 - **`Avatar`**: Compact user and entity avatar supporting image and placeholder icon variants.
+- **`CarouselControl`**: Carousel navigation overlay control bar providing chevron previous/next triggers.
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Universal list tile with title, subtitle, leading action slot, and dual trailing slots.
+
+### Utilities (`lib/components/utilities/`)
+- **`AlterMediaView`**: Universal media presentation layer for images, GIFs, and muted looping autoplay videos.
+- **`Avatar`**: User and entity avatar supporting image and placeholder icon variants.
+- **`CarouselControl`**: Carousel navigation overlay control bar providing chevron action triggers.
+- **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
+- **`ListItem`**: Flexible list row with title, subtitle, left slot, and dual right slots.
+
+### Web & Molecules (`lib/web/`)
+- **`BioMarker`**: Responsive entity and biography marker molecule card with logo, title, badges, and bio description.
+- **`MobileMarker`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and autoplay looping videos with BioMarker.
+- **`ProjectGrid`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming ProjectMarker cards with device scope synchronization.
+- **`MobileGrid`**: Responsive mobile screen showcase grid & carousel with unified BioMarker entity metadata.
+- **`ProjectMarker`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and autoplay videos.
 
 ---
 

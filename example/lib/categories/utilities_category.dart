@@ -351,6 +351,122 @@ WidgetbookFolder utilitiesCategory() {
           ),
         ],
       ),
+      WidgetbookComponent(
+        name: 'CarouselControl',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final position = context.knobs.object.dropdown(
+                label: 'Position Variant',
+                options: CarouselControlPosition.values,
+                labelBuilder: (p) => p.name,
+                initialOption: CarouselControlPosition.middle,
+              );
+
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: Container(
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: AlterSemanticTokens.baseGray,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AlterSemanticTokens.stroke100,
+                          width: 2,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: CarouselControl(
+                        position: position,
+                        onPrevious: () => showExampleToast(
+                          context,
+                          'Previous Slide tapped',
+                        ),
+                        onNext: () => showExampleToast(
+                          context,
+                          'Next Slide tapped',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Showcase',
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'POSITION=START (Previous button hidden)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: 600,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: AlterSemanticTokens.baseGray,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        alignment: Alignment.center,
+                        child: const CarouselControl.start(),
+                      ),
+                      const SizedBox(height: 32),
+                      Text(
+                        'POSITION=MIDDLE (Both buttons active)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: 600,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: AlterSemanticTokens.baseGray,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        alignment: Alignment.center,
+                        child: const CarouselControl.middle(),
+                      ),
+                      const SizedBox(height: 32),
+                      Text(
+                        'POSITION=END (Next button hidden)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: 600,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: AlterSemanticTokens.baseGray,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        alignment: Alignment.center,
+                        child: const CarouselControl.end(),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     ],
   );
 }
