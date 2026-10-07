@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 
+import 'categories/blocks_category.dart';
 import 'categories/buttons_category.dart';
 import 'categories/foundations_category.dart';
 import 'categories/grids_category.dart';
@@ -38,6 +39,7 @@ class AlterWidgetbookApp extends StatelessWidget {
         utilitiesCategory(),
         webCategory(),
         gridsCategory(),
+        blocksCategory(),
       ],
       addons: [
         MaterialThemeAddon(

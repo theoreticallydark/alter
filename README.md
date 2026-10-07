@@ -104,12 +104,13 @@ Alter organizes design tokens into foundational layers:
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Flexible list row with title, subtitle, left slot, and dual right slots.
 
-### Web & Molecules (`lib/web/`)
+### Web, Blocks & Molecules (`lib/web/`)
+- **`HeroBlock`**: Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages.
 - **`BioMarker`**: Responsive entity and biography marker molecule card with logo, title, badges, and bio description.
-- **`MobileMarker`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and autoplay looping videos with BioMarker.
+- **`MobileMarker`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware autoplay looping videos with BioMarker.
 - **`ProjectGrid`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming ProjectMarker cards with device scope synchronization.
-- **`MobileGrid`**: Responsive mobile screen showcase grid & carousel with unified BioMarker entity metadata.
-- **`ProjectMarker`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and autoplay videos.
+- **`MobileGrid`**: Responsive mobile screen showcase grid & carousel with unified BioMarker entity metadata supporting image and video lists with viewport autoplay.
+- **`ProjectMarker`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
 
 ---
 

@@ -107,20 +107,21 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 ### Utilities (`lib/components/utilities/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`AlterMediaView`** | `v1.0.0` | [alter_media_view.md](utilities/alter_media_view.md) | Universal media view component supporting static images, animated GIFs, and muted looping autoplay videos. |
+| **`AlterMediaView`** | `v1.1.0` | [alter_media_view.md](utilities/alter_media_view.md) | Universal media view component supporting static images, animated GIFs, and muted looping autoplay videos with viewport-aware delay (default 1.2s). |
 | **`Avatar`** | `v1.0.0` | [avatar.md](utilities/avatar.md) | User and entity avatar supporting image and placeholder icon variants. |
 | **`CarouselControl`** | `v1.0.1` | [carousel_control.md](utilities/carousel_control.md) | Carousel navigation overlay control bar providing chevron previous/next triggers. |
 | **`Divider`** | `v1.0.1` | [divider.md](utilities/divider.md) | 1px content divider line supporting horizontal and vertical orientations. |
 | **`ListItem`** | `v1.0.1` | [list_item.md](utilities/list_item.md) | Flexible list row with title, subtitle, left slot, and dual right slots. |
 
-### Web & Molecules (`lib/web/`)
+### Web, Blocks & Molecules (`lib/web/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
+| **`HeroBlock`** | `v1.0.0` | [hero_block.md](../web/blocks/hero_block.md) | Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages. |
 | **`BioMarker`** | `v1.0.1` | [bio_marker.md](../web/markers/bio_marker.md) | Responsive entity and biography marker molecule card with logo, title, badges, and bio description. |
-| **`MobileMarker`** | `v1.1.0` | [mobile_marker.md](../web/markers/mobile_marker.md) | Responsive mobile device showcase card combining an iPhone 14 Plus container (428:926) with BioMarker and video support. |
+| **`MobileMarker`** | `v1.2.0` | [mobile_marker.md](../web/markers/mobile_marker.md) | Responsive mobile device showcase card combining an iPhone 14 Plus container (428:926) with BioMarker and viewport-aware video support. |
 | **`ProjectGrid`** | `v1.0.1` | [project_grid.md](../web/grids/project_grid.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming ProjectMarker cards with device synchronization. |
-| **`MobileGrid`** | `v1.0.4` | [mobile_grid.md](../web/grids/mobile_grid.md) | Responsive mobile showcase grid & carousel with unified BioMarker entity metadata supporting image and video lists. |
-| **`ProjectMarker`** | `v1.3.0` | [project_marker.md](../web/markers/project_marker.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and autoplay videos. |
+| **`MobileGrid`** | `v1.0.5` | [mobile_grid.md](../web/grids/mobile_grid.md) | Responsive mobile showcase grid & carousel with unified BioMarker entity metadata supporting image and video lists with viewport autoplay. |
+| **`ProjectMarker`** | `v1.4.0` | [project_marker.md](../web/markers/project_marker.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos. |
 
 ---
 

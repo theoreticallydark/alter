@@ -1607,6 +1607,190 @@ void main() {
       expect(find.text('Mobile Grid With Videos'), findsOneWidget);
       expect(find.byType(AlterMediaView), findsAtLeastNWidgets(4));
     });
+
+    testWidgets('HeroBlock renders PC layout with avatar, title, subtitle, and action buttons', (WidgetTester tester) async {
+      bool primaryTapped = false;
+      bool secondaryTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: HeroBlock(
+                device: HeroBlockDevice.pc,
+                title: 'Hi, I am Nayan &\nI build things.',
+                subtitle: 'Principal UX Designer & Engineer @SIG',
+                primaryButtonLabel: 'Book a call',
+                secondaryButtonLabel: 'Download CV',
+                onPrimaryTap: () => primaryTapped = true,
+                onSecondaryTap: () => secondaryTapped = true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Hi, I am Nayan &\nI build things.'), findsOneWidget);
+      expect(find.text('Principal UX Designer & Engineer @SIG'), findsOneWidget);
+      expect(find.text('Book a call'), findsOneWidget);
+      expect(find.text('Download CV'), findsOneWidget);
+      expect(find.byType(ButtonText), findsNWidgets(2));
+
+      await tester.tap(find.text('Book a call'));
+      await tester.pump();
+      expect(primaryTapped, isTrue);
+
+      await tester.tap(find.text('Download CV'));
+      await tester.pump();
+      expect(secondaryTapped, isTrue);
+    });
+
+    testWidgets('HeroBlock renders Mobile layout and toggles elements', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: HeroBlock(
+                device: HeroBlockDevice.mobile,
+                title: 'Mobile Hero Headline',
+                hasSubtitle: false,
+                hasAvatar: false,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Mobile Hero Headline'), findsOneWidget);
+      expect(find.byIcon(Icons.person_rounded), findsNothing);
+    });
+
+    testWidgets('BrandBlock renders PC layout with default placeholder brands', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: BrandBlock(
+                device: BrandBlockDevice.pc,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('I have architected design systems at'), findsOneWidget);
+      expect(find.text('Element DS'), findsOneWidget);
+      expect(find.text('SIEMENS'), findsOneWidget);
+      expect(find.text('SIG'), findsOneWidget);
+      expect(find.text('iX DS'), findsOneWidget);
+      expect(find.text('HeyDoc'), findsOneWidget);
+      expect(find.text('InLabels'), findsOneWidget);
+    });
+
+    testWidgets('BrandBlock renders custom brands and responds to taps', (WidgetTester tester) async {
+      bool brandTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: BrandBlock(
+                device: BrandBlockDevice.mobile,
+                title: 'Trusted by Leaders',
+                items: [
+                  BrandItem(
+                    name: 'Custom Brand 1',
+                    onTap: () => brandTapped = true,
+                  ),
+                  const BrandItem(
+                    name: 'Custom Brand 2',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Trusted by Leaders'), findsOneWidget);
+      expect(find.text('Custom Brand 1'), findsOneWidget);
+      expect(find.text('Custom Brand 2'), findsOneWidget);
+
+      await tester.tap(find.text('Custom Brand 1'));
+      await tester.pump();
+      expect(brandTapped, isTrue);
+    });
+
+    testWidgets('HeaderBlock renders PC and Mobile layouts with Divider and header text', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                HeaderBlock(
+                  device: HeaderBlockDevice.pc,
+                  header: 'Experiences',
+                ),
+                HeaderBlock(
+                  device: HeaderBlockDevice.mobile,
+                  header: 'Projects',
+                  hasDivider: false,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Experiences'), findsOneWidget);
+      expect(find.text('Projects'), findsOneWidget);
+      expect(find.byType(Divider), findsOneWidget);
+    });
+
+    testWidgets('ProjectHeroBlock renders PC and Mobile layouts with logo, title, details, and actions', (WidgetTester tester) async {
+      bool actionTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ProjectHeroBlock(
+                    device: ProjectHeroBlockDevice.pc,
+                    title: 'PC Project Title',
+                    description: 'PC Project Description',
+                    actions: [
+                      ProjectHeroAction(
+                        label: 'PC Action',
+                        icon: Icons.code,
+                        onTap: () => actionTapped = true,
+                      ),
+                    ],
+                  ),
+                  const ProjectHeroBlock(
+                    device: ProjectHeroBlockDevice.mobile,
+                    title: 'Mobile Project Title',
+                    hasNotice: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('PC Project Title'), findsOneWidget);
+      expect(find.text('PC Project Description'), findsOneWidget);
+      expect(find.text('PC Action'), findsOneWidget);
+      expect(find.text('Mobile Project Title'), findsOneWidget);
+      expect(find.text('Client'), findsNWidgets(4)); // 2 labels + 2 values across the two instances
+      expect(find.text('Feedback Text'), findsOneWidget); // Only in PC instance
+
+      await tester.tap(find.text('PC Action'));
+      await tester.pump();
+      expect(actionTapped, isTrue);
+    });
   });
 }
 
