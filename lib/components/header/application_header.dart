@@ -1,221 +1,396 @@
 import 'package:flutter/material.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
-import '../buttons/button_graphic_image.dart';
-import '../buttons/button_graphic_text.dart';
-import '../buttons/button_icon.dart';
-import '../buttons/button_icon_ghost.dart';
+import 'application_header_button_icon.dart';
+import 'application_header_button_text.dart';
 
-/// An application app-bar / header with title, subtitle, navigation return button, action slots, and profile trigger.
+/// A full-width desktop and web application header for the Alter Design System.
+///
+/// Figma Specifications (Node `706:8794` - `ApplicationHeader` / `device=Web`):
+/// - Layout: 48px height horizontal bar, edge-to-edge layout, `#FFFFFF` background, 1px bottom border `#F3F4F6`.
+/// - Left Group:
+///   - Launcher Button (`hasLauncherButton`, 48x48 [ApplicationHeaderButtonIcon] with `Icons.apps`).
+///   - Logo Container (`hasLogo`, 34x34px logo image/widget).
+///   - Application Title (`applicationTitle`, [AlterTypography.h4Bold] 16px).
+/// - Center Group (Navigation Tab Bar):
+///   - Tab List (`hasPages`, centered row of [ApplicationHeaderButtonText] buttons).
+/// - Right Group (Actions & Avatar):
+///   - Action Buttons 1 to 4 (`showApplicationHeaderButton1..4` via [ApplicationHeaderButtonIcon]).
+///   - Avatar Button (`showAvatarButton` via [ApplicationHeaderButtonIcon.avatar]).
 class ApplicationHeader extends StatelessWidget {
   /// Component version for reference.
-  /// v1.1.0: Added `hasReturnButton`, `onReturnTap`, custom action icons, and `profileImage` matching Figma node 119:5716.
-  /// v1.0.2: Dynamically hug action elements with spacing only between adjacent active items, eliminating trailing space when subsequent actions are absent.
-  /// v1.0.1: Updated outer layout to 24px padding all around and 16px itemSpacing between headerContainer and Slot as per Figma node 119:5716.
-  static const String version = '1.1.0';
+  /// v1.0.1: Default logo uses alter_logo.png asset with full customization support (logo, logoWidget, logoAssetPath).
+  /// v1.0.0: Initial release matching Figma Node 706:8794 (ApplicationHeader / device=Web).
+  static const String version = '1.0.1';
 
-  /// Primary headline text.
+  // Left Section Properties
+  /// Whether the leading application launcher button (apps icon) is displayed.
+  final bool hasLauncherButton;
+
+  /// Icon rendered in the launcher button.
+  final IconData launcherIcon;
+
+  /// Callback executed when the launcher button is tapped.
+  final VoidCallback? onLauncherTap;
+
+  /// Whether the application logo is displayed.
+  final bool hasLogo;
+
+  /// Image provider for the application logo.
+  final ImageProvider? logo;
+
+  /// Custom widget override for the logo.
+  final Widget? logoWidget;
+
+  /// Custom asset path for the logo (defaults to 'assets/alter_logo.png').
+  final String? logoAssetPath;
+
+  /// Callback executed when the logo is tapped.
+  final VoidCallback? onLogoTap;
+
+  /// Whether the application title is displayed.
+  final bool applicationTitle;
+
+  /// Text string for the application title.
   final String title;
 
-  /// Secondary subtitle or brand tag text.
-  final String subtitle;
+  /// Custom widget override for the application title.
+  final Widget? titleWidget;
 
-  /// Whether the leading return/back button is displayed.
-  final bool hasReturnButton;
+  /// Callback executed when the title is tapped.
+  final VoidCallback? onTitleTap;
 
-  /// Callback executed when the return button is tapped.
-  final VoidCallback? onReturnTap;
+  // Center Navigation Section
+  /// Whether the navigation tab list is displayed.
+  final bool hasPages;
 
-  /// Whether the streak/graphic style badge button is shown.
-  final bool hasStyleButton;
+  /// List of tab/page string labels displayed in the center navigation bar.
+  final List<String> pages;
 
-  /// Title of the streak/graphic style badge.
-  final String styleButtonTitle;
+  /// Currently active page index in the center navigation bar.
+  final int selectedPageIndex;
 
-  /// Subtitle of the streak/graphic style badge.
-  final String styleButtonSubtitle;
+  /// Callback fired when a navigation page item is selected.
+  final ValueChanged<int>? onPageSelected;
 
-  /// Callback executed when the style button is tapped.
-  final VoidCallback? onStyleButtonTap;
+  /// Custom list of navigation page widgets (overrides [pages] strings if provided).
+  final List<Widget>? pageWidgets;
 
-  /// Whether the first generic action button is shown.
-  final bool hasActionOne;
+  // Right Actions Section
+  /// Whether action button 1 is displayed.
+  final bool showApplicationHeaderButton1;
 
-  /// Icon rendered in the first action button.
-  final IconData actionOneIcon;
+  /// Icon rendered in action button 1.
+  final IconData action1Icon;
 
-  /// Callback executed when the first action button is tapped.
-  final VoidCallback? onActionOneTap;
+  /// Custom widget override for action button 1.
+  final Widget? action1Widget;
 
-  /// Whether the second generic action button is shown.
-  final bool hasActionTwo;
+  /// Callback executed when action button 1 is tapped.
+  final VoidCallback? onAction1Tap;
 
-  /// Icon rendered in the second action button.
-  final IconData actionTwoIcon;
+  /// Whether action button 2 is displayed.
+  final bool showApplicationHeaderButton2;
 
-  /// Callback executed when the second action button is tapped.
-  final VoidCallback? onActionTwoTap;
+  /// Icon rendered in action button 2.
+  final IconData action2Icon;
 
-  /// Whether the user profile avatar button is shown.
-  final bool hasProfileAction;
+  /// Custom widget override for action button 2.
+  final Widget? action2Widget;
+
+  /// Callback executed when action button 2 is tapped.
+  final VoidCallback? onAction2Tap;
+
+  /// Whether action button 3 is displayed.
+  final bool showApplicationHeaderButton3;
+
+  /// Icon rendered in action button 3.
+  final IconData action3Icon;
+
+  /// Custom widget override for action button 3.
+  final Widget? action3Widget;
+
+  /// Callback executed when action button 3 is tapped.
+  final VoidCallback? onAction3Tap;
+
+  /// Whether action button 4 is displayed.
+  final bool showApplicationHeaderButton4;
+
+  /// Icon rendered in action button 4.
+  final IconData action4Icon;
+
+  /// Custom widget override for action button 4.
+  final Widget? action4Widget;
+
+  /// Callback executed when action button 4 is tapped.
+  final VoidCallback? onAction4Tap;
+
+  /// Whether the user profile avatar button is displayed.
+  final bool showAvatarButton;
+
+  /// Custom avatar widget override.
+  final Widget? avatar;
 
   /// Image provider for the profile avatar.
-  final ImageProvider? profileImage;
+  final ImageProvider? avatarImage;
 
-  /// Callback executed when the profile avatar is tapped.
-  final VoidCallback? onProfileTap;
+  /// Network image URL for the profile avatar.
+  final String? avatarImageUrl;
 
-  /// Optional widget slot embedded below the header bar.
-  final Widget? slot;
+  /// Initials text fallback for the profile avatar (e.g. 'RC').
+  final String? avatarInitials;
+
+  /// Callback executed when the avatar button is tapped.
+  final VoidCallback? onAvatarTap;
+
+  // Styling & Customization
+  /// Background color of the header bar.
+  final Color? backgroundColor;
+
+  /// Bottom border color of the header bar.
+  final Color? borderColor;
 
   /// Creates an [ApplicationHeader] instance.
   const ApplicationHeader({
     super.key,
-    this.title = 'Alter',
-    this.subtitle = 'Design System',
-    this.hasReturnButton = false,
-    this.onReturnTap,
-    this.hasStyleButton = true,
-    this.styleButtonTitle = 'STREAK',
-    this.styleButtonSubtitle = '7 DAYS',
-    this.onStyleButtonTap,
-    this.hasActionOne = true,
-    this.actionOneIcon = Icons.favorite_border,
-    this.onActionOneTap,
-    this.hasActionTwo = false,
-    this.actionTwoIcon = Icons.favorite_border,
-    this.onActionTwoTap,
-    this.hasProfileAction = true,
-    this.profileImage,
-    this.onProfileTap,
-    this.slot,
+    this.hasLauncherButton = true,
+    this.launcherIcon = Icons.apps_rounded,
+    this.onLauncherTap,
+    this.hasLogo = true,
+    this.logo,
+    this.logoWidget,
+    this.logoAssetPath,
+    this.onLogoTap,
+    this.applicationTitle = true,
+    this.title = 'Application Title',
+    this.titleWidget,
+    this.onTitleTap,
+    this.hasPages = true,
+    this.pages = const ['Label', 'Label', 'Label', 'Label', 'Label'],
+    this.selectedPageIndex = 0,
+    this.onPageSelected,
+    this.pageWidgets,
+    this.showApplicationHeaderButton1 = true,
+    this.action1Icon = Icons.face_outlined,
+    this.action1Widget,
+    this.onAction1Tap,
+    this.showApplicationHeaderButton2 = true,
+    this.action2Icon = Icons.face_outlined,
+    this.action2Widget,
+    this.onAction2Tap,
+    this.showApplicationHeaderButton3 = true,
+    this.action3Icon = Icons.face_outlined,
+    this.action3Widget,
+    this.onAction3Tap,
+    this.showApplicationHeaderButton4 = true,
+    this.action4Icon = Icons.face_outlined,
+    this.action4Widget,
+    this.onAction4Tap,
+    this.showAvatarButton = true,
+    this.avatar,
+    this.avatarImage,
+    this.avatarImageUrl,
+    this.avatarInitials,
+    this.onAvatarTap,
+    this.backgroundColor,
+    this.borderColor,
   });
+
+  Widget _buildLogo() {
+    if (logoWidget != null) return logoWidget!;
+    if (logo != null) {
+      return Image(
+        image: logo!,
+        width: 34,
+        height: 34,
+        fit: BoxFit.contain,
+      );
+    }
+    if (logoAssetPath != null) {
+      return Image.asset(
+        logoAssetPath!,
+        width: 34,
+        height: 34,
+        fit: BoxFit.contain,
+      );
+    }
+    // Default: load Alter logo from package asset with fallbacks
+    return Image.asset(
+      'lib/assets/alter_logo.png',
+      package: 'alter',
+      width: 34,
+      height: 34,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) => Image.asset(
+        'assets/alter_logo.png',
+        width: 34,
+        height: 34,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: AlterSemanticTokens.baseGray,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(
+            Icons.water_drop_outlined,
+            size: 20,
+            color: AlterSemanticTokens.textPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLeftSection() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (hasLauncherButton)
+          ApplicationHeaderButtonIcon(
+            icon: launcherIcon,
+            onTap: onLauncherTap,
+          ),
+        if (hasLogo)
+          InkWell(
+            onTap: onLogoTap,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              alignment: Alignment.center,
+              child: _buildLogo(),
+            ),
+          ),
+        if (applicationTitle)
+          InkWell(
+            onTap: onTitleTap,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              alignment: Alignment.center,
+              child: titleWidget ??
+                  Text(
+                    title,
+                    style: AlterTypography.h4Bold.copyWith(
+                      color: AlterSemanticTokens.textPrimary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCenterSection() {
+    if (!hasPages) return const Spacer();
+
+    if (pageWidgets != null && pageWidgets!.isNotEmpty) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: pageWidgets!,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                for (int i = 0; i < pages.length; i++)
+                  ApplicationHeaderButtonText(
+                    label: pages[i],
+                    isSelected: i == selectedPageIndex,
+                    onTap: () => onPageSelected?.call(i),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRightSection() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (showApplicationHeaderButton1)
+          action1Widget ??
+              ApplicationHeaderButtonIcon(
+                icon: action1Icon,
+                onTap: onAction1Tap,
+              ),
+        if (showApplicationHeaderButton2)
+          action2Widget ??
+              ApplicationHeaderButtonIcon(
+                icon: action2Icon,
+                onTap: onAction2Tap,
+              ),
+        if (showApplicationHeaderButton3)
+          action3Widget ??
+              ApplicationHeaderButtonIcon(
+                icon: action3Icon,
+                onTap: onAction3Tap,
+              ),
+        if (showApplicationHeaderButton4)
+          action4Widget ??
+              ApplicationHeaderButtonIcon(
+                icon: action4Icon,
+                onTap: onAction4Tap,
+              ),
+        if (showAvatarButton)
+          ApplicationHeaderButtonIcon.avatar(
+            avatar: avatar,
+            avatarImage: avatarImage,
+            avatarImageUrl: avatarImageUrl,
+            avatarInitials: avatarInitials,
+            onTap: onAvatarTap,
+          ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final actions = <Widget>[
-      if (hasStyleButton)
-        ButtonGraphicText(
-          title: styleButtonTitle,
-          subtitle: styleButtonSubtitle,
-          onTap: onStyleButtonTap,
-        ),
-      if (hasActionOne)
-        ButtonIcon(
-          icon: actionOneIcon,
-          type: ButtonIconType.gray,
-          size: 48,
-          onTap: onActionOneTap,
-        ),
-      if (hasActionTwo)
-        ButtonIcon(
-          icon: actionTwoIcon,
-          type: ButtonIconType.gray,
-          size: 48,
-          onTap: onActionTwoTap,
-        ),
-      if (hasProfileAction)
-        ButtonGraphicImage(
-          image: profileImage,
-          onTap: onProfileTap,
-        ),
-    ];
-
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: const BoxDecoration(
-        color: AlterSemanticTokens.baseWhite,
+      decoration: BoxDecoration(
+        color: backgroundColor ?? AlterSemanticTokens.baseWhite,
+        border: Border(
+          bottom: BorderSide(
+            color: borderColor ?? AlterSemanticTokens.baseBorder,
+            width: 1.0,
+          ),
+        ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Left Group (Return Button + Title/Subtitle)
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (hasReturnButton) ...[
-                      ButtonIconGhost(
-                        icon: Icons.chevron_left,
-                        size: 32,
-                        type: ButtonIconGhostType.primary,
-                        onTap: onReturnTap,
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: AlterTypography.h1Serif.copyWith(
-                              color: AlterSemanticTokens.textPrimary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            subtitle,
-                            style: AlterTypography.caption.copyWith(
-                              color: AlterSemanticTokens.textSecondary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Right Group (Actions: dynamic hugging without trailing margin)
-              if (actions.isNotEmpty) ...[
-                const SizedBox(width: 16),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for (int i = 0; i < actions.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 8),
-                      actions[i],
-                    ],
-                  ],
-                ),
-              ],
-            ],
-          ),
-
-          // Slot Container
-          ClipRect(
-            child: AnimatedCrossFade(
-              alignment: Alignment.topCenter,
-              firstChild: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 16),
-                  slot ?? const SizedBox.shrink(),
-                ],
-              ),
-              secondChild: const SizedBox(width: double.infinity, height: 0),
-              crossFadeState: slot != null
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 300),
-              firstCurve: Curves.easeInOutCubic,
-              secondCurve: Curves.easeInOutCubic,
-              sizeCurve: Curves.easeInOutCubic,
-            ),
-          ),
+          _buildLeftSection(),
+          _buildCenterSection(),
+          _buildRightSection(),
         ],
       ),
     );

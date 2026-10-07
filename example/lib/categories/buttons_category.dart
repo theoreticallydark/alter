@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Divider;
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 import '../toast_helper.dart';

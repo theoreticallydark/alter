@@ -23,6 +23,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/alter_logo.png
+    - lib/assets/alter_logo.png
+
   fonts:
     - family: Geist
       fonts:

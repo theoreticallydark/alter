@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart' hide Checkbox, Badge;
+import 'package:flutter/material.dart' hide Checkbox, Badge, Divider;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:alter/alter.dart';
+import 'package:alter/components/header/application_header_button_icon.dart';
+import 'package:alter/components/header/application_header_button_text.dart';
 
 void main() {
   group('Alter Tokens', () {
@@ -399,7 +401,7 @@ void main() {
       expect(find.text('Hidden'), findsNothing);
     });
 
-    testWidgets('ApplicationHeader renders with return button and custom slot', (WidgetTester tester) async {
+    testWidgets('MobileApplicationHeader renders with return button and custom slot', (WidgetTester tester) async {
       bool returnTapped = false;
       bool actionTapped = false;
 
@@ -407,7 +409,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Center(
-              child: ApplicationHeader(
+              child: MobileApplicationHeader(
                 title: 'Test Header',
                 subtitle: 'Test Subtitle',
                 hasReturnButton: true,
@@ -437,6 +439,115 @@ void main() {
       await tester.tap(find.byType(ButtonIcon));
       await tester.pump();
       expect(actionTapped, isTrue);
+    });
+
+    testWidgets('ApplicationHeader renders launcher, title, pages, actions, and avatar', (WidgetTester tester) async {
+      bool launcherTapped = false;
+      int selectedPage = -1;
+      bool action1Tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: ApplicationHeader(
+                title: 'Workspace',
+                hasLauncherButton: true,
+                onLauncherTap: () => launcherTapped = true,
+                pages: const ['Overview', 'Projects', 'Analytics'],
+                selectedPageIndex: 0,
+                onPageSelected: (idx) => selectedPage = idx,
+                action1Icon: Icons.search,
+                onAction1Tap: () => action1Tapped = true,
+                avatarInitials: 'RC',
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Workspace'), findsOneWidget);
+      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Projects'), findsOneWidget);
+      expect(find.text('Analytics'), findsOneWidget);
+      expect(find.byIcon(Icons.apps_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.text('RC'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.apps_rounded));
+      await tester.pump();
+      expect(launcherTapped, isTrue);
+
+      await tester.tap(find.text('Projects'));
+      await tester.pump();
+      expect(selectedPage, equals(1));
+
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pump();
+      expect(action1Tapped, isTrue);
+    });
+
+    testWidgets('ApplicationHeaderButtonIcon renders icon, avatar, and handles tap', (WidgetTester tester) async {
+      bool iconTapped = false;
+      bool avatarTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  ApplicationHeaderButtonIcon(
+                    icon: Icons.search,
+                    isSelected: true,
+                    onTap: () => iconTapped = true,
+                  ),
+                  ApplicationHeaderButtonIcon.avatar(
+                    avatarInitials: 'RC',
+                    isHovered: true,
+                    onTap: () => avatarTapped = true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(find.text('RC'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.search));
+      await tester.pump();
+      expect(iconTapped, isTrue);
+
+      await tester.tap(find.text('RC'));
+      await tester.pump();
+      expect(avatarTapped, isTrue);
+    });
+
+    testWidgets('ApplicationHeaderButtonText renders label and handles tap', (WidgetTester tester) async {
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: ApplicationHeaderButtonText(
+                label: 'STREAK',
+                isSelected: true,
+                onTap: () => tapped = true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('STREAK'), findsOneWidget);
+
+      await tester.tap(find.text('STREAK'));
+      await tester.pump();
+      expect(tapped, isTrue);
     });
 
     testWidgets('Checkbox cycles states on tap', (WidgetTester tester) async {
@@ -925,6 +1036,67 @@ void main() {
       expect(find.byIcon(Icons.search_rounded), findsOneWidget);
       expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
       expect(find.text('Home'), findsOneWidget);
+    });
+
+    testWidgets('Avatar renders placeholder icon, initials, and handles tap', (WidgetTester tester) async {
+      bool tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  Avatar.placeholder(
+                    size: 32,
+                    onTap: () => tapped = true,
+                  ),
+                  const Avatar.initials(
+                    initials: 'RC',
+                    size: 40,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
+      expect(find.text('RC'), findsOneWidget);
+
+      await tester.tap(find.byType(Avatar).first);
+      await tester.pump();
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('Divider renders horizontal and vertical lines with custom thickness and indents', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                Divider(
+                  thickness: 2.0,
+                  indent: 12.0,
+                  endIndent: 12.0,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Divider.vertical(
+                    thickness: 1.0,
+                    length: 40.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Divider), findsNWidgets(2));
+      final RenderBox horizontalBox = tester.renderObject(find.byType(Divider).first);
+      expect(horizontalBox.size.height, equals(2.0));
     });
   });
 }

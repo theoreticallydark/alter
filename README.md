@@ -82,13 +82,18 @@ Alter organizes design tokens into foundational layers:
 - **`FeedbackText`**: Inline form helper and error message caption with semantic iconography.
 
 ### Navigation & Tabs (`lib/components/navigation/`, `lib/components/tabs/`, `lib/components/header/`)
-- **`ApplicationHeader`**: Top navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
-- **`AlterTabs`**: Horizontal scrollable and fixed tab bar with animated underline indicator and custom `TabItem` badges.
+- **`MobileApplicationHeader`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
+- **`ApplicationHeaderButtonIcon`**: 48x48 action button for headers supporting icon glyphs and embedded user avatars.
+- **`ApplicationHeaderButtonText`**: 48px height text action button/badge for headers.
+- **`Tabs`**: Horizontal segment/navigation control composed of `TabItem` sub-components with icon and label support.
+- **`TabItem`**: Atomic tab button supporting label, leading icon, and active states.
 - **`AlterBottomNavigationBar`**: Floating pill bottom navigation bar with responsive tab items.
 - **`BottomNavigationBarAction`**: Bottom navigation bar composed with primary/secondary action triggers.
 - **`BottomNavigationButton`**: Primary call-to-action button embedded in bottom navigation.
 
 ### Utilities (`lib/components/utilities/`)
+- **`Avatar`**: Compact user and entity avatar supporting image and placeholder icon variants.
+- **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Universal list tile with title, subtitle, leading action slot, and dual trailing slots.
 
 ---

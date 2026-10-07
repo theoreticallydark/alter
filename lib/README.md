@@ -95,8 +95,11 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 ### Navigation & Header (`lib/components/navigation/`, `lib/components/tabs/`, `lib/components/header/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`ApplicationHeader`** | `v1.1.0` | [application_header.md](header/application_header.md) | Top header with title, subtitle, return button, composite action buttons, and animated child slot. |
-| **`AlterTabs`** | `v1.0.0` | [tabs.md](tabs/tabs.md) | Horizontal scrollable and fixed tab bar with animated underline indicator. |
+| **`MobileApplicationHeader`** | `v1.2.0` | [mobile_application_header.md](header/mobile_application_header.md) | Top mobile header with title, subtitle, return button, composite action buttons, and animated child slot. |
+| **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
+| **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](header/application_header_button_text.md) | 48px height text action button/badge for headers. |
+| **`Tabs`** | `v1.1.0` | [tabs.md](tabs/tabs.md) | Horizontal segment/navigation control with icon and label support. |
+| **`TabItem`** | `v1.1.0` | [tab_item.md](tabs/tab_item.md) | Atomic tab button supporting label, leading icon, and active states. |
 | **`AlterBottomNavigationBar`** | `v1.1.0` | [bottom_navigation_bar.md](navigation/bottom_navigation_bar.md) | Rounded bottom navigation bar with item list. |
 | **`BottomNavigationBarAction`** | `v1.1.0` | [bottom_navigation_bar_action.md](navigation/bottom_navigation_bar_action.md) | Action bottom bar with integrated primary action or multi-action triggers. |
 | **`BottomNavigationButton`** | `v1.0.0` | [bottom_navigation_button.md](navigation/bottom_navigation_button.md) | Primary action button embedded in bottom navigation. |
@@ -104,6 +107,8 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 ### Utilities (`lib/components/utilities/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
+| **`Avatar`** | `v1.0.0` | [avatar.md](utilities/avatar.md) | User and entity avatar supporting image and placeholder icon variants. |
+| **`Divider`** | `v1.0.0` | [divider.md](utilities/divider.md) | 1px content divider line supporting horizontal and vertical orientations. |
 | **`ListItem`** | `v1.0.1` | [list_item.md](utilities/list_item.md) | Flexible list row with title, subtitle, left slot, and dual right slots. |
 
 ---
