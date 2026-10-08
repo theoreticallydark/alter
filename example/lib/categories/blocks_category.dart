@@ -440,6 +440,102 @@ WidgetbookFolder blocksCategory() {
           ),
         ],
       ),
+      WidgetbookComponent(
+        name: 'FooterBlock',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final device = context.knobs.object.dropdown(
+                label: 'Device Adaptation',
+                options: FooterBlockDevice.values,
+                labelBuilder: (d) => d.name,
+                initialOption: FooterBlockDevice.auto,
+              );
+
+              final email = context.knobs.string(
+                label: 'Email Address',
+                initialValue: 'kharkarnayan00@gmail.com',
+              );
+
+              final hasCopy = context.knobs.boolean(
+                label: 'Has Copy Button',
+                initialValue: true,
+              );
+
+              final socialLabel = context.knobs.string(
+                label: 'Social Label',
+                initialValue: 'Find me on ',
+              );
+
+              final hasSocial = context.knobs.boolean(
+                label: 'Has Social Links',
+                initialValue: true,
+              );
+
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 896),
+                    child: FooterBlock(
+                      device: device,
+                      email: email,
+                      hasCopyButton: hasCopy,
+                      socialLabel: socialLabel,
+                      hasSocial: hasSocial,
+                      onCopyTap: () =>
+                          showExampleToast(context, 'Copied $email'),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Showcase',
+            builder: (context) {
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'PC / DESKTOP (Figma Node 922:7403 - 896px)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const SizedBox(
+                        width: 896,
+                        child: FooterBlock(
+                          device: FooterBlockDevice.pc,
+                        ),
+                      ),
+                      const SizedBox(height: 64),
+                      Text(
+                        'MOBILE (Figma Node 922:9278 - 316px)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const SizedBox(
+                        width: 316,
+                        child: FooterBlock(
+                          device: FooterBlockDevice.mobile,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     ],
   );
 }

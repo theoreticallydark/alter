@@ -41,6 +41,7 @@ export 'styles/swatches.dart';
 export 'styles/tokens.dart';
 export 'styles/typography.dart';
 export 'web/blocks/brand_block.dart';
+export 'web/blocks/footer_block.dart';
 export 'web/blocks/header_block.dart';
 export 'web/blocks/hero_block.dart';
 export 'web/blocks/project_hero_block.dart';

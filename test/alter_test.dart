@@ -1791,6 +1791,52 @@ void main() {
       await tester.pump();
       expect(actionTapped, isTrue);
     });
+
+    testWidgets('FooterBlock renders PC and Mobile layouts with email, copy button, and social links', (WidgetTester tester) async {
+      bool copyTapped = false;
+      bool socialTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  FooterBlock(
+                    device: FooterBlockDevice.pc,
+                    email: 'test@example.com',
+                    onCopyTap: () => copyTapped = true,
+                    socialLinks: [
+                      FooterSocialLink(
+                        icon: Icons.code,
+                        onTap: () => socialTapped = true,
+                      ),
+                    ],
+                  ),
+                  const FooterBlock(
+                    device: FooterBlockDevice.mobile,
+                    email: 'mobile@example.com',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('test@example.com'), findsOneWidget);
+      expect(find.text('mobile@example.com'), findsOneWidget);
+      expect(find.text('Find me on '), findsNWidgets(2));
+      expect(find.byIcon(Icons.content_copy_outlined), findsNWidgets(2));
+
+      await tester.tap(find.byIcon(Icons.content_copy_outlined).first);
+      await tester.pump();
+      expect(copyTapped, isTrue);
+
+      await tester.tap(find.byIcon(Icons.code));
+      await tester.pump();
+      expect(socialTapped, isTrue);
+    });
   });
 }
 
