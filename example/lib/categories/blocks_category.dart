@@ -476,17 +476,14 @@ WidgetbookFolder blocksCategory() {
               return Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 896),
-                    child: FooterBlock(
-                      device: device,
-                      email: email,
-                      hasCopyButton: hasCopy,
-                      socialLabel: socialLabel,
-                      hasSocial: hasSocial,
-                      onCopyTap: () =>
-                          showExampleToast(context, 'Copied $email'),
-                    ),
+                  child: FooterBlock(
+                    device: device,
+                    email: email,
+                    hasCopyButton: hasCopy,
+                    socialLabel: socialLabel,
+                    hasSocial: hasSocial,
+                    onCopyTap: () =>
+                        showExampleToast(context, 'Copied $email'),
                   ),
                 ),
               );

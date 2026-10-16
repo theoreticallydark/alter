@@ -49,16 +49,17 @@ class FooterSocialLink {
 ///
 /// Figma Specifications (Node `922:9277` - `FooterBlock`):
 /// - Variants:
-///   - `device=PC` (`922:7403`): Width 896px, 24px padding, Row layout with space-between distribution.
-///     - Left: Email text (14px Geist Regular `#000000`) + [ButtonIconGhost] copy button (24x24px).
-///     - Right: "Find me on " text (14px Geist Regular `#4A5565`) + [ButtonIcon] white buttons (48x48px, 20px radius).
-///   - `device=Mobile` (`922:9278`): Width 316px, 24px padding, Column layout with 24px gap.
-///     - Top: Email text + [ButtonIconGhost] copy button.
-///     - Bottom: "Find me on " text + [ButtonIcon] white buttons.
+///   - `device=PC` (`922:7403`): Designed width 896px (contextual fill), 24px padding, Row layout with space-between distribution.
+///     - Left (`Technology Stack`): Email text (14px Geist Regular `#000000`) + [ButtonIconGhost] copy button (24x24px).
+///     - Right (`Availability`): "Find me on " text (14px Geist Regular `#4A5565`) + [ButtonIcon] white buttons (48x48px, 20px radius).
+///   - `device=Mobile` (`922:9278`): Designed width 316px (contextual fill), 24px padding, Column layout with 24px gap, center-aligned.
+///     - Top (`Technology Stack`): Email text + [ButtonIconGhost] copy button.
+///     - Bottom (`Availability`): "Find me on " text + [ButtonIcon] white buttons.
 class FooterBlock extends StatelessWidget {
   /// Component version for reference.
+  /// v1.0.1: Contextual end-to-end full width support, mobile center alignment matching Figma node 922:9279.
   /// v1.0.0: Initial release matching Figma Node 922:9277 (FooterBlock: device=PC/Mobile).
-  static const String version = '1.0.0';
+  static const String version = '1.0.1';
 
   /// Optional fixed width constraint for the block.
   final double? width;
@@ -242,7 +243,7 @@ class FooterBlock extends StatelessWidget {
         } else {
           content = Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildEmailSection(context),
               if (hasSocial) ...[
@@ -255,18 +256,12 @@ class FooterBlock extends StatelessWidget {
 
         final blockContent = AlterDeviceScope(
           device: isPc ? AlterDevice.pc : AlterDevice.mobile,
-          child: Padding(
+          child: Container(
+            width: width ?? (constraints.hasBoundedWidth ? double.infinity : null),
             padding: padding,
             child: content,
           ),
         );
-
-        if (width != null) {
-          return SizedBox(
-            width: width,
-            child: blockContent,
-          );
-        }
 
         return blockContent;
       },
