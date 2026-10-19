@@ -317,16 +317,16 @@ WidgetbookFolder blocksCategory() {
         ],
       ),
       WidgetbookComponent(
-        name: 'ProjectHeroBlock',
+        name: 'HeroProjectsBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final device = context.knobs.object.dropdown(
                 label: 'Device Adaptation',
-                options: ProjectHeroBlockDevice.values,
+                options: HeroProjectsBlockDevice.values,
                 labelBuilder: (d) => d.name,
-                initialOption: ProjectHeroBlockDevice.auto,
+                initialOption: HeroProjectsBlockDevice.auto,
               );
 
               final title = context.knobs.string(
@@ -379,7 +379,7 @@ WidgetbookFolder blocksCategory() {
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 896),
-                    child: ProjectHeroBlock(
+                    child: HeroProjectsBlock(
                       device: device,
                       title: title,
                       description: description,
@@ -414,8 +414,8 @@ WidgetbookFolder blocksCategory() {
                       const SizedBox(height: 16),
                       const SizedBox(
                         width: 896,
-                        child: ProjectHeroBlock(
-                          device: ProjectHeroBlockDevice.pc,
+                        child: HeroProjectsBlock(
+                          device: HeroProjectsBlockDevice.pc,
                         ),
                       ),
                       const SizedBox(height: 64),
@@ -428,8 +428,146 @@ WidgetbookFolder blocksCategory() {
                       const SizedBox(height: 16),
                       const SizedBox(
                         width: 316,
-                        child: ProjectHeroBlock(
-                          device: ProjectHeroBlockDevice.mobile,
+                        child: HeroProjectsBlock(
+                          device: HeroProjectsBlockDevice.mobile,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      WidgetbookComponent(
+        name: 'GraphicsCarouselBlock',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final device = context.knobs.object.dropdown(
+                label: 'Device',
+                options: GraphicsCarouselBlockDevice.values,
+                labelBuilder: (d) => d.name,
+                initialOption: GraphicsCarouselBlockDevice.auto,
+              );
+
+              final pcItemsPerView = context.knobs.object.dropdown(
+                label: 'PC Items Per View',
+                options: [2, 3],
+                labelBuilder: (c) => '$c Items',
+                initialOption: 2,
+              );
+
+              final title = context.knobs.string(
+                label: 'Title',
+                initialValue: 'Featured Graphic Showcase',
+              );
+
+              final subtitle = context.knobs.string(
+                label: 'Subtitle',
+                initialValue: 'Brand & Visual Identity',
+              );
+
+              final sampleImages = [
+                'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800',
+                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
+                'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800',
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+              ];
+
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 896),
+                    child: GraphicsCarouselBlock(
+                      device: device,
+                      pcItemsPerView: pcItemsPerView,
+                      imageUrls: sampleImages,
+                      title: title,
+                      subtitle: subtitle,
+                      badgeLabels: const ['Brand', 'Design'],
+                      onItemTap: (index) {
+                        showExampleToast(context, 'Tapped image #${index + 1}');
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          WidgetbookUseCase(
+            name: 'All Variants Showcase',
+            builder: (context) {
+              final sampleImages = [
+                'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800',
+                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
+                'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800',
+              ];
+
+              return Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'PC, 2 Items Per View (Figma Node 957:17115 - 896px)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 896,
+                        child: GraphicsCarouselBlock(
+                          device: GraphicsCarouselBlockDevice.pc,
+                          pcItemsPerView: 2,
+                          imageUrls: sampleImages,
+                          title: 'Brand Portfolio',
+                          subtitle: 'Design System & Motion',
+                          badgeLabels: const ['Showcase', '2026'],
+                        ),
+                      ),
+                      const SizedBox(height: 48),
+                      Text(
+                        'PC, 3 Items Per View (896px)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 896,
+                        child: GraphicsCarouselBlock(
+                          device: GraphicsCarouselBlockDevice.pc,
+                          pcItemsPerView: 3,
+                          imageUrls: [
+                            ...sampleImages,
+                            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+                          ],
+                          title: 'Digital Products',
+                          subtitle: 'Multi-screen overview',
+                          badgeLabels: const ['Product', 'UI/UX'],
+                        ),
+                      ),
+                      const SizedBox(height: 48),
+                      Text(
+                        'MOBILE (Figma Node 957:17121 - 316px)',
+                        style: AlterTypography.h4Bold.copyWith(
+                          color: AlterSemanticTokens.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 316,
+                        child: GraphicsCarouselBlock(
+                          device: GraphicsCarouselBlockDevice.mobile,
+                          imageUrls: sampleImages,
+                          title: 'Mobile Projects',
+                          subtitle: 'Swipe horizontally',
                         ),
                       ),
                     ],

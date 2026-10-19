@@ -8,23 +8,23 @@ WidgetbookFolder webCategory() {
     name: 'Web (Molecules)',
     children: [
       WidgetbookComponent(
-        name: 'BioMarker',
+        name: 'BiographyBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final type = context.knobs.object.dropdown(
                 label: 'Layout Type',
-                options: BioMarkerType.values,
+                options: BiographyBlockType.values,
                 labelBuilder: (t) => t.name,
-                initialOption: BioMarkerType.tall,
+                initialOption: BiographyBlockType.tall,
               );
 
               final device = context.knobs.object.dropdown(
                 label: 'Device Adaptation',
-                options: BioMarkerDevice.values,
+                options: BiographyBlockDevice.values,
                 labelBuilder: (d) => d.name,
-                initialOption: BioMarkerDevice.auto,
+                initialOption: BiographyBlockDevice.auto,
               );
 
               final title = context.knobs.string(
@@ -98,7 +98,7 @@ WidgetbookFolder webCategory() {
                   padding: const EdgeInsets.all(24),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 896),
-                    child: BioMarker(
+                    child: BiographyBlock(
                       type: type,
                       device: device,
                       title: title,
@@ -116,7 +116,7 @@ WidgetbookFolder webCategory() {
                       hasDescription: hasDescription,
                       onLogoTap: () => showExampleToast(
                         context,
-                        'Tapped BioMarker Logo',
+                        'Tapped BiographyBlock Logo',
                       ),
                     ),
                   ),
@@ -142,9 +142,9 @@ WidgetbookFolder webCategory() {
                       const SizedBox(height: 12),
                       const SizedBox(
                         width: 896,
-                        child: BioMarker(
-                          type: BioMarkerType.tall,
-                          device: BioMarkerDevice.web,
+                        child: BiographyBlock(
+                          type: BiographyBlockType.tall,
+                          device: BiographyBlockDevice.web,
                           title: 'Alter Design System',
                           subtitle: 'Component Library & Foundation',
                           description:
@@ -163,8 +163,8 @@ WidgetbookFolder webCategory() {
                       const SizedBox(height: 12),
                       const SizedBox(
                         width: 896,
-                        child: BioMarker.wide(
-                          device: BioMarkerDevice.web,
+                        child: BiographyBlock.wide(
+                          device: BiographyBlockDevice.web,
                           title: 'Roberta Casas',
                           subtitle: 'Senior Product Designer',
                           description:
@@ -185,9 +185,9 @@ WidgetbookFolder webCategory() {
                       const SizedBox(height: 12),
                       const SizedBox(
                         width: 320,
-                        child: BioMarker(
-                          type: BioMarkerType.tall,
-                          device: BioMarkerDevice.mobile,
+                        child: BiographyBlock(
+                          type: BiographyBlockType.tall,
+                          device: BiographyBlockDevice.mobile,
                           title: 'Alter Mobile',
                           subtitle: 'iOS & Android',
                           description:
@@ -206,8 +206,8 @@ WidgetbookFolder webCategory() {
                       const SizedBox(height: 12),
                       const SizedBox(
                         width: 320,
-                        child: BioMarker.wide(
-                          device: BioMarkerDevice.mobile,
+                        child: BiographyBlock.wide(
+                          device: BiographyBlockDevice.mobile,
                           title: 'Roberta Casas',
                           subtitle: 'Design Lead',
                           description: 'Product designer focusing on mobile systems.',
@@ -225,35 +225,16 @@ WidgetbookFolder webCategory() {
         ],
       ),
       WidgetbookComponent(
-        name: 'ProjectMarker',
+        name: 'GraphicsBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final device = context.knobs.object.dropdown(
                 label: 'Device',
-                options: ProjectMarkerDevice.values,
+                options: GraphicsBlockDevice.values,
                 labelBuilder: (d) => d.name,
-                initialOption: ProjectMarkerDevice.auto,
-              );
-
-              final isCarousel = context.knobs.boolean(
-                label: 'Is Carousel',
-                initialValue: true,
-              );
-
-              final pcItemsPerView = context.knobs.int.slider(
-                label: 'PC Items Per View',
-                initialValue: 2,
-                min: 1,
-                max: 4,
-              );
-
-              final mobileViewportFraction = context.knobs.double.slider(
-                label: 'Mobile Viewport Fraction',
-                initialValue: 0.86,
-                min: 0.5,
-                max: 1.0,
+                initialOption: GraphicsBlockDevice.auto,
               );
 
               final title = context.knobs.string(
@@ -276,31 +257,23 @@ WidgetbookFolder webCategory() {
                 initialValue: true,
               );
 
-              final sampleImages = [
-                'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800',
-                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
-                'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800',
-                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-              ];
+              const sampleImage =
+                  'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800';
 
               return Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(24),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 896),
-                    child: ProjectMarker(
+                    child: GraphicsBlock(
                       device: device,
-                      isCarousel: isCarousel,
-                      pcItemsPerView: pcItemsPerView,
-                      mobileViewportFraction: mobileViewportFraction,
-                      carouselImageUrls: sampleImages,
-                      imageUrl: sampleImages[0],
+                      imageUrl: sampleImage,
                       title: title,
                       subtitle: subtitle,
                       hasLogo: hasLogo,
                       hasBadgeBar: hasBadgeBar,
-                      onImageTap: (index) {
-                        showExampleToast(context, 'Tapped image slide #$index');
+                      onImageTap: (_) {
+                        showExampleToast(context, 'Tapped GraphicsBlock');
                       },
                     ),
                   ),
@@ -311,12 +284,8 @@ WidgetbookFolder webCategory() {
           WidgetbookUseCase(
             name: 'All Variants Showcase',
             builder: (context) {
-              final sampleImages = [
-                'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800',
-                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
-                'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800',
-                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-              ];
+              const sampleImage =
+                  'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800';
 
               return Center(
                 child: SingleChildScrollView(
@@ -325,95 +294,36 @@ WidgetbookFolder webCategory() {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'PC, Carousel=False (Figma Node 795:3760)',
+                        'PC (Figma Node 795:3760 - 896px)',
                         style: AlterTypography.h4Bold.copyWith(
                           color: AlterSemanticTokens.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
-                      SizedBox(
+                      const SizedBox(
                         width: 896,
-                        child: ProjectMarker(
-                          device: ProjectMarkerDevice.pc,
-                          isCarousel: false,
-                          imageUrl: sampleImages[0],
+                        child: GraphicsBlock(
+                          device: GraphicsBlockDevice.pc,
+                          imageUrl: sampleImage,
                           title: 'Design System PC',
                           subtitle: 'Figma to Flutter component engine',
                         ),
                       ),
                       const SizedBox(height: 36),
                       Text(
-                        'PC, Carousel=True (2-Columns - Figma Node 813:12021)',
+                        'MOBILE (Figma Node 795:6005 - 316px)',
                         style: AlterTypography.h4Bold.copyWith(
                           color: AlterSemanticTokens.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
-                      SizedBox(
-                        width: 896,
-                        child: ProjectMarker(
-                          device: ProjectMarkerDevice.pc,
-                          isCarousel: true,
-                          pcItemsPerView: 2,
-                          carouselImageUrls: sampleImages,
-                          title: 'Project Showcase (2-Column Carousel)',
-                          subtitle: 'Side by side banner view with controls',
-                        ),
-                      ),
-                      const SizedBox(height: 36),
-                      Text(
-                        'PC, Carousel=True (3-Columns Configurable)',
-                        style: AlterTypography.h4Bold.copyWith(
-                          color: AlterSemanticTokens.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: 896,
-                        child: ProjectMarker(
-                          device: ProjectMarkerDevice.pc,
-                          isCarousel: true,
-                          pcItemsPerView: 3,
-                          carouselImageUrls: sampleImages,
-                          title: 'Project Showcase (3-Column Carousel)',
-                          subtitle: '3 simultaneous cards with carousel controls',
-                        ),
-                      ),
-                      const SizedBox(height: 36),
-                      Text(
-                        'MOBILE, Carousel=False (Figma Node 795:6005)',
-                        style: AlterTypography.h4Bold.copyWith(
-                          color: AlterSemanticTokens.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
+                      const SizedBox(
                         width: 316,
-                        child: ProjectMarker(
-                          device: ProjectMarkerDevice.mobile,
-                          isCarousel: false,
-                          imageUrl: sampleImages[0],
+                        child: GraphicsBlock(
+                          device: GraphicsBlockDevice.mobile,
+                          imageUrl: sampleImage,
                           title: 'Mobile Project',
                           subtitle: 'iOS & Android Layout',
-                        ),
-                      ),
-                      const SizedBox(height: 36),
-                      Text(
-                        'MOBILE, Carousel=True with Peek Cue (Figma Node 819:2595)',
-                        style: AlterTypography.h4Bold.copyWith(
-                          color: AlterSemanticTokens.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: 316,
-                        child: ProjectMarker(
-                          device: ProjectMarkerDevice.mobile,
-                          isCarousel: true,
-                          mobileViewportFraction: 0.86,
-                          carouselImageUrls: sampleImages,
-                          title: 'Mobile Project Carousel',
-                          subtitle: 'Thumb-swipeable with ~14% / 44px peek affordance',
                         ),
                       ),
                     ],
@@ -425,16 +335,16 @@ WidgetbookFolder webCategory() {
         ],
       ),
       WidgetbookComponent(
-        name: 'MobileMarker',
+        name: 'MobileMockupBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final scale = context.knobs.object.dropdown(
                 label: 'Scale Driver',
-                options: MobileMarkerScale.values,
+                options: MobileMockupBlockScale.values,
                 labelBuilder: (s) => s.name,
-                initialOption: MobileMarkerScale.width,
+                initialOption: MobileMockupBlockScale.width,
               );
 
               final width = context.knobs.double.slider(
@@ -478,10 +388,10 @@ WidgetbookFolder webCategory() {
               return Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(24),
-                  child: MobileMarker(
+                  child: MobileMockupBlock(
                     scale: scale,
-                    width: scale == MobileMarkerScale.width ? width : null,
-                    height: scale == MobileMarkerScale.height ? height : null,
+                    width: scale == MobileMockupBlockScale.width ? width : null,
+                    height: scale == MobileMockupBlockScale.height ? height : null,
                     imageUrl: sampleImage,
                     hasBioMarker: hasBioMarker,
                     title: title,
@@ -516,8 +426,8 @@ WidgetbookFolder webCategory() {
                       const SizedBox(height: 12),
                       const SizedBox(
                         width: 320,
-                        child: MobileMarker(
-                          scale: MobileMarkerScale.width,
+                        child: MobileMockupBlock(
+                          scale: MobileMockupBlockScale.width,
                           width: 320,
                           imageUrl: sampleImage,
                           title: 'Mobile App Scale=Width',
@@ -534,8 +444,8 @@ WidgetbookFolder webCategory() {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const MobileMarker(
-                        scale: MobileMarkerScale.height,
+                      const MobileMockupBlock(
+                        scale: MobileMockupBlockScale.height,
                         height: 550,
                         imageUrl: sampleImage,
                         title: 'Mobile App Scale=Height',

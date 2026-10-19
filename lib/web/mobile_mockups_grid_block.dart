@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart' hide Badge, Divider;
 import '../../components/utilities/carousel_control.dart';
 import '../../foundations/device_scope.dart';
-import '../markers/bio_marker.dart';
-import '../markers/mobile_marker.dart';
+import 'biography_block.dart';
+import 'mobile_mockup_block.dart';
 
-/// Target device / viewport modes for [MobileGrid].
-enum MobileGridDevice {
+/// Target device / viewport modes for [MobileMockupsGridBlock].
+enum MobileMockupsGridBlockDevice {
   /// Automatically adapts based on parent width (< 600px triggers mobile layout) or ambient [AlterDeviceScope].
   auto,
 
@@ -16,33 +16,37 @@ enum MobileGridDevice {
   mobile,
 }
 
+/// Backwards compatibility alias for [MobileMockupsGridBlockDevice].
+typedef MobileGridDevice = MobileMockupsGridBlockDevice;
+
 /// A responsive grid and carousel component for showcasing mobile screen mockups with associated entity metadata.
 ///
-/// Figma Specifications (Node `810:10819` - `MobileGrid`):
+/// Figma Specifications (Node `810:10819` - `MobileMockupsGridBlock`):
 /// - **PC Device Mode**:
 ///   - User controls container `width`; `height` is hug contents.
-///   - Hosts 4 [MobileMarker] cards of variant `scale=Width` filling the width with 24px gaps.
+///   - Hosts 4 [MobileMockupBlock] cards of variant `scale=Width` filling the width with 24px gaps.
 ///   - Each card height is auto-deduced based on the `428:926` aspect ratio.
-///   - `isCarousel=False` (`810:10818`): Static 4-column row of 4 [MobileMarker] cards.
+///   - `isCarousel=False` (`810:10818`): Static 4-column row of 4 [MobileMockupBlock] cards.
 ///   - `isCarousel=True` (`811:11752`): 4-card visible sliding carousel with [CarouselControl] chevrons.
-///   - Bottom section: [BioMarker] (`type=Tall, device=Web`) with logo, title, subtitle, and badges.
+///   - Bottom section: [BiographyBlock] (`type=Tall, device=Web`) with logo, title, subtitle, and badges.
 /// - **Mobile Device Mode**:
 ///   - Regardless of [isCarousel] (true or false), always renders the single thumb-based scroll carousel (`810:10991`).
-///   - Hosts [MobileMarker] cards of variant `scale=Height` (height 480px, width auto-deduced ~221.86px).
+///   - Hosts [MobileMockupBlock] cards of variant `scale=Height` (height 480px, width auto-deduced ~221.86px).
 ///   - Viewport peek cue via [mobileViewportFraction] (default ~`0.78`).
-///   - Bottom section: [BioMarker] in mobile compact mode (`hasLogo: false`, `hasBadgeBar: false`).
-class MobileGrid extends StatefulWidget {
+///   - Bottom section: [BiographyBlock] in mobile compact mode (`hasLogo: false`, `hasBadgeBar: false`).
+class MobileMockupsGridBlock extends StatefulWidget {
   /// Component version for reference.
+  /// v1.1.0: Renamed from MobileGrid to MobileMockupsGridBlock matching Figma node 810:10819, moved to lib/web/.
   /// v1.0.5: Added viewport-aware autoplay and configurable delay (default 1.2s) support via AlterMediaView.
   /// v1.0.4: Added videoUrls parameter for seamless multimedia video mockup lists across carousel and grid views.
   /// v1.0.3: Added ambient AlterDeviceScope propagation so child MobileMarkers and bottom BioMarker derive device mode directly from MobileGrid width.
   /// v1.0.2: Fixed PC non-carousel equal card heights by placing gap SizedBoxes between Expandeds, and made mobile layout dynamically hug the auto-deduced height of the mobile cards.
   /// v1.0.1: Standardized PC layout and unified Mobile layout.
   /// v1.0.0: Initial release matching Figma Node 810:10819.
-  static const String version = '1.0.5';
+  static const String version = '1.1.0';
 
   /// Viewport mode (`auto`, `pc`, or `mobile`).
-  final MobileGridDevice device;
+  final MobileMockupsGridBlockDevice device;
 
   /// Whether the items are presented in a horizontally sliding/swiping carousel or a static 4-column grid.
   final bool isCarousel;
@@ -159,10 +163,10 @@ class MobileGrid extends StatefulWidget {
   /// Custom widget list for badge bar.
   final List<Widget>? badges;
 
-  /// Creates a [MobileGrid] instance.
-  const MobileGrid({
+  /// Creates a [MobileMockupsGridBlock] instance.
+  const MobileMockupsGridBlock({
     super.key,
-    this.device = MobileGridDevice.auto,
+    this.device = MobileMockupsGridBlockDevice.auto,
     this.isCarousel = false,
     this.width,
     this.breakpoint = 600.0,
@@ -203,9 +207,9 @@ class MobileGrid extends StatefulWidget {
   });
 
   /// Convenience builder constructor for dynamic list rendering.
-  const MobileGrid.builder({
+  const MobileMockupsGridBlock.builder({
     super.key,
-    this.device = MobileGridDevice.auto,
+    this.device = MobileMockupsGridBlockDevice.auto,
     this.isCarousel = false,
     this.width,
     this.breakpoint = 600.0,
@@ -247,10 +251,10 @@ class MobileGrid extends StatefulWidget {
         itemBuilder = builder;
 
   @override
-  State<MobileGrid> createState() => _MobileGridState();
+  State<MobileMockupsGridBlock> createState() => _MobileMockupsGridBlockState();
 }
 
-class _MobileGridState extends State<MobileGrid> {
+class _MobileMockupsGridBlockState extends State<MobileMockupsGridBlock> {
   late final PageController _mobilePageController;
   late final ScrollController _pcScrollController;
   int _currentPcIndex = 0;
@@ -265,7 +269,7 @@ class _MobileGridState extends State<MobileGrid> {
   }
 
   @override
-  void didUpdateWidget(covariant MobileGrid oldWidget) {
+  void didUpdateWidget(covariant MobileMockupsGridBlock oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.mobileViewportFraction != widget.mobileViewportFraction) {
       _mobilePageController.dispose();
@@ -317,8 +321,8 @@ class _MobileGridState extends State<MobileGrid> {
       videoUrl = widget.videoUrls![index % widget.videoUrls!.length];
     }
 
-    return MobileMarker(
-      scale: MobileMarkerScale.width,
+    return MobileMockupBlock(
+      scale: MobileMockupBlockScale.width,
       imageUrl: imageUrl,
       videoUrl: videoUrl,
       playInViewportOnly: widget.playInViewportOnly,
@@ -466,9 +470,9 @@ class _MobileGridState extends State<MobileGrid> {
     final effectiveHasLogo = widget.hasLogo ?? isPc;
     final effectiveHasBadgeBar = widget.hasBadgeBar ?? isPc;
 
-    return BioMarker(
-      type: isPc ? BioMarkerType.tall : BioMarkerType.tall,
-      device: isPc ? BioMarkerDevice.web : BioMarkerDevice.mobile,
+    return BiographyBlock(
+      type: isPc ? BiographyBlockType.tall : BiographyBlockType.tall,
+      device: isPc ? BiographyBlockDevice.web : BiographyBlockDevice.mobile,
       title: widget.title,
       titleWidget: widget.titleWidget,
       hasSubtitle: widget.hasSubtitle,
@@ -501,9 +505,9 @@ class _MobileGridState extends State<MobileGrid> {
         final double targetWidth = widget.width ?? parentWidth;
 
         final bool isPc = switch (widget.device) {
-          MobileGridDevice.auto => targetWidth >= widget.breakpoint,
-          MobileGridDevice.pc => true,
-          MobileGridDevice.mobile => false,
+          MobileMockupsGridBlockDevice.auto => targetWidth >= widget.breakpoint,
+          MobileMockupsGridBlockDevice.pc => true,
+          MobileMockupsGridBlockDevice.mobile => false,
         };
 
         final Widget content = isPc
@@ -523,3 +527,7 @@ class _MobileGridState extends State<MobileGrid> {
     );
   }
 }
+
+/// Backwards compatibility alias for [MobileMockupsGridBlock].
+typedef MobileGrid = MobileMockupsGridBlock;
+

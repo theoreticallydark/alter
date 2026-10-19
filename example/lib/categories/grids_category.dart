@@ -8,21 +8,21 @@ WidgetbookFolder gridsCategory() {
     name: 'Web (Grids)',
     children: [
       WidgetbookComponent(
-        name: 'ProjectGrid',
+        name: 'GraphicsGridBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final device = context.knobs.object.dropdown(
                 label: 'Device',
-                options: ProjectGridDevice.values,
+                options: GraphicsGridBlockDevice.values,
                 labelBuilder: (d) => d.name,
-                initialOption: ProjectGridDevice.auto,
+                initialOption: GraphicsGridBlockDevice.auto,
               );
 
               final count = context.knobs.int.slider(
                 label: 'Project Count',
-                initialValue: 2,
+                initialValue: 4,
                 min: 1,
                 max: 6,
               );
@@ -39,11 +39,11 @@ WidgetbookFolder gridsCategory() {
                   padding: const EdgeInsets.all(24),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 896),
-                    child: ProjectGrid.builder(
+                    child: GraphicsGridBlock.builder(
                       device: device,
                       count: count,
                       builder: (context, index) {
-                        return ProjectMarker(
+                        return GraphicsBlock(
                           imageUrl: sampleImages[index % sampleImages.length],
                           title: 'Project #${index + 1}',
                           subtitle: 'Design System Showcase',
@@ -73,7 +73,7 @@ WidgetbookFolder gridsCategory() {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'PC, Count=Single (Figma Node 795:4012)',
+                        'PC, Single Column Full Width',
                         style: AlterTypography.h4Bold.copyWith(
                           color: AlterSemanticTokens.textPrimary,
                         ),
@@ -81,10 +81,10 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 896,
-                        child: ProjectGrid(
-                          device: ProjectGridDevice.pc,
+                        child: GraphicsGridBlock(
+                          device: GraphicsGridBlockDevice.pc,
                           projects: [
-                            ProjectMarker(
+                            GraphicsBlock(
                               imageUrl: sampleImages[0],
                               title: 'Single Featured Project (PC)',
                               subtitle: 'Full width single column with badges & logo',
@@ -94,7 +94,7 @@ WidgetbookFolder gridsCategory() {
                       ),
                       const SizedBox(height: 48),
                       Text(
-                        'PC, Count=Double (Figma Node 795:3694)',
+                        'PC, 2-Column Grid (Figma Node 795:3694)',
                         style: AlterTypography.h4Bold.copyWith(
                           color: AlterSemanticTokens.textPrimary,
                         ),
@@ -102,15 +102,15 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 896,
-                        child: ProjectGrid(
-                          device: ProjectGridDevice.pc,
+                        child: GraphicsGridBlock(
+                          device: GraphicsGridBlockDevice.pc,
                           projects: [
-                            ProjectMarker(
+                            GraphicsBlock(
                               imageUrl: sampleImages[0],
                               title: 'Project Alpha (PC)',
                               subtitle: '2-column grid with badges & logo',
                             ),
-                            ProjectMarker(
+                            GraphicsBlock(
                               imageUrl: sampleImages[1],
                               title: 'Project Beta (PC)',
                               subtitle: '48px horizontal gap',
@@ -120,7 +120,7 @@ WidgetbookFolder gridsCategory() {
                       ),
                       const SizedBox(height: 48),
                       Text(
-                        'MOBILE, Count=Single (Figma Node 795:4015)',
+                        'MOBILE, 1-Column Stack (Figma Node 795:3702)',
                         style: AlterTypography.h4Bold.copyWith(
                           color: AlterSemanticTokens.textPrimary,
                         ),
@@ -128,36 +128,15 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 316,
-                        child: ProjectGrid(
-                          device: ProjectGridDevice.mobile,
+                        child: GraphicsGridBlock(
+                          device: GraphicsGridBlockDevice.mobile,
                           projects: [
-                            ProjectMarker(
-                              imageUrl: sampleImages[0],
-                              title: 'Mobile Project Single',
-                              subtitle: 'Mobile 1-column layout',
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 48),
-                      Text(
-                        'MOBILE, Count=Double (Figma Node 795:3702)',
-                        style: AlterTypography.h4Bold.copyWith(
-                          color: AlterSemanticTokens.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: 316,
-                        child: ProjectGrid(
-                          device: ProjectGridDevice.mobile,
-                          projects: [
-                            ProjectMarker(
+                            GraphicsBlock(
                               imageUrl: sampleImages[0],
                               title: 'Mobile Project Alpha',
                               subtitle: 'Vertical stacked item 1',
                             ),
-                            ProjectMarker(
+                            GraphicsBlock(
                               imageUrl: sampleImages[1],
                               title: 'Mobile Project Beta',
                               subtitle: 'Vertical stacked item 2 (48px gap)',
@@ -174,16 +153,16 @@ WidgetbookFolder gridsCategory() {
         ],
       ),
       WidgetbookComponent(
-        name: 'MobileGrid',
+        name: 'MobileMockupsGridBlock',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
             builder: (context) {
               final device = context.knobs.object.dropdown(
                 label: 'Device',
-                options: MobileGridDevice.values,
+                options: MobileMockupsGridBlockDevice.values,
                 labelBuilder: (d) => d.name,
-                initialOption: MobileGridDevice.auto,
+                initialOption: MobileMockupsGridBlockDevice.auto,
               );
 
               final isCarousel = context.knobs.boolean(
@@ -213,7 +192,7 @@ WidgetbookFolder gridsCategory() {
                   padding: const EdgeInsets.all(24),
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 896),
-                    child: MobileGrid(
+                    child: MobileMockupsGridBlock(
                       device: device,
                       isCarousel: isCarousel,
                       mobileViewportFraction: fraction,
@@ -260,8 +239,8 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 896,
-                        child: MobileGrid(
-                          device: MobileGridDevice.pc,
+                        child: MobileMockupsGridBlock(
+                          device: MobileMockupsGridBlockDevice.pc,
                           isCarousel: false,
                           imageUrls: sampleScreens,
                           title: 'Fintech Mobile App Ecosystem',
@@ -282,8 +261,8 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 896,
-                        child: MobileGrid(
-                          device: MobileGridDevice.pc,
+                        child: MobileMockupsGridBlock(
+                          device: MobileMockupsGridBlockDevice.pc,
                           isCarousel: true,
                           imageUrls: sampleScreens,
                           title: 'Banking & Investing Suite',
@@ -304,8 +283,8 @@ WidgetbookFolder gridsCategory() {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: 316,
-                        child: MobileGrid(
-                          device: MobileGridDevice.mobile,
+                        child: MobileMockupsGridBlock(
+                          device: MobileMockupsGridBlockDevice.mobile,
                           isCarousel: true,
                           mobileViewportFraction: 0.78,
                           imageUrls: sampleScreens,

@@ -3,10 +3,10 @@ import 'package:video_player/video_player.dart';
 import '../../components/utilities/alter_media_view.dart';
 import '../../foundations/device_scope.dart';
 import '../../styles/tokens.dart';
-import 'bio_marker.dart';
+import 'biography_block.dart';
 
-/// Sizing scale mode for [MobileMarker].
-enum MobileMarkerScale {
+/// Sizing scale mode for [MobileMockupBlock].
+enum MobileMockupBlockScale {
   /// Width is explicitly constrained/filled; height is auto-deduced from the 428:926 aspect ratio.
   width,
 
@@ -14,8 +14,11 @@ enum MobileMarkerScale {
   height,
 }
 
-/// Target device / viewport modes for [MobileMarker].
-enum MobileMarkerDevice {
+/// Backwards compatibility alias for [MobileMockupBlockScale].
+typedef MobileMarkerScale = MobileMockupBlockScale;
+
+/// Target device / viewport modes for [MobileMockupBlock].
+enum MobileMockupBlockDevice {
   /// Automatically responds to layout constraints or inherits ambient [AlterDeviceScope] from parent grid.
   auto,
 
@@ -26,9 +29,12 @@ enum MobileMarkerDevice {
   mobile,
 }
 
-/// A responsive mobile screen showcase and entity card combining an iPhone 14 Plus container (428:926) with an optional [BioMarker].
+/// Backwards compatibility alias for [MobileMockupBlockDevice].
+typedef MobileMarkerDevice = MobileMockupBlockDevice;
+
+/// A responsive mobile screen showcase and entity card combining an iPhone 14 Plus container (428:926) with an optional [BiographyBlock].
 ///
-/// Figma Specifications (Node `810:10719` - `MobileMarker`):
+/// Figma Specifications (Node `810:10719` - `MobileMockupBlock`):
 /// - Variants:
 ///   - `scale=Width` (`810:10718`): Width is controlled; height is auto-deduced and hugs content.
 ///   - `scale=Height` (`810:10720`): Height is controlled; width is auto-deduced and hugs content.
@@ -39,21 +45,22 @@ enum MobileMarkerDevice {
 ///   - Border: 1px `#F3F4F6` ([AlterSemanticTokens.stroke100]).
 ///   - Border Radius: 20px (`BorderRadius.circular(20)`).
 /// - Bottom Section:
-///   - Optional [BioMarker] (`761:7097`) toggled by [hasBioMarker] (default `true`).
+///   - Optional [BiographyBlock] (`761:7097`) toggled by [hasBioMarker] (default `true`).
 ///   - Spacing gap: 16px.
-class MobileMarker extends StatelessWidget {
+class MobileMockupBlock extends StatelessWidget {
   /// Component version for reference.
+  /// v1.3.0: Renamed from MobileMarker to MobileMockupBlock matching Figma node 810:10719, moved to lib/web/.
   /// v1.2.0: Added viewport-aware autoplay and configurable delay (default 1.2s) support via AlterMediaView.
   /// v1.1.0: Added native multimedia support for animated GIFs and autoplay looping videos without controllers via AlterMediaView.
   /// v1.0.1: Added device parameter and AlterDeviceScope inheritance so MobileMarker and its BioMarker derive device mode directly from parent grids.
-  /// v1.0.0: Initial release matching Figma Node 810:10719 (MobileMarker: scale=Width/Height, iPhone 14 Plus 428:926 container + BioMarker).
-  static const String version = '1.2.0';
+  /// v1.0.0: Initial release matching Figma Node 810:10719 (MobileMockupBlock: scale=Width/Height, iPhone 14 Plus 428:926 container + BioMarker).
+  static const String version = '1.3.0';
 
   /// Scale mode: whether width or height drives the auto-deduced sizing.
-  final MobileMarkerScale scale;
+  final MobileMockupBlockScale scale;
 
   /// Viewport device mode (`auto`, `pc`, or `mobile`).
-  final MobileMarkerDevice device;
+  final MobileMockupBlockDevice device;
 
   /// Explicit width constraint when [scale] is [MobileMarkerScale.width] (defaults to fill available width).
   final double? width;
@@ -176,11 +183,11 @@ class MobileMarker extends StatelessWidget {
   /// Custom widget list for badge bar.
   final List<Widget>? badges;
 
-  /// Creates a [MobileMarker] instance.
-  const MobileMarker({
+  /// Creates a [MobileMockupBlock] instance.
+  const MobileMockupBlock({
     super.key,
-    this.scale = MobileMarkerScale.width,
-    this.device = MobileMarkerDevice.auto,
+    this.scale = MobileMockupBlockScale.width,
+    this.device = MobileMockupBlockDevice.auto,
     this.width,
     this.height,
     this.aspectRatio = 428 / 926,
@@ -253,9 +260,9 @@ class MobileMarker extends StatelessWidget {
   }
 
   Widget _buildBioSection(bool isPc) {
-    return BioMarker(
-      type: BioMarkerType.tall,
-      device: isPc ? BioMarkerDevice.web : BioMarkerDevice.mobile,
+    return BiographyBlock(
+      type: BiographyBlockType.tall,
+      device: isPc ? BiographyBlockDevice.web : BiographyBlockDevice.mobile,
       title: title,
       titleWidget: titleWidget,
       hasSubtitle: hasSubtitle,
@@ -284,14 +291,14 @@ class MobileMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final ambient = AlterDeviceScope.maybeOf(context);
     final bool isPc = switch (device) {
-      MobileMarkerDevice.auto => ambient != null
+      MobileMockupBlockDevice.auto => ambient != null
           ? ambient == AlterDevice.pc
-          : (scale == MobileMarkerScale.width ? (width ?? 896) >= 600 : true),
-      MobileMarkerDevice.pc => true,
-      MobileMarkerDevice.mobile => false,
+          : (scale == MobileMockupBlockScale.width ? (width ?? 896) >= 600 : true),
+      MobileMockupBlockDevice.pc => true,
+      MobileMockupBlockDevice.mobile => false,
     };
 
-    if (scale == MobileMarkerScale.height) {
+    if (scale == MobileMockupBlockScale.height) {
       // Scale = Height: height is fixed/constrained; width is auto-deduced from aspect ratio.
       final targetHeight = height ?? 692.34;
       final targetWidth = targetHeight * aspectRatio;
@@ -363,3 +370,7 @@ class MobileMarker extends StatelessWidget {
     return content;
   }
 }
+
+/// Backwards compatibility alias for [MobileMockupBlock].
+typedef MobileMarker = MobileMockupBlock;
+

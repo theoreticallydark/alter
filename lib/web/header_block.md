@@ -33,10 +33,10 @@ HeaderBlock(
 // Section Header with Embedded Section Content
 HeaderBlock(
   header: 'Projects',
-  child: ProjectGrid(
+  child: GraphicsGridBlock(
     projects: [
-      ProjectMarker(title: 'Project 1'),
-      ProjectMarker(title: 'Project 2'),
+      GraphicsBlock(title: 'Project 1'),
+      GraphicsBlock(title: 'Project 2'),
     ],
   ),
 )

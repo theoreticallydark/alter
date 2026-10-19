@@ -6,8 +6,8 @@ import '../../foundations/device_scope.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
-/// Target device / viewport modes for [ProjectHeroBlock].
-enum ProjectHeroBlockDevice {
+/// Target device / viewport modes for [HeroProjectsBlock].
+enum HeroProjectsBlockDevice {
   /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
   auto,
 
@@ -18,7 +18,10 @@ enum ProjectHeroBlockDevice {
   mobile,
 }
 
-/// Data model representing a key-value detail pair in [ProjectHeroBlock].
+/// Backwards compatibility alias for [HeroProjectsBlockDevice].
+typedef ProjectHeroBlockDevice = HeroProjectsBlockDevice;
+
+/// Data model representing a key-value detail pair in [HeroProjectsBlock].
 class ProjectDetailItem {
   /// Label descriptor (e.g. 'Client', 'Platform', 'Year', 'Status').
   final String label;
@@ -33,7 +36,7 @@ class ProjectDetailItem {
   });
 }
 
-/// Data model representing an availability action button in [ProjectHeroBlock].
+/// Data model representing an availability action button in [HeroProjectsBlock].
 class ProjectHeroAction {
   /// Action button label (used for PC [ButtonText]).
   final String label;
@@ -58,7 +61,7 @@ class ProjectHeroAction {
 
 /// A responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links.
 ///
-/// Figma Specifications (Node `802:8220` - `ProjectHeroBlock`):
+/// Figma Specifications (Node `802:8220` - `HeroProjectsBlock`):
 /// - Variants:
 ///   - `device=PC` (`802:8221`): Width 896px, Column layout, 24px gap.
 ///     - Logo Container: 84x84px, 24px corner radius, `#FFFFFF` bg, 1px `#F3F4F6` stroke.
@@ -74,16 +77,17 @@ class ProjectHeroAction {
 ///     - Details: 2x2 Grid, 16px gap (14px label + 18px value).
 ///     - Notice: [Toast] banner with `status=Caution`.
 ///     - StackBar: Column (24px gap) containing "Built with" tech icons and "Available on" [ButtonIcon] 48x48px buttons.
-class ProjectHeroBlock extends StatelessWidget {
+class HeroProjectsBlock extends StatelessWidget {
   /// Component version for reference.
-  /// v1.0.0: Initial release matching Figma Node 802:8220 (ProjectHeroBlock: device=PC/Mobile).
-  static const String version = '1.0.0';
+  /// v1.1.0: Renamed from ProjectHeroBlock to HeroProjectsBlock to match Figma node 802:8220, moved to lib/web/.
+  /// v1.0.0: Initial release matching Figma Node 802:8220 (HeroProjectsBlock: device=PC/Mobile).
+  static const String version = '1.1.0';
 
   /// Optional fixed width constraint for the block.
   final double? width;
 
   /// Viewport mode (`auto`, `pc`, or `mobile`).
-  final ProjectHeroBlockDevice device;
+  final HeroProjectsBlockDevice device;
 
   /// Width threshold below which mobile layout is activated (defaults to 500.0).
   final double breakpoint;
@@ -157,11 +161,11 @@ class ProjectHeroBlock extends StatelessWidget {
   /// Custom widget override for the availability action bar.
   final Widget? actionsWidget;
 
-  /// Creates a [ProjectHeroBlock] instance.
-  const ProjectHeroBlock({
+  /// Creates a [HeroProjectsBlock] instance.
+  const HeroProjectsBlock({
     super.key,
     this.width,
-    this.device = ProjectHeroBlockDevice.auto,
+    this.device = HeroProjectsBlockDevice.auto,
     this.breakpoint = 500.0,
     this.title = 'Title -\nSubtitle',
     this.titleWidget,
@@ -459,11 +463,11 @@ class ProjectHeroBlock extends StatelessWidget {
         final ambient = AlterDeviceScope.maybeOf(context);
 
         final bool isPc = switch (device) {
-          ProjectHeroBlockDevice.auto => ambient != null
+          HeroProjectsBlockDevice.auto => ambient != null
               ? ambient == AlterDevice.pc
               : targetWidth >= breakpoint,
-          ProjectHeroBlockDevice.pc => true,
-          ProjectHeroBlockDevice.mobile => false,
+          HeroProjectsBlockDevice.pc => true,
+          HeroProjectsBlockDevice.mobile => false,
         };
 
         final TextStyle titleStyle = isPc
@@ -551,3 +555,7 @@ class ProjectHeroBlock extends StatelessWidget {
     );
   }
 }
+
+/// Backwards compatibility alias for [HeroProjectsBlock].
+typedef ProjectHeroBlock = HeroProjectsBlock;
+

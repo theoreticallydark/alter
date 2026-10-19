@@ -1,13 +1,13 @@
-# ProjectMarker
+# GraphicsBlock
 
-Responsive project and portfolio card molecule combining banner media / carousel with an entity [BioMarker] sub-component for the Alter Design System.
+Responsive project and portfolio card molecule combining banner media / carousel with an entity [BiographyBlock] sub-component for the Alter Design System.
 
 ## Figma Specification
 - **Node ID**: [`795:6004`](https://www.figma.com/design/zv3qKQ3LHZCA8hWFcsOMtH/Alter-Design-System?node-id=795-6004)
-- **Component Set**: `ProjectMarker`
+- **Component Set**: `GraphicsBlock`
 - **Variants**:
-  - `device=PC, isCarousel=False` (`795:3760`): Single 16:9 banner image + BioMarker with logo and badge bar.
-  - `device=Mobile, isCarousel=False` (`795:6005`): Single 16:9 banner image + compact BioMarker (no logo, no badge bar).
+  - `device=PC, isCarousel=False` (`795:3760`): Single 16:9 banner image + BiographyBlock with logo and badge bar.
+  - `device=Mobile, isCarousel=False` (`795:6005`): Single 16:9 banner image + compact BiographyBlock (no logo, no badge bar).
   - `device=PC, isCarousel=True` (`813:12021`): Multi-column side-by-side carousel with hardware-accelerated animated sliding and [CarouselControl] overlay.
   - `device=Mobile, isCarousel=True` (`819:2595`): Thumb-swipeable carousel with peek cue (~86% card width, 44px peek affordance) without chevrons.
 
@@ -16,7 +16,7 @@ Responsive project and portfolio card molecule combining banner media / carousel
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `width` | `double?` | `null` | Optional fixed width (defaults to fill available parent width) |
-| `device` | `ProjectMarkerDevice` | `ProjectMarkerDevice.auto` | Viewport adaptation mode (`auto`, `pc`, `mobile`) |
+| `device` | `GraphicsBlockDevice` | `GraphicsBlockDevice.auto` | Viewport adaptation mode (`auto`, `pc`, `mobile`) |
 | `isCarousel` | `bool` | `false` | Whether the media section operates in carousel mode |
 | `pcItemsPerView` | `int` | `2` | Number of simultaneous cards visible in PC carousel mode (e.g. 2, 3, etc.) |
 | `mobileViewportFraction` | `double` | `0.86` | Viewport fraction occupied by active card on mobile (leaves ~14% / 44px peek cue) |
@@ -50,12 +50,14 @@ Responsive project and portfolio card molecule combining banner media / carousel
 | `description` | `String` | `'Description'` | Descriptive paragraph |
 
 ## Child Components Reused
-- [BioMarker](file:///c:/Vayu/Alter/lib/web/markers/bio_marker.dart) (`761:7097`): Metadata, logo, title, subtitle, and badges.
+- [BiographyBlock](file:///c:/Vayu/Alter/lib/web/biography_block.dart) (`761:7097`): Metadata, logo, title, subtitle, and badges.
 - [CarouselControl](file:///c:/Vayu/Alter/lib/components/utilities/carousel_control.dart) (`811:11843`): Chevron navigation overlay for PC carousel.
-- [Badge](file:///c:/Vayu/Alter/lib/components/pills/badge.dart) (`124:4003`): Reused inside BioMarker.
-- [Divider](file:///c:/Vayu/Alter/lib/components/utilities/divider.dart) (`559:916`): Reused inside BioMarker when description is visible.
+- [Badge](file:///c:/Vayu/Alter/lib/components/pills/badge.dart) (`124:4003`): Reused inside BiographyBlock.
+- [Divider](file:///c:/Vayu/Alter/lib/components/utilities/divider.dart) (`559:916`): Reused inside BiographyBlock when description is visible.
 
 ## Changelog
+- **`v1.5.0`**: Renamed from `ProjectMarker` to `GraphicsBlock` matching Figma Node `795:6004`, moved to `/lib/web/`, retained `ProjectMarker` typedef for backwards compatibility.
 - **`v1.2.0`**: Implemented smooth hardware-accelerated animated sliding for PC carousel navigation via `ScrollController` with `easeInOutCubic` curve.
 - **`v1.1.0`**: Added configurable `pcItemsPerView` (defaults to 2, supports 3+), `mobileViewportFraction` (defaults to 0.86 with peek cue), and native touch-first `PageView` with `padEnds: false` for mobile carousels.
 - **`v1.0.0`**: Initial release matching Figma Node `795:6004`.
+`.

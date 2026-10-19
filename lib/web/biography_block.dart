@@ -5,8 +5,8 @@ import '../../foundations/device_scope.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
-/// Layout style variants for [BioMarker].
-enum BioMarkerType {
+/// Layout style variants for [BiographyBlock].
+enum BiographyBlockType {
   /// Vertical stacked header layout where badges appear beneath title and subtitle.
   tall,
 
@@ -14,8 +14,11 @@ enum BioMarkerType {
   wide,
 }
 
-/// Target device / viewport modes for [BioMarker].
-enum BioMarkerDevice {
+/// Backwards compatibility alias for [BiographyBlockType].
+typedef BioMarkerType = BiographyBlockType;
+
+/// Target device / viewport modes for [BiographyBlock].
+enum BiographyBlockDevice {
   /// Automatically responds to layout constraints (< 500px triggers mobile layout) or inherits ambient [AlterDeviceScope] from parent.
   auto,
 
@@ -26,9 +29,12 @@ enum BioMarkerDevice {
   mobile,
 }
 
+/// Backwards compatibility alias for [BiographyBlockDevice].
+typedef BioMarkerDevice = BiographyBlockDevice;
+
 /// A responsive biography and entity marker card for the Alter Design System.
 ///
-/// Figma Specifications (Node `761:7097` - `BioMarker`):
+/// Figma Specifications (Node `761:7097` - `BiographyBlock`):
 /// - Variants:
 ///   - `type`: `Tall` | `Wide`
 ///   - `device`: `Web` (Desktop) | `Mobile`
@@ -50,17 +56,18 @@ enum BioMarkerDevice {
 ///     - Separated by 1px [Divider] ([AlterSemanticTokens.stroke200]).
 ///     - Web Description: `Body/body-lg` ([AlterTypography.bodyLg], `#4A5565`).
 ///     - Mobile Description: `Body/body` ([AlterTypography.body], `#4A5565`).
-class BioMarker extends StatelessWidget {
+class BiographyBlock extends StatelessWidget {
   /// Component version for reference.
+  /// v1.1.0: Renamed from BioMarker to BiographyBlock matching Figma node 761:7097, moved to lib/web/.
   /// v1.0.1: Added ambient AlterDeviceScope inheritance so BioMarker derives device mode directly from parent marker/grid rather than judging its own narrow cell width.
-  /// v1.0.0: Initial release matching Figma Node 761:7097 (BioMarker: Tall/Wide, Web/Mobile responsive).
-  static const String version = '1.0.1';
+  /// v1.0.0: Initial release matching Figma Node 761:7097 (BiographyBlock: Tall/Wide, Web/Mobile responsive).
+  static const String version = '1.1.0';
 
   /// Variant layout type (`tall` or `wide`).
-  final BioMarkerType type;
+  final BiographyBlockType type;
 
   /// Viewport mode (`auto` responsive, `web`, or `mobile`).
-  final BioMarkerDevice device;
+  final BiographyBlockDevice device;
 
   /// Main entity title text.
   final String title;
@@ -125,11 +132,11 @@ class BioMarker extends StatelessWidget {
   /// Custom list of badge widgets (overrides default badges if provided).
   final List<Widget>? badges;
 
-  /// Creates a [BioMarker] instance.
-  const BioMarker({
+  /// Creates a [BiographyBlock] instance.
+  const BiographyBlock({
     super.key,
-    this.type = BioMarkerType.tall,
-    this.device = BioMarkerDevice.auto,
+    this.type = BiographyBlockType.tall,
+    this.device = BiographyBlockDevice.auto,
     this.title = 'Title',
     this.titleWidget,
     this.hasSubtitle = true,
@@ -153,10 +160,10 @@ class BioMarker extends StatelessWidget {
     this.badges,
   });
 
-  /// Convenience constructor for a wide-layout [BioMarker].
-  const BioMarker.wide({
+  /// Convenience constructor for a wide-layout [BiographyBlock].
+  const BiographyBlock.wide({
     super.key,
-    this.device = BioMarkerDevice.auto,
+    this.device = BiographyBlockDevice.auto,
     this.title = 'Title',
     this.titleWidget,
     this.hasSubtitle = true,
@@ -178,7 +185,7 @@ class BioMarker extends StatelessWidget {
     this.hasBadgeThree = true,
     this.badge3Label = 'Label',
     this.badges,
-  }) : type = BioMarkerType.wide;
+  }) : type = BiographyBlockType.wide;
 
   Widget _buildLogo(bool isMobile) {
     final double size = isMobile ? 48.0 : 84.0;
@@ -420,10 +427,10 @@ class BioMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (device == BioMarkerDevice.web) {
+    if (device == BiographyBlockDevice.web) {
       return _buildContent(false);
     }
-    if (device == BioMarkerDevice.mobile) {
+    if (device == BiographyBlockDevice.mobile) {
       return _buildContent(true);
     }
 
@@ -442,3 +449,7 @@ class BioMarker extends StatelessWidget {
     );
   }
 }
+
+/// Backwards compatibility alias for [BiographyBlock].
+typedef BioMarker = BiographyBlock;
+

@@ -104,13 +104,17 @@ Alter organizes design tokens into foundational layers:
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Flexible list row with title, subtitle, left slot, and dual right slots.
 
-### Web, Blocks & Molecules (`lib/web/`)
+### Web & Blocks (`lib/web/`)
+- **`BiographyBlock`**: Responsive entity and biography card with logo, title, badges, and bio description.
+- **`BrandBlock`**: Responsive social proof and partner brand showcase block.
+- **`FooterBlock`**: Responsive footer block with contact email, copy-to-clipboard action, and social profile links.
+- **`GraphicsBlock`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
+- **`GraphicsGridBlock`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device scope synchronization.
+- **`HeaderBlock`**: Responsive section header block with expandable divider line and bold title.
 - **`HeroBlock`**: Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages.
-- **`BioMarker`**: Responsive entity and biography marker molecule card with logo, title, badges, and bio description.
-- **`MobileMarker`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware autoplay looping videos with BioMarker.
-- **`ProjectGrid`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming ProjectMarker cards with device scope synchronization.
-- **`MobileGrid`**: Responsive mobile screen showcase grid & carousel with unified BioMarker entity metadata supporting image and video lists with viewport autoplay.
-- **`ProjectMarker`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
+- **`HeroProjectsBlock`**: Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links.
+- **`MobileMockupBlock`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware autoplay looping videos with BiographyBlock.
+- **`MobileMockupsGridBlock`**: Responsive mobile screen showcase grid & carousel with unified BiographyBlock entity metadata supporting image and video lists with viewport autoplay.
 
 ---
 

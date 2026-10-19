@@ -1,17 +1,17 @@
-# BioMarker
+# BiographyBlock
 
-> Current Version: `v1.0.0`  
+> Current Version: `v1.1.0`  
 > [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/web/biomarker)
 
 ## Overview
-`BioMarker` is a responsive entity and biography marker molecule card in the Alter Design System. It combines an entity logo box, title and subtitle typography, badge pills, and a structured bio description separated by a divider.
+`BiographyBlock` (formerly `BioMarker`) is a responsive entity and biography card in the Alter Design System (Figma Node `761:7097`). It combines an entity logo box, title and subtitle typography, badge pills, and a structured bio description separated by a divider.
 
 It seamlessly adapts between **Web (Desktop)** and **Mobile** viewports with responsive scaling of typography, logo container dimensions, and layout arrangements (`Tall` and `Wide`).
 
 ## Usage
 ```dart
-// Standard Responsive BioMarker (Tall layout)
-BioMarker(
+// Standard Responsive BiographyBlock (Tall layout)
+BiographyBlock(
   title: 'Alter Design System',
   subtitle: 'Component Library & Foundation',
   description: 'A modular, high-fidelity Flutter design system crafted from Figma specifications.',
@@ -20,8 +20,8 @@ BioMarker(
 )
 
 // Wide Header Layout with Web Device Override
-BioMarker.wide(
-  device: BioMarkerDevice.web,
+BiographyBlock.wide(
+  device: BiographyBlockDevice.web,
   title: 'Roberta Casas',
   subtitle: 'Senior Product Designer',
   description: 'Designing intuitive user interfaces and scalable design tokens for cross-platform apps.',
@@ -35,8 +35,8 @@ BioMarker.wide(
 ## Properties
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `type` | `BioMarkerType` | `BioMarkerType.tall` | Layout arrangement (`tall` stacks badges beneath title, `wide` places badges alongside title). |
-| `device` | `BioMarkerDevice` | `BioMarkerDevice.auto` | Viewport adaptation (`auto` responsive via `LayoutBuilder`, `web` forced desktop, `mobile` forced mobile). |
+| `type` | `BiographyBlockType` | `BiographyBlockType.tall` | Layout arrangement (`tall` stacks badges beneath title, `wide` places badges alongside title). |
+| `device` | `BiographyBlockDevice` | `BiographyBlockDevice.auto` | Viewport adaptation (`auto` responsive via `LayoutBuilder`, `web` forced desktop, `mobile` forced mobile). |
 | `title` | `String` | `'Title'` | Main entity title text. |
 | `titleWidget` | `Widget?` | `null` | Custom widget override for title. |
 | `hasSubtitle` | `bool` | `true` | Toggle visibility of subtitle. |
@@ -80,4 +80,7 @@ BioMarker.wide(
 ---
 
 ## Component Changelog
-* **`v1.0.0`**: Initial release matching Figma Node `761:7097` (`BioMarker` with `Tall`/`Wide` types and `Web`/`Mobile` responsive adaptation).
+* **`v1.1.0`**: Renamed from `BioMarker` to `BiographyBlock` matching Figma Node `761:7097`, moved to `/lib/web/`, retained `BioMarker` typedef for backwards compatibility.
+* **`v1.0.1`**: Added ambient `AlterDeviceScope` inheritance so `BioMarker` derives device mode directly from parent marker/grid.
+* **`v1.0.0`**: Initial release matching Figma Node `761:7097` (`BiographyBlock` with `Tall`/`Wide` types and `Web`/`Mobile` responsive adaptation).
+

@@ -1837,6 +1837,57 @@ void main() {
       await tester.pump();
       expect(socialTapped, isTrue);
     });
+
+    testWidgets('GraphicsCarouselBlock renders PC and Mobile layouts with CarouselControl and BiographyBlock', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  GraphicsCarouselBlock(
+                    device: GraphicsCarouselBlockDevice.pc,
+                    title: 'PC Carousel Title',
+                    subtitle: 'PC Carousel Subtitle',
+                    items: [
+                      Container(color: Colors.red),
+                      Container(color: Colors.blue),
+                      Container(color: Colors.green),
+                    ],
+                  ),
+                  GraphicsCarouselBlock(
+                    device: GraphicsCarouselBlockDevice.pc,
+                    pcItemsPerView: 3,
+                    title: 'PC 3-Item Carousel',
+                    subtitle: 'PC 3-Item Subtitle',
+                    items: [
+                      Container(color: Colors.red),
+                      Container(color: Colors.blue),
+                      Container(color: Colors.green),
+                      Container(color: Colors.yellow),
+                    ],
+                  ),
+                  GraphicsCarouselBlock(
+                    device: GraphicsCarouselBlockDevice.mobile,
+                    title: 'Mobile Carousel Title',
+                    subtitle: 'Mobile Carousel Subtitle',
+                    items: [
+                      Container(color: Colors.red),
+                      Container(color: Colors.blue),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('PC Carousel Title'), findsOneWidget);
+      expect(find.text('PC 3-Item Carousel'), findsOneWidget);
+      expect(find.text('Mobile Carousel Title'), findsOneWidget);
+      expect(find.byType(CarouselControl), findsNWidgets(2));
+    });
   });
 }
 

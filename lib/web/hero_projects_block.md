@@ -1,9 +1,10 @@
-# ProjectHeroBlock
+# HeroProjectsBlock
 
 A responsive project case study and portfolio hero block featuring logo, title, metadata grid, notice banner, tech stack, and action links.
 
 ## Figma Reference
 - **Node ID**: `802:8220`
+- **Component Set**: `HeroProjectsBlock`
 - **Variants**:
   - `device=PC` (`802:8221`): Width 896px, Column layout, 24px gap.
     - Logo Container: 84x84px with 24px border radius.
@@ -25,7 +26,7 @@ A responsive project case study and portfolio hero block featuring logo, title, 
 ```dart
 import 'package:alter/alter.dart';
 
-ProjectHeroBlock(
+HeroProjectsBlock(
   title: 'Alter -\nDesign System',
   description: 'A comprehensive Flutter design system built for performance and pixel perfection.',
   details: [
@@ -50,3 +51,7 @@ ProjectHeroBlock(
   ],
 )
 ```
+
+## Changelog
+- **`v1.1.0`**: Renamed from `ProjectHeroBlock` to `HeroProjectsBlock` matching Figma Node `802:8220`, moved to `/lib/web/`, retained `ProjectHeroBlock` typedef for backwards compatibility.
+- **`v1.0.0`**: Initial release matching Figma Node `802:8220`.

@@ -5,10 +5,10 @@ import '../../components/utilities/alter_media_view.dart';
 import '../../components/utilities/carousel_control.dart';
 import '../../foundations/device_scope.dart';
 import '../../styles/tokens.dart';
-import 'bio_marker.dart';
+import 'biography_block.dart';
 
-/// Target device / viewport modes for [ProjectMarker].
-enum ProjectMarkerDevice {
+/// Target device / viewport modes for [GraphicsBlock].
+enum GraphicsBlockDevice {
   /// Automatically responds to layout constraints or inherits ambient [AlterDeviceScope] from parent grid.
   auto,
 
@@ -19,9 +19,12 @@ enum ProjectMarkerDevice {
   mobile,
 }
 
-/// A responsive project and portfolio card molecule combining banner media / carousel and an entity [BioMarker].
+/// Backwards compatibility alias for [GraphicsBlockDevice].
+typedef ProjectMarkerDevice = GraphicsBlockDevice;
+
+/// A responsive project and portfolio card molecule combining banner media / carousel and an entity [BiographyBlock].
 ///
-/// Figma Specifications (Node `795:6004` - `ProjectMarker`):
+/// Figma Specifications (Node `795:6004` - `GraphicsBlock`):
 /// - Variants:
 ///   - `device=PC, isCarousel=False` (`795:3760`): Single 16:9 banner media + BioMarker with logo and badge bar.
 ///   - `device=Mobile, isCarousel=False` (`795:6005`): Single 16:9 banner media + compact BioMarker (no logo, no badge bar).
@@ -34,25 +37,26 @@ enum ProjectMarkerDevice {
 ///   - Height: Hugs content (`MainAxisSize.min`).
 ///   - Media container aspect ratio: 16 / 9 for images/videos with 20px radius and 2px `#F3F4F6` border.
 /// - Child components:
-///   - Reuses [BioMarker] (`761:7097`) for metadata, title, subtitle, and badges.
+///   - Reuses [BiographyBlock] (`761:7097`) for metadata, title, subtitle, and badges.
 ///   - Reuses [CarouselControl] (`811:11843`) for carousel navigation buttons on PC.
 ///   - Reuses [AlterMediaView] for all multimedia rendering.
-class ProjectMarker extends StatefulWidget {
+class GraphicsBlock extends StatefulWidget {
   /// Component version for reference.
+  /// v1.5.0: Renamed from ProjectMarker to GraphicsBlock matching Figma node 795:6004, moved to lib/web/.
   /// v1.4.0: Added viewport-aware autoplay and configurable delay (default 1.2s) support via AlterMediaView.
   /// v1.3.0: Added native multimedia support for animated GIFs and autoplay looping videos without controllers via AlterMediaView across both single media and carousel modes.
   /// v1.2.2: Added ambient AlterDeviceScope inheritance so ProjectMarker derives device mode directly from parent ProjectGrid without judging its own narrow cell width, and propagates device mode to BioMarker.
   /// v1.2.1: Adjusted auto-responsive breakpoint to 380.0 (and made configurable via breakpoint property).
   /// v1.2.0: Implemented smooth hardware-accelerated animated sliding for PC carousel navigation via ScrollController with easeInOutCubic curve.
   /// v1.1.0: Added configurable pcItemsPerView (default 2), mobileViewportFraction (default 0.86 with peek cue), and native touch-first PageView for mobile carousels.
-  /// v1.0.0: Initial release matching Figma Node 795:6004 (ProjectMarker: PC/Mobile, Single/Carousel variants).
-  static const String version = '1.4.0';
+  /// v1.0.0: Initial release matching Figma Node 795:6004 (GraphicsBlock: PC/Mobile, Single/Carousel variants).
+  static const String version = '1.5.0';
 
-  /// Optional fixed width for the overall [ProjectMarker] (defaults to fill available parent width).
+  /// Optional fixed width for the overall [GraphicsBlock] (defaults to fill available parent width).
   final double? width;
 
   /// Viewport mode (`auto` responsive, `pc`, or `mobile`).
-  final ProjectMarkerDevice device;
+  final GraphicsBlockDevice device;
 
   /// Viewport width breakpoint below which mobile layout is activated (defaults to 380.0).
   final double breakpoint;
@@ -229,11 +233,11 @@ class ProjectMarker extends StatefulWidget {
   /// Custom widget override for description.
   final Widget? descriptionWidget;
 
-  /// Creates a [ProjectMarker] instance.
-  const ProjectMarker({
+  /// Creates a [GraphicsBlock] instance.
+  const GraphicsBlock({
     super.key,
     this.width,
-    this.device = ProjectMarkerDevice.auto,
+    this.device = GraphicsBlockDevice.auto,
     this.breakpoint = 380.0,
     this.isCarousel = false,
     this.pcItemsPerView = 2,
@@ -294,10 +298,10 @@ class ProjectMarker extends StatefulWidget {
   }) : assert(pcItemsPerView >= 1, 'pcItemsPerView must be at least 1');
 
   @override
-  State<ProjectMarker> createState() => _ProjectMarkerState();
+  State<GraphicsBlock> createState() => _GraphicsBlockState();
 }
 
-class _ProjectMarkerState extends State<ProjectMarker> {
+class _GraphicsBlockState extends State<GraphicsBlock> {
   late int _currentIndex;
   ScrollController? _pcScrollController;
   PageController? _mobilePageController;
@@ -318,7 +322,7 @@ class _ProjectMarkerState extends State<ProjectMarker> {
   }
 
   @override
-  void didUpdateWidget(covariant ProjectMarker oldWidget) {
+  void didUpdateWidget(covariant GraphicsBlock oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.carouselIndex != widget.carouselIndex) {
       _currentIndex = widget.carouselIndex;
@@ -610,11 +614,11 @@ class _ProjectMarkerState extends State<ProjectMarker> {
         final ambient = AlterDeviceScope.maybeOf(context);
 
         final bool isPc = switch (widget.device) {
-          ProjectMarkerDevice.auto => ambient != null
+          GraphicsBlockDevice.auto => ambient != null
               ? ambient == AlterDevice.pc
               : targetWidth >= widget.breakpoint,
-          ProjectMarkerDevice.pc => true,
-          ProjectMarkerDevice.mobile => false,
+          GraphicsBlockDevice.pc => true,
+          GraphicsBlockDevice.mobile => false,
         };
 
         final effectiveHasLogo = widget.hasLogo ?? isPc;
@@ -630,9 +634,9 @@ class _ProjectMarkerState extends State<ProjectMarker> {
                 ),
               );
 
-        final Widget bioSection = BioMarker(
-          type: BioMarkerType.tall,
-          device: isPc ? BioMarkerDevice.web : BioMarkerDevice.mobile,
+        final Widget bioSection = BiographyBlock(
+          type: BiographyBlockType.tall,
+          device: isPc ? BiographyBlockDevice.web : BiographyBlockDevice.mobile,
           title: widget.title,
           titleWidget: widget.titleWidget,
           hasSubtitle: widget.hasSubtitle,
@@ -681,3 +685,7 @@ class _ProjectMarkerState extends State<ProjectMarker> {
     );
   }
 }
+
+/// Backwards compatibility alias for [GraphicsBlock].
+typedef ProjectMarker = GraphicsBlock;
+
