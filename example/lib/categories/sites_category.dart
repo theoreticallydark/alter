@@ -3,9 +3,9 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 import '../toast_helper.dart';
 
-WidgetbookFolder webCategory() {
+WidgetbookFolder sitesCategory() {
   return WidgetbookFolder(
-    name: 'Web (Molecules)',
+    name: 'Sites',
     children: [
       WidgetbookComponent(
         name: 'BiographyBlock',

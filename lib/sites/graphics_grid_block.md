@@ -26,8 +26,8 @@ Responsive project and portfolio grid layout consuming [GraphicsBlock] cards for
 | `breakpoint` | `double` | `500.0` | Responsive width breakpoint for mobile vs PC |
 
 ## Child Components Reused
-- [GraphicsBlock](file:///c:/Vayu/Alter/lib/web/graphics_block.dart) (`795:6004`): Primary card item in the grid.
-- [BiographyBlock](file:///c:/Vayu/Alter/lib/web/biography_block.dart) (`761:7097`): Reused inside GraphicsBlock.
+- [GraphicsBlock](file:///c:/Vayu/Alter/lib/sites/graphics_block.dart) (`795:6004`): Primary card item in the grid.
+- [BiographyBlock](file:///c:/Vayu/Alter/lib/sites/biography_block.dart) (`761:7097`): Reused inside GraphicsBlock.
 
 ## Design Tokens Used
 - **Spacing**: `48.0` px grid gaps (horizontal and vertical)

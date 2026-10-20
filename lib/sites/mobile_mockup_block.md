@@ -38,7 +38,7 @@ Responsive mobile device showcase and entity card combining an iPhone 14 Plus me
 | `hasBadgeBar` | `bool` | `false` | Badge bar visibility toggle |
 
 ## Child Components Reused
-- [BiographyBlock](file:///c:/Vayu/Alter/lib/web/biography_block.dart) (`761:7097`): Metadata, title, subtitle, divider, and description.
+- [BiographyBlock](file:///c:/Vayu/Alter/lib/sites/biography_block.dart) (`761:7097`): Metadata, title, subtitle, divider, and description.
 - [Divider](file:///c:/Vayu/Alter/lib/components/utilities/divider.dart) (`559:916`): Reused inside BiographyBlock.
 
 ## Design Tokens Used

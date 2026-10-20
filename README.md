@@ -104,7 +104,7 @@ Alter organizes design tokens into foundational layers:
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Flexible list row with title, subtitle, left slot, and dual right slots.
 
-### Web & Blocks (`lib/web/`)
+### Sites & Blocks (`lib/sites/`)
 - **`BiographyBlock`**: Responsive entity and biography card with logo, title, badges, and bio description.
 - **`BrandBlock`**: Responsive social proof and partner brand showcase block.
 - **`FooterBlock`**: Responsive footer block with contact email, copy-to-clipboard action, and social profile links.

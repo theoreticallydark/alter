@@ -113,19 +113,19 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 | **`Divider`** | `v1.0.1` | [divider.md](utilities/divider.md) | 1px content divider line supporting horizontal and vertical orientations. |
 | **`ListItem`** | `v1.0.1` | [list_item.md](utilities/list_item.md) | Flexible list row with title, subtitle, left slot, and dual right slots. |
 
-### Web & Blocks (`lib/web/`)
+### Sites & Blocks (`lib/sites/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`BiographyBlock`** | `v1.1.0` | [biography_block.md](web/biography_block.md) | Responsive entity and biography card with logo, title, badges, and bio description. |
-| **`BrandBlock`** | `v1.0.0` | [brand_block.md](web/brand_block.md) | Responsive social proof brand showcase block for landing pages. |
-| **`FooterBlock`** | `v1.0.1` | [footer_block.md](web/footer_block.md) | Responsive footer block with contact email, copy action, and social profile links. |
-| **`GraphicsBlock`** | `v1.5.0` | [graphics_block.md](web/graphics_block.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, GIFs, and autoplay videos. |
-| **`GraphicsGridBlock`** | `v1.1.0` | [graphics_grid_block.md](web/graphics_grid_block.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device synchronization. |
-| **`HeaderBlock`** | `v1.0.0` | [header_block.md](web/header_block.md) | Responsive section header block with expandable divider line and bold title. |
-| **`HeroBlock`** | `v1.0.0` | [hero_block.md](web/hero_block.md) | Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages. |
-| **`HeroProjectsBlock`** | `v1.1.0` | [hero_projects_block.md](web/hero_projects_block.md) | Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links. |
-| **`MobileMockupBlock`** | `v1.3.0` | [mobile_mockup_block.md](web/mobile_mockup_block.md) | Responsive mobile device showcase card combining an iPhone 14 Plus container (428:926) with BiographyBlock and viewport-aware video support. |
-| **`MobileMockupsGridBlock`** | `v1.1.0` | [mobile_mockups_grid_block.md](web/mobile_mockups_grid_block.md) | Responsive mobile showcase grid & carousel with unified BiographyBlock entity metadata supporting image and video lists with viewport autoplay. |
+| **`BiographyBlock`** | `v1.1.0` | [biography_block.md](sites/biography_block.md) | Responsive entity and biography card with logo, title, badges, and bio description. |
+| **`BrandBlock`** | `v1.0.0` | [brand_block.md](sites/brand_block.md) | Responsive social proof brand showcase block for landing pages. |
+| **`FooterBlock`** | `v1.0.1` | [footer_block.md](sites/footer_block.md) | Responsive footer block with contact email, copy action, and social profile links. |
+| **`GraphicsBlock`** | `v1.5.0` | [graphics_block.md](sites/graphics_block.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, GIFs, and autoplay videos. |
+| **`GraphicsGridBlock`** | `v1.1.0` | [graphics_grid_block.md](sites/graphics_grid_block.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device synchronization. |
+| **`HeaderBlock`** | `v1.0.0` | [header_block.md](sites/header_block.md) | Responsive section header block with expandable divider line and bold title. |
+| **`HeroBlock`** | `v1.0.0` | [hero_block.md](sites/hero_block.md) | Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages. |
+| **`HeroProjectsBlock`** | `v1.1.0` | [hero_projects_block.md](sites/hero_projects_block.md) | Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links. |
+| **`MobileMockupBlock`** | `v1.3.0` | [mobile_mockup_block.md](sites/mobile_mockup_block.md) | Responsive mobile device showcase card combining an iPhone 14 Plus container (428:926) with BiographyBlock and viewport-aware video support. |
+| **`MobileMockupsGridBlock`** | `v1.1.0` | [mobile_mockups_grid_block.md](sites/mobile_mockups_grid_block.md) | Responsive mobile showcase grid & carousel with unified BiographyBlock entity metadata supporting image and video lists with viewport autoplay. |
 
 ---
 

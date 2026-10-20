@@ -14,7 +14,7 @@ import 'categories/selects_category.dart';
 import 'categories/status_category.dart';
 import 'categories/tabs_category.dart';
 import 'categories/utilities_category.dart';
-import 'categories/web_category.dart';
+import 'categories/sites_category.dart';
 
 void main() {
   runApp(const AlterWidgetbookApp());
@@ -37,7 +37,7 @@ class AlterWidgetbookApp extends StatelessWidget {
         statusCategory(),
         tabsCategory(),
         utilitiesCategory(),
-        webCategory(),
+        sitesCategory(),
         gridsCategory(),
         blocksCategory(),
       ],

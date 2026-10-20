@@ -50,7 +50,7 @@ Responsive project and portfolio card molecule combining banner media / carousel
 | `description` | `String` | `'Description'` | Descriptive paragraph |
 
 ## Child Components Reused
-- [BiographyBlock](file:///c:/Vayu/Alter/lib/web/biography_block.dart) (`761:7097`): Metadata, logo, title, subtitle, and badges.
+- [BiographyBlock](file:///c:/Vayu/Alter/lib/sites/biography_block.dart) (`761:7097`): Metadata, logo, title, subtitle, and badges.
 - [CarouselControl](file:///c:/Vayu/Alter/lib/components/utilities/carousel_control.dart) (`811:11843`): Chevron navigation overlay for PC carousel.
 - [Badge](file:///c:/Vayu/Alter/lib/components/pills/badge.dart) (`124:4003`): Reused inside BiographyBlock.
 - [Divider](file:///c:/Vayu/Alter/lib/components/utilities/divider.dart) (`559:916`): Reused inside BiographyBlock when description is visible.
