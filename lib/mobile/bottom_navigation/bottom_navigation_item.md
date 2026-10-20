@@ -1,7 +1,7 @@
 # BottomNavigationItem
 
 > Current Version: `v1.0.4`  
-> Internal sub-component for [AlterBottomNavigationBar](file:///c:/Vayu/Alter/lib/components/navigation/bottom_navigation_bar.md)
+> Internal sub-component for [AlterBottomNavigationBar](file:///c:/Vayu/Alter/lib/mobile/bottom_navigation/bottom_navigation_bar.md)
 
 ## Overview
 `BottomNavigationItem` is an internal sub-component representing a single tab item rendered exclusively within `AlterBottomNavigationBar`. It organizes an icon and caption label vertically within a 24px rounded pill container. It is not intended for standalone usage.

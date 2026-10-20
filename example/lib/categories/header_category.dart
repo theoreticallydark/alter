@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
-import 'package:alter/components/header/application_header_button_icon.dart';
-import 'package:alter/components/header/application_header_button_text.dart';
+import 'package:alter/web/application_header/application_header_button_icon.dart';
+import 'package:alter/web/application_header/application_header_button_text.dart';
 import '../toast_helper.dart';
 
 WidgetbookFolder headerCategory() {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart' hide Checkbox, Badge, Divider;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:alter/alter.dart';
-import 'package:alter/components/header/application_header_button_icon.dart';
-import 'package:alter/components/header/application_header_button_text.dart';
+import 'package:alter/web/application_header/application_header_button_icon.dart';
+import 'package:alter/web/application_header/application_header_button_text.dart';
 
 void main() {
   group('Alter Tokens', () {

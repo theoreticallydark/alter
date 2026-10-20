@@ -72,8 +72,8 @@ ApplicationHeader(
 ## Design System Tokens & Specs (Figma Node `706:8794`)
 - **Dimensions**: Fixed `48px` item height, edge-to-edge full width.
 - **Child Components Reused**:
-  - [ApplicationHeaderButtonIcon](file:///c:/Vayu/Alter/lib/components/header/application_header_button_icon.dart) (`542:9072`)
-  - [ApplicationHeaderButtonText](file:///c:/Vayu/Alter/lib/components/header/application_header_button_text.dart) (`760:3612`)
+  - [ApplicationHeaderButtonIcon](file:///c:/Vayu/Alter/lib/web/application_header/application_header_button_icon.dart) (`542:9072`)
+  - [ApplicationHeaderButtonText](file:///c:/Vayu/Alter/lib/web/application_header/application_header_button_text.dart) (`760:3612`)
   - [Avatar](file:///c:/Vayu/Alter/lib/components/utilities/avatar.dart) (`655:11313`)
 - **Typography**:
   - Title: `Headings/h4` -> `AlterTypography.h4Bold` (Geist 16px, SemiBold 600, line-height 20px).

@@ -81,7 +81,7 @@ Alter organizes design tokens into foundational layers:
 - **`Toast`**: Floating banner notification component with `success`, `warning`, `danger`, and `info` semantic variants.
 - **`FeedbackText`**: Inline form helper and error message caption with semantic iconography.
 
-### Navigation & Tabs (`lib/components/navigation/`, `lib/components/tabs/`, `lib/components/header/`)
+### Navigation, Tabs & Header (`lib/mobile/bottom_navigation/`, `lib/components/tabs/`, `lib/web/`, `lib/mobile/application_header_mobile/`)
 - **`MobileApplicationHeader`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
 - **`ApplicationHeaderButtonIcon`**: 48x48 action button for headers supporting icon glyphs and embedded user avatars.
 - **`ApplicationHeaderButtonText`**: 48px height text action button/badge for headers.

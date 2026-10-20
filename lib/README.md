@@ -92,12 +92,12 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 | **`Toast`** | `v1.0.0` | [toast.md](status/toast.md) | Floating banner notification component with semantic variants. |
 | **`FeedbackText`** | `v1.0.0` | [feedback_text.md](status/feedback_text.md) | Inline form helper and error message caption with semantic iconography. |
 
-### Navigation & Header (`lib/components/navigation/`, `lib/components/tabs/`, `lib/components/header/`)
+### Navigation & Header (`lib/components/navigation/`, `lib/components/tabs/`, `lib/web/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`MobileApplicationHeader`** | `v1.2.0` | [mobile_application_header.md](header/mobile_application_header.md) | Top mobile header with title, subtitle, return button, composite action buttons, and animated child slot. |
-| **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
-| **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](header/application_header_button_text.md) | 48px height text action button/badge for headers. |
+| **`MobileApplicationHeader`** | `v1.2.0` | [mobile_application_header.md](../mobile/application_header_mobile/mobile_application_header.md) | Top mobile header with title, subtitle, return button, composite action buttons, and animated child slot. |
+| **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](web/application_header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
+| **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](web/application_header/application_header_button_text.md) | 48px height text action button/badge for headers. |
 | **`Tabs`** | `v1.1.0` | [tabs.md](tabs/tabs.md) | Horizontal segment/navigation control with icon and label support. |
 | **`TabItem`** | `v1.1.0` | [tab_item.md](tabs/tab_item.md) | Atomic tab button supporting label, leading icon, and active states. |
 | **`AlterBottomNavigationBar`** | `v1.1.0` | [bottom_navigation_bar.md](navigation/bottom_navigation_bar.md) | Rounded bottom navigation bar with item list. |

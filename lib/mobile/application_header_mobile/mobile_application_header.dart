@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../components/buttons/button_graphic_image.dart';
+import '../../components/buttons/button_graphic_text.dart';
+import '../../components/buttons/button_icon.dart';
+import '../../components/buttons/button_icon_ghost.dart';
 import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
-import '../buttons/button_graphic_image.dart';
-import '../buttons/button_graphic_text.dart';
-import '../buttons/button_icon.dart';
-import '../buttons/button_icon_ghost.dart';
 
 /// A mobile application app-bar / header with title, subtitle, navigation return button, action slots, and profile trigger.
 class MobileApplicationHeader extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../components/utilities/avatar.dart';
 import '../../styles/tokens.dart';
-import '../utilities/avatar.dart';
 
 /// Style variants for [ApplicationHeaderButtonIcon].
 enum ApplicationHeaderButtonIconType {
