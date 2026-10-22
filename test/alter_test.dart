@@ -401,7 +401,7 @@ void main() {
       expect(find.text('Hidden'), findsNothing);
     });
 
-    testWidgets('MobileApplicationHeader renders with return button and custom slot', (WidgetTester tester) async {
+    testWidgets('ApplicationHeaderMobile renders with return button and custom slot', (WidgetTester tester) async {
       bool returnTapped = false;
       bool actionTapped = false;
 
@@ -409,7 +409,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Center(
-              child: MobileApplicationHeader(
+              child: ApplicationHeaderMobile(
                 title: 'Test Header',
                 subtitle: 'Test Subtitle',
                 hasReturnButton: true,

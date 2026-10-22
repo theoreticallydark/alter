@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
-import '../toast_helper.dart';
+import 'package:alter/mobile/bottom_navigation/bottom_navigation_item.dart';
+import '../../toast_helper.dart';
 
-WidgetbookFolder navigationCategory() {
+WidgetbookFolder bottomNavigationCategory() {
   return WidgetbookFolder(
-    name: 'Navigation',
+    name: 'BottomNavigation',
     children: [
       WidgetbookComponent(
-        name: 'BottomNavigationBar',
+        name: 'AlterBottomNavigationBar',
         useCases: [
           WidgetbookUseCase(
             name: 'Interactive',
@@ -25,6 +26,36 @@ WidgetbookFolder navigationCategory() {
                   onItemTapped: (index) => showExampleToast(
                     context,
                     'Clicked Bottom Navigation Tab $index',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      WidgetbookComponent(
+        name: 'BottomNavigationItem',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final label = context.knobs.string(
+                label: 'Label',
+                initialValue: 'Home',
+              );
+              final isSelected = context.knobs.boolean(
+                label: 'Is Selected',
+                initialValue: true,
+              );
+
+              return Center(
+                child: BottomNavigationItem(
+                  label: label,
+                  icon: Icons.home_outlined,
+                  isSelected: isSelected,
+                  onTap: () => showExampleToast(
+                    context,
+                    'Clicked BottomNavigationItem: $label',
                   ),
                 ),
               );

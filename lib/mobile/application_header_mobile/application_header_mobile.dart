@@ -7,13 +7,14 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// A mobile application app-bar / header with title, subtitle, navigation return button, action slots, and profile trigger.
-class MobileApplicationHeader extends StatelessWidget {
+class ApplicationHeaderMobile extends StatelessWidget {
   /// Component version for reference.
-  /// v1.2.0: Renamed component from ApplicationHeader to MobileApplicationHeader matching design system nomenclature.
+  /// v1.3.0: Renamed component from MobileApplicationHeader to ApplicationHeaderMobile matching design system nomenclature.
+  /// v1.2.0: Renamed component from ApplicationHeader to MobileApplicationHeader.
   /// v1.1.0: Added `hasReturnButton`, `onReturnTap`, custom action icons, and `profileImage` matching Figma node 119:5716.
   /// v1.0.2: Dynamically hug action elements with spacing only between adjacent active items, eliminating trailing space when subsequent actions are absent.
   /// v1.0.1: Updated outer layout to 24px padding all around and 16px itemSpacing between headerContainer and Slot as per Figma node 119:5716.
-  static const String version = '1.2.0';
+  static const String version = '1.3.0';
 
   /// Primary headline text.
   final String title;
@@ -69,8 +70,8 @@ class MobileApplicationHeader extends StatelessWidget {
   /// Optional widget slot embedded below the header bar.
   final Widget? slot;
 
-  /// Creates a [MobileApplicationHeader] instance.
-  const MobileApplicationHeader({
+  /// Creates an [ApplicationHeaderMobile] instance.
+  const ApplicationHeaderMobile({
     super.key,
     this.title = 'Alter',
     this.subtitle = 'Design System',
@@ -222,3 +223,6 @@ class MobileApplicationHeader extends StatelessWidget {
     );
   }
 }
+
+/// Backwards compatibility alias for [ApplicationHeaderMobile].
+typedef MobileApplicationHeader = ApplicationHeaderMobile;

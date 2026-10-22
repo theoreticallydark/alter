@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Checkbox, Radio, Switch;
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
-import '../toast_helper.dart';
+import '../../toast_helper.dart';
 
 WidgetbookFolder selectsCategory() {
   return WidgetbookFolder(

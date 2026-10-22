@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Checkbox, Divider;
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
-import '../toast_helper.dart';
+import '../../toast_helper.dart';
 
 WidgetbookFolder utilitiesCategory() {
   return WidgetbookFolder(
@@ -460,6 +460,50 @@ WidgetbookFolder utilitiesCategory() {
                         child: const CarouselControl.end(),
                       ),
                     ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      WidgetbookComponent(
+        name: 'AlterMediaView',
+        useCases: [
+          WidgetbookUseCase(
+            name: 'Interactive',
+            builder: (context) {
+              final fit = context.knobs.object.dropdown(
+                label: 'Fit',
+                options: BoxFit.values,
+                labelBuilder: (f) => f.name,
+                initialOption: BoxFit.cover,
+              );
+              final borderRadius = context.knobs.double.slider(
+                label: 'Border Radius',
+                initialValue: 16.0,
+                min: 0.0,
+                max: 32.0,
+              );
+              final showBorder = context.knobs.boolean(
+                label: 'Show Border',
+                initialValue: true,
+              );
+
+              return Center(
+                child: SizedBox(
+                  width: 320,
+                  height: 240,
+                  child: AlterMediaView(
+                    url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80',
+                    fit: fit,
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    border: showBorder
+                        ? Border.all(
+                            color: AlterSemanticTokens.stroke100,
+                            width: 1,
+                          )
+                        : null,
                   ),
                 ),
               );

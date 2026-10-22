@@ -7,7 +7,7 @@ export 'components/buttons/button_icon.dart';
 export 'components/buttons/button_icon_ghost.dart';
 export 'components/buttons/button_text.dart';
 export 'web/application_header/application_header.dart';
-export 'mobile/application_header_mobile/mobile_application_header.dart';
+export 'mobile/application_header_mobile/application_header_mobile.dart';
 export 'components/inputs/currency_input.dart';
 export 'components/inputs/input_control.dart';
 export 'components/inputs/numeric_input.dart';

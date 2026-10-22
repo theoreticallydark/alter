@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
-import '../toast_helper.dart';
+import '../../toast_helper.dart';
 
-WidgetbookFolder inputCategory() {
+WidgetbookFolder inputsCategory() {
   return WidgetbookFolder(
-    name: 'Input',
+    name: 'Inputs',
     children: [
       // 1. InputControl Primitive
       WidgetbookComponent(

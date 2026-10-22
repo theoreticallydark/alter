@@ -92,34 +92,57 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 | **`Toast`** | `v1.0.0` | [toast.md](status/toast.md) | Floating banner notification component with semantic variants. |
 | **`FeedbackText`** | `v1.0.0` | [feedback_text.md](status/feedback_text.md) | Inline form helper and error message caption with semantic iconography. |
 
-### Navigation & Header (`lib/components/navigation/`, `lib/components/tabs/`, `lib/web/`)
+### Navigation & Header (`lib/mobile/bottom_navigation/`, `lib/components/tabs/`, `lib/mobile/application_header_mobile/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`MobileApplicationHeader`** | `v1.2.0` | [mobile_application_header.md](../mobile/application_header_mobile/mobile_application_header.md) | Top mobile header with title, subtitle, return button, composite action buttons, and animated child slot. |
-| **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](web/application_header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
-| **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](web/application_header/application_header_button_text.md) | 48px height text action button/badge for headers. |
+| **`ApplicationHeaderMobile`** | `v1.3.0` | [application_header_mobile.md](../mobile/application_header_mobile/application_header_mobile.md) | Top mobile header with title, subtitle, return button, composite action buttons, and animated child slot. |
 | **`Tabs`** | `v1.1.0` | [tabs.md](tabs/tabs.md) | Horizontal segment/navigation control with icon and label support. |
 | **`TabItem`** | `v1.1.0` | [tab_item.md](tabs/tab_item.md) | Atomic tab button supporting label, leading icon, and active states. |
-| **`AlterBottomNavigationBar`** | `v1.1.0` | [bottom_navigation_bar.md](navigation/bottom_navigation_bar.md) | Rounded bottom navigation bar with item list. |
-| **`BottomNavigationBarAction`** | `v1.1.0` | [bottom_navigation_bar_action.md](navigation/bottom_navigation_bar_action.md) | Action bottom bar with integrated primary action or multi-action triggers. |
-| **`BottomNavigationButton`** | `v1.0.0` | [bottom_navigation_button.md](navigation/bottom_navigation_button.md) | Primary action button embedded in bottom navigation. |
+| **`AlterBottomNavigationBar`** | `v1.1.0` | [bottom_navigation_bar.md](../mobile/bottom_navigation/bottom_navigation_bar.md) | Rounded bottom navigation bar with item list. |
+| **`BottomNavigationBarAction`** | `v1.1.0` | [bottom_navigation_bar_action.md](../mobile/bottom_navigation/bottom_navigation_bar_action.md) | Action bottom bar with integrated primary action or multi-action triggers. |
+| **`BottomNavigationButton`** | `v1.0.0` | [bottom_navigation_button.md](../mobile/bottom_navigation/bottom_navigation_button.md) | Primary action button embedded in bottom navigation. |
+| **`BottomNavigationItem`** | `v1.0.4` | [bottom_navigation_item.md](../mobile/bottom_navigation/bottom_navigation_item.md) | Individual clickable navigation item with icon and label. |
 
 ### Utilities (`lib/components/utilities/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`AlterMediaView`** | `v1.1.0` | [alter_media_view.md](utilities/alter_media_view.md) | Universal media view component supporting static images, animated GIFs, and muted looping autoplay videos with viewport-aware delay (default 1.2s). |
 | **`Avatar`** | `v1.0.0` | [avatar.md](utilities/avatar.md) | User and entity avatar supporting image and placeholder icon variants. |
 | **`CarouselControl`** | `v1.0.1` | [carousel_control.md](utilities/carousel_control.md) | Carousel navigation overlay control bar providing chevron previous/next triggers. |
 | **`Divider`** | `v1.0.1` | [divider.md](utilities/divider.md) | 1px content divider line supporting horizontal and vertical orientations. |
 | **`ListItem`** | `v1.0.1` | [list_item.md](utilities/list_item.md) | Flexible list row with title, subtitle, left slot, and dual right slots. |
 
-### Sites & Blocks (`lib/sites/`)
+---
+
+## 🚧 Upcoming in v3.0.0 (In Development)
+
+> [!NOTE]
+> The components and modules below are currently in active development on the `main` branch to bring responsive Web and Sites support to Alter. They will be officially published to [pub.dev](https://pub.dev/packages/alter) in the upcoming **v3.0.0** release.
+
+### Web Header (`lib/web/application_header/`)
+| Component | Version | Docs | Description |
+| :--- | :--- | :--- | :--- |
+| **`ApplicationHeader`** | `v1.0.0` | [application_header.md](../web/application_header/application_header.md) | Responsive web and desktop application header with navigation slots. |
+| **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](../web/application_header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
+| **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](../web/application_header/application_header_button_text.md) | 48px height text action button/badge for headers. |
+
+### Foundations (`lib/foundations/`)
+| Component | Version | Docs | Description |
+| :--- | :--- | :--- | :--- |
+| **`AlterDeviceScope`** | `v1.0.0` | — | Ambient device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope. |
+
+### Multimedia Presentation (`lib/components/utilities/`)
+| Component | Version | Docs | Description |
+| :--- | :--- | :--- | :--- |
+| **`AlterMediaView`** | `v1.1.0` | [alter_media_view.md](utilities/alter_media_view.md) | Universal media view component supporting static images, animated GIFs, and muted looping autoplay videos with viewport-aware delay (default 1.2s). |
+
+### Sites & Responsive Blocks (`lib/sites/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
 | **`BiographyBlock`** | `v1.1.0` | [biography_block.md](sites/biography_block.md) | Responsive entity and biography card with logo, title, badges, and bio description. |
 | **`BrandBlock`** | `v1.0.0` | [brand_block.md](sites/brand_block.md) | Responsive social proof brand showcase block for landing pages. |
 | **`FooterBlock`** | `v1.0.1` | [footer_block.md](sites/footer_block.md) | Responsive footer block with contact email, copy action, and social profile links. |
 | **`GraphicsBlock`** | `v1.5.0` | [graphics_block.md](sites/graphics_block.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, GIFs, and autoplay videos. |
+| **`GraphicsCarouselBlock`** | `v1.0.0` | — | Responsive full-width horizontal carousel block for visual showcases. |
 | **`GraphicsGridBlock`** | `v1.1.0` | [graphics_grid_block.md](sites/graphics_grid_block.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device synchronization. |
 | **`HeaderBlock`** | `v1.0.0` | [header_block.md](sites/header_block.md) | Responsive section header block with expandable divider line and bold title. |
 | **`HeroBlock`** | `v1.0.0` | [hero_block.md](sites/hero_block.md) | Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages. |

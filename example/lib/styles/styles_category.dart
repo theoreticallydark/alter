@@ -2,9 +2,9 @@ import 'package:flutter/material.dart' hide Divider;
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 
-WidgetbookFolder foundationsCategory() {
+WidgetbookFolder stylesCategory() {
   return WidgetbookFolder(
-    name: 'Foundations',
+    name: 'Styles',
     children: [
       WidgetbookComponent(
         name: 'Typography',

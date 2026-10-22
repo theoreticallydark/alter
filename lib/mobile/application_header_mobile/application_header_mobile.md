@@ -1,14 +1,14 @@
-# MobileApplicationHeader
+# ApplicationHeaderMobile
 
-> Current Version: `v1.2.0`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/header/mobileapplicationheader)
+> Current Version: `v1.3.0`  
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/header/applicationheadermobile)
 
 ## Overview
-`MobileApplicationHeader` is the standard top header / app-bar component for mobile viewports in the Alter Design System. It houses an optional return/back button, title and subtitle typography on the left, an adaptive right action group (style button, primary/secondary action buttons, profile image), and an expandable child slot below with smooth transition animations.
+`ApplicationHeaderMobile` (formerly `MobileApplicationHeader`) is the standard top header / app-bar component for mobile viewports in the Alter Design System. It houses an optional return/back button, title and subtitle typography on the left, an adaptive right action group (style button, primary/secondary action buttons, profile image), and an expandable child slot below with smooth transition animations.
 
 ## Usage
 ```dart
-MobileApplicationHeader(
+ApplicationHeaderMobile(
   title: 'Dashboard',
   subtitle: 'Welcome Back',
   hasReturnButton: true,
@@ -55,12 +55,13 @@ MobileApplicationHeader(
 - **Padding**: `24px` all around (`EdgeInsets.all(24)`).
 - **Item Spacing**: `16px` between header bar and bottom expandable slot.
 - **Typography**:
-  - Title: `AlterTypography.h1Serif` (Instrument Serif 32px, Regular 400).
-  - Subtitle: `AlterTypography.caption` (Geist 12px, Regular 400).
+- Title: `AlterTypography.h1Serif` (Instrument Serif 32px, Regular 400).
+- Subtitle: `AlterTypography.caption` (Geist 12px, Regular 400).
 
 ---
 
 ## Component Changelog
+* **`v1.3.0`**: Renamed component from `MobileApplicationHeader` to `ApplicationHeaderMobile` matching design system nomenclature. Retained `MobileApplicationHeader` typedef alias for backwards compatibility.
 * **`v1.2.0`**: Renamed component from `ApplicationHeader` to `MobileApplicationHeader` matching design system nomenclature. Added backwards-compatibility typedef alias.
 * **`v1.1.0`**: Added `hasReturnButton`, `onReturnTap`, custom action icons, and `profileImage` matching Figma node `119:5716`.
 * **`v1.0.2`**: Dynamically hug action elements with spacing only between adjacent active items.

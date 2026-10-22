@@ -11,7 +11,7 @@ Add `alter` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  alter: ^2.0.0
+  alter: ^2.0.1
 ```
 
 ### 2. Import Alter
@@ -51,7 +51,7 @@ Alter organizes design tokens into foundational layers:
 ### Inputs (`lib/components/inputs/`)
 - **`InputControl`**: Configurable surface primitive with multiline bounds safety, leading/trailing slots, hover/focus rings, and error message container.
 - **`TextInput`**: Full `FormField<String>` wrapper with `TextInputMode` filters, deferred `isRequired` validation on blur, and direct `keyboardType` fallback override.
-- **`TextArea`**: Multiline text area supporting both fixed reserved lines (`lines: 4`) and dynamic adaptive height (`minLines: 1`) that expands as users type.
+- **`TextAreaInput`**: Multiline text area supporting both fixed reserved lines (`lines: 4`) and dynamic adaptive height (`minLines: 1`) that expands as users type.
 - **`NumericInput`**: Live comma grouping (International and Indian systems), decimal precision limits, bounds validation (`minValue`/`maxValue`), and trailing action slot.
 - **`CurrencyInput`**: Financial currency entry preset with Euro default icon, 2-decimal precision, and prefix formatting.
 - **`PasswordInput`**: Secure input with interactive eye visibility toggle, built-in space denial, character limits, and strength validation rules.
@@ -81,15 +81,14 @@ Alter organizes design tokens into foundational layers:
 - **`Toast`**: Floating banner notification component with `success`, `warning`, `danger`, and `info` semantic variants.
 - **`FeedbackText`**: Inline form helper and error message caption with semantic iconography.
 
-### Navigation, Tabs & Header (`lib/mobile/bottom_navigation/`, `lib/components/tabs/`, `lib/web/`, `lib/mobile/application_header_mobile/`)
-- **`MobileApplicationHeader`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
-- **`ApplicationHeaderButtonIcon`**: 48x48 action button for headers supporting icon glyphs and embedded user avatars.
-- **`ApplicationHeaderButtonText`**: 48px height text action button/badge for headers.
+### Mobile Navigation, Tabs & Header (`lib/mobile/`, `lib/components/tabs/`)
+- **`ApplicationHeaderMobile`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
 - **`Tabs`**: Horizontal segment/navigation control composed of `TabItem` sub-components with icon and label support.
 - **`TabItem`**: Atomic tab button supporting label, leading icon, and active states.
 - **`AlterBottomNavigationBar`**: Floating pill bottom navigation bar with responsive tab items.
 - **`BottomNavigationBarAction`**: Bottom navigation bar composed with primary/secondary action triggers.
 - **`BottomNavigationButton`**: Primary call-to-action button embedded in bottom navigation.
+- **`BottomNavigationItem`**: Individual clickable item within the bottom navigation bar.
 
 ### Utilities (`lib/components/utilities/`)
 - **`Avatar`**: Compact user and entity avatar supporting image and placeholder icon variants.
@@ -97,18 +96,30 @@ Alter organizes design tokens into foundational layers:
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Universal list tile with title, subtitle, leading action slot, and dual trailing slots.
 
-### Utilities (`lib/components/utilities/`)
-- **`AlterMediaView`**: Universal media presentation layer for images, GIFs, and muted looping autoplay videos.
-- **`Avatar`**: User and entity avatar supporting image and placeholder icon variants.
-- **`CarouselControl`**: Carousel navigation overlay control bar providing chevron action triggers.
-- **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
-- **`ListItem`**: Flexible list row with title, subtitle, left slot, and dual right slots.
+---
 
-### Sites & Blocks (`lib/sites/`)
+## 🚧 Upcoming in v3.0.0 (In Development)
+
+> [!NOTE]
+> The components and modules below are currently in active development on the `main` branch to bring responsive Web and Sites support to Alter. They will be officially published to [pub.dev](https://pub.dev/packages/alter) in the upcoming **v3.0.0** release.
+
+### Web Header & Desktop Navigation (`lib/web/application_header/`)
+- **`ApplicationHeader`**: Responsive web & desktop application header supporting title, navigation pages, actions, and profile avatar slots.
+- **`ApplicationHeaderButtonIcon`**: 48x48 action button for headers supporting icon glyphs and embedded user avatars.
+- **`ApplicationHeaderButtonText`**: 48px height text action button/badge for headers.
+
+### Foundations (`lib/foundations/`)
+- **`AlterDeviceScope`**: Inherited device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope ensuring child components synchronize layout with parent grid/marker state without individual viewport queries.
+
+### Multimedia Presentation (`lib/components/utilities/`)
+- **`AlterMediaView`**: Universal media presentation widget supporting static images, animated GIFs, and muted looping autoplay videos with viewport-aware play/pause automation.
+
+### Sites & Responsive Blocks (`lib/sites/`)
 - **`BiographyBlock`**: Responsive entity and biography card with logo, title, badges, and bio description.
 - **`BrandBlock`**: Responsive social proof and partner brand showcase block.
 - **`FooterBlock`**: Responsive footer block with contact email, copy-to-clipboard action, and social profile links.
 - **`GraphicsBlock`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
+- **`GraphicsCarouselBlock`**: Responsive full-width horizontal carousel block for visual showcases.
 - **`GraphicsGridBlock`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device scope synchronization.
 - **`HeaderBlock`**: Responsive section header block with expandable divider line and bold title.
 - **`HeroBlock`**: Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages.
