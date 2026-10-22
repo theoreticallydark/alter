@@ -113,22 +113,17 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 
 ---
 
-## 🚧 Upcoming in v3.0.0 (In Development)
-
-> [!NOTE]
-> The components and modules below are currently in active development on the `main` branch to bring responsive Web and Sites support to Alter. They will be officially published to [pub.dev](https://pub.dev/packages/alter) in the upcoming **v3.0.0** release.
-
 ### Web Header (`lib/web/application_header/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`ApplicationHeader`** | `v1.0.0` | [application_header.md](../web/application_header/application_header.md) | Responsive web and desktop application header with navigation slots. |
+| **`ApplicationHeader`** | `v1.0.1` | [application_header.md](../web/application_header/application_header.md) | Responsive web and desktop application header with navigation slots. |
 | **`ApplicationHeaderButtonIcon`** | `v1.0.0` | [application_header_button_icon.md](../web/application_header/application_header_button_icon.md) | 48x48 action button for headers supporting icon glyphs and embedded user avatars. |
 | **`ApplicationHeaderButtonText`** | `v1.0.0` | [application_header_button_text.md](../web/application_header/application_header_button_text.md) | 48px height text action button/badge for headers. |
 
 ### Foundations (`lib/foundations/`)
 | Component | Version | Docs | Description |
 | :--- | :--- | :--- | :--- |
-| **`AlterDeviceScope`** | `v1.0.0` | — | Ambient device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope. |
+| **`AlterDeviceScope`** | `v1.1.0` | [device_scope.md](../foundations/device_scope.md) | Ambient device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope. |
 
 ### Multimedia Presentation (`lib/components/utilities/`)
 | Component | Version | Docs | Description |
@@ -142,8 +137,8 @@ Alter components use bundled local font assets registered in `pubspec.yaml`:
 | **`BrandBlock`** | `v1.0.0` | [brand_block.md](sites/brand_block.md) | Responsive social proof brand showcase block for landing pages. |
 | **`FooterBlock`** | `v1.0.1` | [footer_block.md](sites/footer_block.md) | Responsive footer block with contact email, copy action, and social profile links. |
 | **`GraphicsBlock`** | `v1.5.0` | [graphics_block.md](sites/graphics_block.md) | Responsive project and portfolio card molecule supporting single & multi-item carousels for images, GIFs, and autoplay videos. |
-| **`GraphicsCarouselBlock`** | `v1.0.0` | — | Responsive full-width horizontal carousel block for visual showcases. |
-| **`GraphicsGridBlock`** | `v1.1.0` | [graphics_grid_block.md](sites/graphics_grid_block.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device synchronization. |
+| **`GraphicsCarouselBlock`** | `v1.1.0` | [graphics_carousel_block.md](sites/graphics_carousel_block.md) | Responsive full-width horizontal carousel block for visual showcases. |
+| **`GraphicsGridBlock`** | `v1.1.1` | [graphics_grid_block.md](sites/graphics_grid_block.md) | Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device synchronization. |
 | **`HeaderBlock`** | `v1.0.0` | [header_block.md](sites/header_block.md) | Responsive section header block with expandable divider line and bold title. |
 | **`HeroBlock`** | `v1.0.0` | [hero_block.md](sites/hero_block.md) | Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages. |
 | **`HeroProjectsBlock`** | `v1.1.0` | [hero_projects_block.md](sites/hero_projects_block.md) | Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links. |

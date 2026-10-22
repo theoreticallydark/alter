@@ -11,7 +11,7 @@ Add `alter` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  alter: ^2.0.1
+  alter: ^3.0.0
 ```
 
 ### 2. Import Alter
@@ -43,10 +43,33 @@ Alter organizes design tokens into foundational layers:
 * **`AlterColors`**: 234 raw color palette swatches extracted from Figma design variables.
 * **`AlterSemanticTokens`**: Semantic color mappings (`baseWhite`, `baseGray`, `interactivePrimary`, `textPrimary`, `stroke100`, `statusSuccess`, etc.).
 * **`AlterTypography`**: Text style scale tokens (`display`, `displayXl`, `h1Serif`, `h1Bold`, `h2`, `h3`, `bodyLgBold`, `body`, `caption`, etc.).
+* **`AlterDeviceScope`**: Inherited device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope ensuring child components synchronize layout with parent grid/marker state without individual viewport queries.
 
 ---
 
 ## 🧩 Components Catalog
+
+### Web & Navigation (`lib/web/`, `lib/mobile/`, `lib/components/tabs/`)
+- **`ApplicationHeader`**: Responsive web & desktop application header supporting brand unit, navigation tabs, composite actions, and profile avatar slots.
+- **`ApplicationHeaderMobile`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
+- **`Tabs`**: Horizontal segment/navigation control composed of `TabItem` sub-components with icon and label support.
+- **`TabItem`**: Atomic tab button supporting label, leading icon, and active states.
+- **`AlterBottomNavigationBar`**: Floating pill bottom navigation bar with responsive tab items.
+- **`BottomNavigationBarAction`**: Bottom navigation bar composed with primary/secondary action triggers.
+- **`BottomNavigationButton`**: Primary call-to-action button embedded in bottom navigation.
+
+### Sites & Responsive Blocks (`lib/sites/`)
+- **`BiographyBlock`**: Responsive entity and biography card with logo, title, badges, and bio description (`Tall` & `Wide`).
+- **`BrandBlock`**: Responsive social proof and partner brand showcase block.
+- **`FooterBlock`**: Responsive footer block with contact email, copy-to-clipboard action, and social profile links.
+- **`GraphicsBlock`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
+- **`GraphicsCarouselBlock`**: Responsive full-width horizontal carousel block for visual showcases.
+- **`GraphicsGridBlock`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming `GraphicsBlock` cards with device scope synchronization.
+- **`HeaderBlock`**: Responsive section header block with expandable divider line and bold title.
+- **`HeroBlock`**: Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages.
+- **`HeroProjectsBlock`**: Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links.
+- **`MobileMockupBlock`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware autoplay looping videos with `BiographyBlock`.
+- **`MobileMockupsGridBlock`**: Responsive mobile screen showcase grid & carousel with unified `BiographyBlock` entity metadata supporting image and video lists with viewport autoplay.
 
 ### Inputs (`lib/components/inputs/`)
 - **`InputControl`**: Configurable surface primitive with multiline bounds safety, leading/trailing slots, hover/focus rings, and error message container.
@@ -81,51 +104,12 @@ Alter organizes design tokens into foundational layers:
 - **`Toast`**: Floating banner notification component with `success`, `warning`, `danger`, and `info` semantic variants.
 - **`FeedbackText`**: Inline form helper and error message caption with semantic iconography.
 
-### Mobile Navigation, Tabs & Header (`lib/mobile/`, `lib/components/tabs/`)
-- **`ApplicationHeaderMobile`**: Top mobile navigation header with title, subtitle, return button, composite action buttons, and animated child slot.
-- **`Tabs`**: Horizontal segment/navigation control composed of `TabItem` sub-components with icon and label support.
-- **`TabItem`**: Atomic tab button supporting label, leading icon, and active states.
-- **`AlterBottomNavigationBar`**: Floating pill bottom navigation bar with responsive tab items.
-- **`BottomNavigationBarAction`**: Bottom navigation bar composed with primary/secondary action triggers.
-- **`BottomNavigationButton`**: Primary call-to-action button embedded in bottom navigation.
-- **`BottomNavigationItem`**: Individual clickable item within the bottom navigation bar.
-
-### Utilities (`lib/components/utilities/`)
+### Utilities & Media (`lib/components/utilities/`)
+- **`AlterMediaView`**: Universal media presentation widget supporting static images, animated GIFs, and muted looping autoplay videos with viewport visibility detection.
 - **`Avatar`**: Compact user and entity avatar supporting image and placeholder icon variants.
 - **`CarouselControl`**: Carousel navigation overlay control bar providing chevron previous/next triggers.
 - **`Divider`**: 1px content divider line supporting horizontal and vertical orientations.
 - **`ListItem`**: Universal list tile with title, subtitle, leading action slot, and dual trailing slots.
-
----
-
-## 🚧 Upcoming in v3.0.0 (In Development)
-
-> [!NOTE]
-> The components and modules below are currently in active development on the `main` branch to bring responsive Web and Sites support to Alter. They will be officially published to [pub.dev](https://pub.dev/packages/alter) in the upcoming **v3.0.0** release.
-
-### Web Header & Desktop Navigation (`lib/web/application_header/`)
-- **`ApplicationHeader`**: Responsive web & desktop application header supporting title, navigation pages, actions, and profile avatar slots.
-- **`ApplicationHeaderButtonIcon`**: 48x48 action button for headers supporting icon glyphs and embedded user avatars.
-- **`ApplicationHeaderButtonText`**: 48px height text action button/badge for headers.
-
-### Foundations (`lib/foundations/`)
-- **`AlterDeviceScope`**: Inherited device mode (`AlterDevice.pc` / `AlterDevice.mobile`) propagation scope ensuring child components synchronize layout with parent grid/marker state without individual viewport queries.
-
-### Multimedia Presentation (`lib/components/utilities/`)
-- **`AlterMediaView`**: Universal media presentation widget supporting static images, animated GIFs, and muted looping autoplay videos with viewport-aware play/pause automation.
-
-### Sites & Responsive Blocks (`lib/sites/`)
-- **`BiographyBlock`**: Responsive entity and biography card with logo, title, badges, and bio description.
-- **`BrandBlock`**: Responsive social proof and partner brand showcase block.
-- **`FooterBlock`**: Responsive footer block with contact email, copy-to-clipboard action, and social profile links.
-- **`GraphicsBlock`**: Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and viewport-aware autoplay videos.
-- **`GraphicsCarouselBlock`**: Responsive full-width horizontal carousel block for visual showcases.
-- **`GraphicsGridBlock`**: Responsive project grid layout (PC 2-column, Mobile 1-column) consuming GraphicsBlock cards with device scope synchronization.
-- **`HeaderBlock`**: Responsive section header block with expandable divider line and bold title.
-- **`HeroBlock`**: Responsive hero banner section block with avatar, display typography headline, subtitle, and action buttons for landing pages.
-- **`HeroProjectsBlock`**: Responsive project case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links.
-- **`MobileMockupBlock`**: Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware autoplay looping videos with BiographyBlock.
-- **`MobileMockupsGridBlock`**: Responsive mobile screen showcase grid & carousel with unified BiographyBlock entity metadata supporting image and video lists with viewport autoplay.
 
 ---
 
