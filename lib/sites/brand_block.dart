@@ -4,16 +4,7 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Target device / viewport modes for [BrandBlock].
-enum BrandBlockDevice {
-  /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (max width 896px).
-  pc,
-
-  /// Forces Mobile layout (max width 316px).
-  mobile,
-}
+typedef BrandBlockDevice = AlterBlockDevice;
 
 /// Data model representing a brand logo or partner tile in [BrandBlock].
 class BrandItem {

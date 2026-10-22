@@ -9,15 +9,31 @@ enum AlterDevice {
   mobile,
 }
 
+/// Target viewport adaptation modes for responsive Alter site blocks.
+enum AlterBlockDevice {
+  /// Automatically adapts based on parent width constraint or ambient [AlterDeviceScope].
+  auto,
+
+  /// Forces PC / Desktop layout.
+  pc,
+
+  /// Forces Mobile layout.
+  mobile;
+
+  /// Alias for [pc] desktop/web layout.
+  static const AlterBlockDevice web = AlterBlockDevice.pc;
+}
+
 /// An [InheritedWidget] that propagates the ambient [AlterDevice] mode (PC or Mobile) down the widget tree.
 ///
-/// Grids (`ProjectGrid`, `MobileGrid`) and Markers (`ProjectMarker`, `MobileMarker`)
-/// use this scope so that child components (`BioMarker`, `ProjectMarker`, `MobileMarker`) derive their
+/// Responsive grid blocks ([GraphicsGridBlock], [MobileMockupsGridBlock]) and composite blocks ([GraphicsBlock], [MobileMockupBlock])
+/// use this scope so that child components ([BiographyBlock], [GraphicsBlock], [MobileMockupBlock]) derive their
 /// device mode directly from their parent's resolved layout and not judge their own width independently.
 class AlterDeviceScope extends InheritedWidget {
   /// Component version for reference.
-  /// v1.0.0: Ambient device propagation scope ensuring child components synchronize with parent grid/marker device state.
-  static const String version = '1.0.0';
+  /// v1.1.0: Added AlterBlockDevice enum and updated block references.
+  /// v1.0.0: Ambient device propagation scope ensuring child components synchronize with parent grid/block device state.
+  static const String version = '1.1.0';
 
   /// The active device mode for the subtree.
   final AlterDevice device;

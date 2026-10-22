@@ -5,19 +5,10 @@ import 'biography_block.dart';
 import 'mobile_mockup_block.dart';
 
 /// Target device / viewport modes for [MobileMockupsGridBlock].
-enum MobileMockupsGridBlockDevice {
-  /// Automatically adapts based on parent width (< 600px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (4-column grid or multi-item sliding carousel).
-  pc,
-
-  /// Forces Mobile layout (touch-friendly swipe carousel with viewport peek).
-  mobile,
-}
+typedef MobileMockupsGridBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [MobileMockupsGridBlockDevice].
-typedef MobileGridDevice = MobileMockupsGridBlockDevice;
+typedef MobileGridDevice = AlterBlockDevice;
 
 /// A responsive grid and carousel component for showcasing mobile screen mockups with associated entity metadata.
 ///

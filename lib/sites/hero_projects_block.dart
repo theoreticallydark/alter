@@ -7,19 +7,10 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Target device / viewport modes for [HeroProjectsBlock].
-enum HeroProjectsBlockDevice {
-  /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (max width 896px).
-  pc,
-
-  /// Forces Mobile layout (max width 316px).
-  mobile,
-}
+typedef HeroProjectsBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [HeroProjectsBlockDevice].
-typedef ProjectHeroBlockDevice = HeroProjectsBlockDevice;
+typedef ProjectHeroBlockDevice = AlterBlockDevice;
 
 /// Data model representing a key-value detail pair in [HeroProjectsBlock].
 class ProjectDetailItem {

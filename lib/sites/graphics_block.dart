@@ -8,19 +8,10 @@ import '../../styles/tokens.dart';
 import 'biography_block.dart';
 
 /// Target device / viewport modes for [GraphicsBlock].
-enum GraphicsBlockDevice {
-  /// Automatically responds to layout constraints or inherits ambient [AlterDeviceScope] from parent grid.
-  auto,
-
-  /// Forces PC / Desktop layout with multi-column carousel or full-width banner and expanded BioMarker.
-  pc,
-
-  /// Forces Mobile layout with thumb-swipeable peek carousel or compact banner and compact BioMarker.
-  mobile,
-}
+typedef GraphicsBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [GraphicsBlockDevice].
-typedef ProjectMarkerDevice = GraphicsBlockDevice;
+typedef ProjectMarkerDevice = AlterBlockDevice;
 
 /// A responsive project and portfolio card molecule combining banner media / carousel and an entity [BiographyBlock].
 ///

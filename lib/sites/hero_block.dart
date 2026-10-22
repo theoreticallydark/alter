@@ -5,16 +5,7 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Target device / viewport modes for [HeroBlock].
-enum HeroBlockDevice {
-  /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (80px display title, h2 subtitle, actions with icons).
-  pc,
-
-  /// Forces Mobile layout (48px display title, h4 subtitle, compact actions).
-  mobile,
-}
+typedef HeroBlockDevice = AlterBlockDevice;
 
 /// A responsive hero banner section block for landing pages.
 ///

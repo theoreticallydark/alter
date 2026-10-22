@@ -1,5 +1,44 @@
 # Changelog
 
+## 3.0.0
+
+### Major Release — Web & Responsive Sites Support, Multimedia Layer & Standardized Foundations
+
+#### 🚀 What’s New?
+- **Web Header (`lib/web/application_header/`)**:
+  - `ApplicationHeader` (`v1.0.1`): Full-width desktop/web application header supporting launcher app drawer, customizable brand logo unit, page navigation tab row, composite action buttons, and user avatar button.
+- **Responsive Sites & Blocks Suite (`lib/sites/`)**:
+  - `BiographyBlock` (`v1.1.0`): Responsive entity and bio presentation card supporting `Tall` and `Wide` layouts with logo, title, badges, and bio description.
+  - `BrandBlock` (`v1.0.0`): Responsive social proof and partner brand showcase block.
+  - `FooterBlock` (`v1.0.1`): Responsive landing page footer block with contact email, copy-to-clipboard action, and social profile links.
+  - `GraphicsBlock` (`v1.5.0`): Responsive project and portfolio card molecule supporting single & multi-item carousels for images, animated GIFs, and autoplay looping videos.
+  - `GraphicsGridBlock` (`v1.1.1`): Responsive project grid layout (PC 2-column, Mobile 1-column) consuming `GraphicsBlock` cards with device scope synchronization.
+  - `HeaderBlock` (`v1.0.0`): Responsive section header block with expandable divider line and bold headline typography.
+  - `HeroBlock` (`v1.0.0`): Responsive landing page hero banner section with avatar, 80px display headline, subtitle, and primary/secondary action buttons.
+  - `HeroProjectsBlock` (`v1.1.0`): Responsive case study hero block with logo, title, metadata grid, notice banner, tech stack, and action links.
+  - `MobileMockupBlock` (`v1.3.0`): Responsive mobile screen showcase and entity card (428:926 iPhone container) supporting images, GIFs, and viewport-aware video playback with integrated biography card.
+  - `MobileMockupsGridBlock` (`v1.1.0`): Responsive mobile showcase grid & carousel with unified entity metadata supporting image and video lists with viewport autoplay.
+
+#### 🔄 Updates
+- **Standardized Block Device Modes**: Consolidated all 11 block device enums into a unified `AlterBlockDevice` enum (`auto`, `pc`, `mobile`) in `lib/foundations/device_scope.dart`.
+- **Naming Alignment**:
+  - Mobile header standardized as `ApplicationHeaderMobile` in `lib/mobile/application_header_mobile/`.
+  - Canonical block naming across all site cards (`BiographyBlock`, `GraphicsBlock`, `MobileMockupBlock`, `GraphicsGridBlock`, `MobileMockupsGridBlock`, `HeroProjectsBlock`).
+  - Added `hasBiographyBlock` on `MobileMockupBlock`.
+- **Refactored Example Catalog**: Fully restructured `/example` into a 1:1 mirror of `/lib` with clean nested Widgetbook categories (`Foundations`, `Styles`, `Components`, `Mobile`, `Web`, `Sites`).
+
+#### 🟡 In-Beta
+- **`GraphicsCarouselBlock` (`v1.1.0`)**: Full-width responsive visual showcase block with multi-item sliding on PC and touch peek swipe on mobile.
+
+#### 🎨 Figma Exclusives
+- Added responsive PC (1440px / 896px content width) and Mobile (390px / 316px content width) layout artboards and handoff specifications for site sections.
+
+#### 💻 Flutter Exclusives
+- **`AlterDeviceScope` (`v1.1.0`)**: Ambient inherited device mode propagation (`AlterDevice.pc` / `AlterDevice.mobile`) ensuring nested child blocks derive layout mode from parent grid bounds without independent resize queries.
+- **`AlterMediaView` (`v1.1.0`)**: Universal media presentation layer supporting static images, animated GIFs, and muted looping autoplay videos via `video_player` with viewport visibility detection (`playInViewportOnly`) and configurable delay (`autoPlayDelay: 1200ms`).
+
+---
+
 ## 2.0.1
 
 - Comprehensive dartdoc documentation (`///`) added across all UI components, semantic tokens, typography styles, and public API symbols.

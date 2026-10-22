@@ -3,19 +3,10 @@ import '../../foundations/device_scope.dart';
 import 'graphics_block.dart';
 
 /// Target device / viewport modes for [GraphicsGridBlock].
-enum GraphicsGridBlockDevice {
-  /// Automatically responds to layout constraints (< 500px triggers mobile 1-column layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (2 columns for multiple items, 1 column for single item).
-  pc,
-
-  /// Forces Mobile layout (1 column stacked vertically).
-  mobile,
-}
+typedef GraphicsGridBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [GraphicsGridBlockDevice].
-typedef ProjectGridDevice = GraphicsGridBlockDevice;
+typedef ProjectGridDevice = AlterBlockDevice;
 
 /// A responsive project and portfolio grid layout consuming [GraphicsBlock] cards.
 ///

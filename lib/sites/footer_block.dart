@@ -7,16 +7,7 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Target device / viewport modes for [FooterBlock].
-enum FooterBlockDevice {
-  /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (max width 896px, horizontal distribution).
-  pc,
-
-  /// Forces Mobile layout (max width 316px, vertical stacked distribution).
-  mobile,
-}
+typedef FooterBlockDevice = AlterBlockDevice;
 
 /// Data model representing a social or external link icon button in [FooterBlock].
 class FooterSocialLink {

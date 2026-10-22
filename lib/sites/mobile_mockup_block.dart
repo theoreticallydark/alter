@@ -18,19 +18,10 @@ enum MobileMockupBlockScale {
 typedef MobileMarkerScale = MobileMockupBlockScale;
 
 /// Target device / viewport modes for [MobileMockupBlock].
-enum MobileMockupBlockDevice {
-  /// Automatically responds to layout constraints or inherits ambient [AlterDeviceScope] from parent grid.
-  auto,
-
-  /// Forces PC / Desktop layout with expanded BioMarker (logo and badge bar).
-  pc,
-
-  /// Forces Mobile layout with compact BioMarker.
-  mobile,
-}
+typedef MobileMockupBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [MobileMockupBlockDevice].
-typedef MobileMarkerDevice = MobileMockupBlockDevice;
+typedef MobileMarkerDevice = AlterBlockDevice;
 
 /// A responsive mobile screen showcase and entity card combining an iPhone 14 Plus container (428:926) with an optional [BiographyBlock].
 ///
@@ -113,8 +104,11 @@ class MobileMockupBlock extends StatelessWidget {
   /// Callback executed when the mobile mockup is tapped.
   final VoidCallback? onImageTap;
 
-  /// Whether the [BioMarker] is displayed below the mobile container.
-  final bool hasBioMarker;
+  /// Whether the [BiographyBlock] is displayed below the mobile container.
+  final bool hasBiographyBlock;
+
+  /// Backwards compatibility alias for [hasBiographyBlock].
+  bool get hasBioMarker => hasBiographyBlock;
 
   // ==========================================
   // BioMarker Properties
@@ -205,7 +199,8 @@ class MobileMockupBlock extends StatelessWidget {
     this.imageWidget,
     this.imageBorderRadius,
     this.onImageTap,
-    this.hasBioMarker = true,
+    bool hasBiographyBlock = true,
+    bool? hasBioMarker,
     this.title = 'Title',
     this.titleWidget,
     this.hasSubtitle = true,
@@ -227,7 +222,7 @@ class MobileMockupBlock extends StatelessWidget {
     this.hasBadgeThree = false,
     this.badge3Label = 'Label',
     this.badges,
-  });
+  }) : hasBiographyBlock = hasBioMarker ?? hasBiographyBlock;
 
   Widget _buildMockupContainer() {
     final mediaContent = AlterMediaView(
@@ -324,7 +319,7 @@ class MobileMockupBlock extends StatelessWidget {
                 width: targetWidth,
                 child: containerChild,
               ),
-              if (hasBioMarker) ...[
+              if (hasBiographyBlock) ...[
                 const SizedBox(height: 16.0),
                 _buildBioSection(isPc),
               ],
@@ -352,7 +347,7 @@ class MobileMockupBlock extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           mockupWidget,
-          if (hasBioMarker) ...[
+          if (hasBiographyBlock) ...[
             const SizedBox(height: 16.0),
             _buildBioSection(isPc),
           ],

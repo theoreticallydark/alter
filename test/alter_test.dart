@@ -1099,13 +1099,13 @@ void main() {
       expect(horizontalBox.size.height, equals(2.0));
     });
 
-    testWidgets('BioMarker renders title, subtitle, badges, divider, description, and adapts to layout', (WidgetTester tester) async {
+    testWidgets('BiographyBlock renders title, subtitle, badges, divider, description, and adapts to layout', (WidgetTester tester) async {
       bool logoTapped = false;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: BioMarker(
+            body: BiographyBlock(
               title: 'Alter Web Marker',
               subtitle: 'Senior Designer',
               description: 'Designing scalable Flutter components.',
@@ -1160,13 +1160,13 @@ void main() {
       expect(nextTapped, isTrue);
     });
 
-    testWidgets('ProjectMarker renders single image mode and responds to interaction', (WidgetTester tester) async {
+    testWidgets('GraphicsBlock renders single image mode and responds to interaction', (WidgetTester tester) async {
       int tappedIndex = -1;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProjectMarker(
+            body: GraphicsBlock(
               title: 'Project Title',
               subtitle: 'Project Subtitle',
               isCarousel: false,
@@ -1178,20 +1178,20 @@ void main() {
 
       expect(find.text('Project Title'), findsOneWidget);
       expect(find.text('Project Subtitle'), findsOneWidget);
-      expect(find.byType(BioMarker), findsOneWidget);
+      expect(find.byType(BiographyBlock), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.image_outlined));
       await tester.pump();
       expect(tappedIndex, equals(0));
     });
 
-    testWidgets('ProjectMarker renders carousel mode with CarouselControl', (WidgetTester tester) async {
+    testWidgets('GraphicsBlock renders carousel mode with CarouselControl', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SizedBox(
               width: 896,
-              child: ProjectMarker(
+              child: GraphicsBlock(
                 title: 'Carousel Project',
                 subtitle: 'Two columns PC view',
                 isCarousel: true,
@@ -1213,13 +1213,13 @@ void main() {
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
     });
 
-    testWidgets('ProjectMarker supports configurable pcItemsPerView (3 columns)', (WidgetTester tester) async {
+    testWidgets('GraphicsBlock supports configurable pcItemsPerView (3 columns)', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SizedBox(
               width: 896,
-              child: ProjectMarker(
+              child: GraphicsBlock(
                 title: '3-Column Carousel',
                 subtitle: 'Three items per row',
                 isCarousel: true,
@@ -1243,13 +1243,13 @@ void main() {
       expect(find.byType(CarouselControl), findsOneWidget);
     });
 
-    testWidgets('ProjectMarker renders mobile carousel with touch PageView and peek', (WidgetTester tester) async {
+    testWidgets('GraphicsBlock renders mobile carousel with touch PageView and peek', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SizedBox(
               width: 316,
-              child: ProjectMarker(
+              child: GraphicsBlock(
                 title: 'Mobile Carousel',
                 subtitle: 'Swipe with peek cue',
                 isCarousel: true,
@@ -1270,14 +1270,14 @@ void main() {
       expect(find.byKey(const Key('m1')), findsOneWidget);
     });
 
-    testWidgets('MobileMarker renders scale=width and responds to tap', (WidgetTester tester) async {
+    testWidgets('MobileMockupBlock renders scale=width and responds to tap', (WidgetTester tester) async {
       bool tapped = false;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
-              child: MobileMarker(
+              child: MobileMockupBlock(
                 scale: MobileMarkerScale.width,
                 width: 320,
                 title: 'Mobile App',
@@ -1294,18 +1294,18 @@ void main() {
       expect(find.text('Mobile App'), findsOneWidget);
       expect(find.text('Scale width'), findsOneWidget);
       expect(find.text('Mobile App Description'), findsOneWidget);
-      expect(find.byType(BioMarker), findsOneWidget);
+      expect(find.byType(BiographyBlock), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.image_outlined));
       await tester.pump();
       expect(tapped, isTrue);
     });
 
-    testWidgets('MobileMarker renders scale=height without BioMarker when toggled', (WidgetTester tester) async {
+    testWidgets('MobileMockupBlock renders scale=height without BiographyBlock when toggled', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: MobileMarker(
+            body: MobileMockupBlock(
               scale: MobileMarkerScale.height,
               height: 500,
               hasBioMarker: false,
@@ -1315,21 +1315,21 @@ void main() {
       );
 
       expect(find.byIcon(Icons.image_outlined), findsOneWidget);
-      expect(find.byType(BioMarker), findsNothing);
+      expect(find.byType(BiographyBlock), findsNothing);
     });
 
-    testWidgets('ProjectGrid renders PC 2-column layout and mobile 1-column layout', (WidgetTester tester) async {
+    testWidgets('GraphicsGridBlock renders PC 2-column layout and mobile 1-column layout', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 896,
-                child: ProjectGrid(
+                child: GraphicsGridBlock(
                   device: ProjectGridDevice.pc,
                   projects: const [
-                    ProjectMarker(title: 'Project 1'),
-                    ProjectMarker(title: 'Project 2'),
+                    GraphicsBlock(title: 'Project 1'),
+                    GraphicsBlock(title: 'Project 2'),
                   ],
                 ),
               ),
@@ -1343,18 +1343,18 @@ void main() {
       expect(find.byType(Row), findsWidgets); // 2-column row layout on PC
     });
 
-    testWidgets('ProjectGrid.builder generates items correctly', (WidgetTester tester) async {
+    testWidgets('GraphicsGridBlock.builder generates items correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 316,
-                child: ProjectGrid.builder(
+                child: GraphicsGridBlock.builder(
                   device: ProjectGridDevice.mobile,
                   count: 3,
                   builder: (context, index) {
-                    return ProjectMarker(title: 'Dynamic Project #$index');
+                    return GraphicsBlock(title: 'Dynamic Project #$index');
                   },
                 ),
               ),
@@ -1368,14 +1368,14 @@ void main() {
       expect(find.text('Dynamic Project #2'), findsOneWidget);
     });
 
-    testWidgets('MobileGrid renders PC 4-column layout and fixed count of 4 when isCarousel is false', (WidgetTester tester) async {
+    testWidgets('MobileMockupsGridBlock renders PC 4-column layout and fixed count of 4 when isCarousel is false', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 896,
-                child: MobileGrid(
+                child: MobileMockupsGridBlock(
                   device: MobileGridDevice.pc,
                   isCarousel: false,
                   title: 'Fintech Suite',
@@ -1389,22 +1389,22 @@ void main() {
 
       expect(find.text('Fintech Suite'), findsOneWidget);
       expect(find.text('Desktop 4-Column Grid'), findsOneWidget);
-      expect(find.byType(MobileMarker), findsNWidgets(4));
+      expect(find.byType(MobileMockupBlock), findsNWidgets(4));
     });
 
-    testWidgets('MobileGrid renders PC carousel with CarouselControl and slides', (WidgetTester tester) async {
+    testWidgets('MobileMockupsGridBlock renders PC carousel with CarouselControl and slides', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 896,
-                child: MobileGrid.builder(
+                child: MobileMockupsGridBlock.builder(
                   device: MobileGridDevice.pc,
                   isCarousel: true,
                   count: 6,
                   builder: (context, index) {
-                    return MobileMarker(
+                    return MobileMockupBlock(
                       title: 'Screen #$index',
                       hasBioMarker: false,
                     );
@@ -1422,20 +1422,20 @@ void main() {
       expect(find.byType(CarouselControl), findsOneWidget);
     });
 
-    testWidgets('MobileGrid renders mobile swipe carousel with viewport fraction cue', (WidgetTester tester) async {
+    testWidgets('MobileMockupsGridBlock renders mobile swipe carousel with viewport fraction cue', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 316,
-                child: MobileGrid.builder(
+                child: MobileMockupsGridBlock.builder(
                   device: MobileGridDevice.mobile,
                   isCarousel: true,
                   mobileViewportFraction: 0.78,
                   count: 3,
                   builder: (context, index) {
-                    return const MobileMarker(
+                    return const MobileMockupBlock(
                       hasBioMarker: false,
                     );
                   },
@@ -1452,7 +1452,7 @@ void main() {
       expect(find.byType(PageView), findsOneWidget);
     });
 
-    testWidgets('BioMarker derives device mode directly from ambient AlterDeviceScope', (WidgetTester tester) async {
+    testWidgets('BiographyBlock derives device mode directly from ambient AlterDeviceScope', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -1460,7 +1460,7 @@ void main() {
               device: AlterDevice.pc,
               child: SizedBox(
                 width: 300, // narrow width that would otherwise trigger mobile auto-mode
-                child: BioMarker(
+                child: BiographyBlock(
                   title: 'Ambient PC Bio',
                   subtitle: 'Inherited from Scope',
                   hasBadgeTwo: true,
@@ -1476,23 +1476,23 @@ void main() {
       expect(find.text('Desktop Badge'), findsOneWidget);
     });
 
-    testWidgets('ProjectGrid propagates PC device mode to child ProjectMarkers and BioMarkers', (WidgetTester tester) async {
+    testWidgets('GraphicsGridBlock propagates PC device mode to child ProjectMarkers and BioMarkers', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: SizedBox(
                 width: 896,
-                child: ProjectGrid(
+                child: GraphicsGridBlock(
                   device: ProjectGridDevice.pc,
                   projects: [
-                    ProjectMarker(
+                    GraphicsBlock(
                       title: 'Project In PC Grid',
                       subtitle: 'Should have badges & logo in 424px cell',
                       hasBadgeTwo: true,
                       badgeTwoLabel: 'Active Badge',
                     ),
-                    ProjectMarker(
+                    GraphicsBlock(
                       title: 'Project 2 In PC Grid',
                       subtitle: 'Cell 2',
                       hasBadgeTwo: true,
@@ -1541,19 +1541,19 @@ void main() {
       expect(find.byType(AlterMediaView), findsNWidgets(3));
     });
 
-    testWidgets('ProjectMarker renders single video and carousel videos', (WidgetTester tester) async {
+    testWidgets('GraphicsBlock renders single video and carousel videos', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  ProjectMarker(
+                  GraphicsBlock(
                     videoUrl: 'https://example.com/project_preview.mp4',
                     title: 'Video Project Marker',
                     subtitle: 'Single video banner',
                   ),
-                  ProjectMarker(
+                  GraphicsBlock(
                     isCarousel: true,
                     carouselVideoUrls: [
                       'https://example.com/clip1.mp4',
@@ -1574,20 +1574,20 @@ void main() {
       expect(find.byType(AlterMediaView), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('MobileMarker and MobileGrid render with video mockups', (WidgetTester tester) async {
+    testWidgets('MobileMockupBlock and MobileMockupsGridBlock render with video mockups', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  MobileMarker(
+                  MobileMockupBlock(
                     scale: MobileMarkerScale.width,
                     videoUrl: 'https://example.com/app_demo.mp4',
                     title: 'App Demo Video',
                     subtitle: 'iPhone 14 Plus container',
                   ),
-                  MobileGrid(
+                  MobileMockupsGridBlock(
                     videoUrls: [
                       'https://example.com/app_demo1.mp4',
                       'https://example.com/app_demo2.mp4',
@@ -1747,7 +1747,7 @@ void main() {
       expect(find.byType(Divider), findsOneWidget);
     });
 
-    testWidgets('ProjectHeroBlock renders PC and Mobile layouts with logo, title, details, and actions', (WidgetTester tester) async {
+    testWidgets('HeroProjectsBlock renders PC and Mobile layouts with logo, title, details, and actions', (WidgetTester tester) async {
       bool actionTapped = false;
 
       await tester.pumpWidget(
@@ -1756,7 +1756,7 @@ void main() {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  ProjectHeroBlock(
+                  HeroProjectsBlock(
                     device: ProjectHeroBlockDevice.pc,
                     title: 'PC Project Title',
                     description: 'PC Project Description',
@@ -1768,7 +1768,7 @@ void main() {
                       ),
                     ],
                   ),
-                  const ProjectHeroBlock(
+                  const HeroProjectsBlock(
                     device: ProjectHeroBlockDevice.mobile,
                     title: 'Mobile Project Title',
                     hasNotice: false,

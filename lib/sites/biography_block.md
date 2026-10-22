@@ -1,7 +1,7 @@
 # BiographyBlock
 
 > Current Version: `v1.1.0`  
-> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/web/biomarker)
+> [Launch in Widgetbook ↗](https://theoreticallydark.github.io/alter/#/sites/biographyblock)
 
 ## Overview
 `BiographyBlock` (formerly `BioMarker`) is a responsive entity and biography card in the Alter Design System (Figma Node `761:7097`). It combines an entity logo box, title and subtitle typography, badge pills, and a structured bio description separated by a divider.

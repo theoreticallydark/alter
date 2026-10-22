@@ -5,16 +5,7 @@ import '../../styles/tokens.dart';
 import 'biography_block.dart';
 
 /// Target device / viewport modes for [GraphicsCarouselBlock].
-enum GraphicsCarouselBlockDevice {
-  /// Automatically responds to layout constraints (< 600px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (2 items visible with CarouselControl overlaid, width 896px).
-  pc,
-
-  /// Forces Mobile layout (horizontal swipe carousel with 272x153px cards and peek, width 316px).
-  mobile,
-}
+typedef GraphicsCarouselBlockDevice = AlterBlockDevice;
 
 /// A responsive carousel component showcasing graphic / project images with navigation controls and an entity biography card.
 ///

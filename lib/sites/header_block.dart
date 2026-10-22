@@ -5,16 +5,7 @@ import '../../styles/tokens.dart';
 import '../../styles/typography.dart';
 
 /// Target device / viewport modes for [HeaderBlock].
-enum HeaderBlockDevice {
-  /// Automatically adapts based on parent width (< 500px triggers mobile layout) or ambient [AlterDeviceScope].
-  auto,
-
-  /// Forces PC / Desktop layout (max width 896px).
-  pc,
-
-  /// Forces Mobile layout (max width 316px).
-  mobile,
-}
+typedef HeaderBlockDevice = AlterBlockDevice;
 
 /// A responsive section header block with an expandable divider line and bold title for landing pages.
 ///

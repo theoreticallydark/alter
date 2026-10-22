@@ -18,19 +18,10 @@ enum BiographyBlockType {
 typedef BioMarkerType = BiographyBlockType;
 
 /// Target device / viewport modes for [BiographyBlock].
-enum BiographyBlockDevice {
-  /// Automatically responds to layout constraints (< 500px triggers mobile layout) or inherits ambient [AlterDeviceScope] from parent.
-  auto,
-
-  /// Forces desktop / web layout with 84x84 logo, h2 typography, and 24px corner radius.
-  web,
-
-  /// Forces mobile layout with 48x48 logo, h4 typography, and 12px corner radius.
-  mobile,
-}
+typedef BiographyBlockDevice = AlterBlockDevice;
 
 /// Backwards compatibility alias for [BiographyBlockDevice].
-typedef BioMarkerDevice = BiographyBlockDevice;
+typedef BioMarkerDevice = AlterBlockDevice;
 
 /// A responsive biography and entity marker card for the Alter Design System.
 ///
