@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart' hide Badge, Divider;
-import 'package:video_player/video_player.dart';
 import '../../components/utilities/alter_media_view.dart';
 import '../../components/utilities/carousel_control.dart';
 import '../../foundations/device_scope.dart';
@@ -85,8 +84,8 @@ class GraphicsBlock extends StatefulWidget {
   /// Custom asset path for single banner video.
   final String? videoAssetPath;
 
-  /// Optional pre-configured [VideoPlayerController] instance for single banner.
-  final VideoPlayerController? videoController;
+  /// Optional media slot / builder for single banner (e.g. VideoPlayer, Lottie, custom widget).
+  final Widget Function(BuildContext context)? mediaBuilder;
 
   /// Whether video should start playing automatically (defaults to true).
   final bool autoPlay;
@@ -241,7 +240,7 @@ class GraphicsBlock extends StatefulWidget {
     this.imageAssetPath,
     this.videoUrl,
     this.videoAssetPath,
-    this.videoController,
+    this.mediaBuilder,
     this.autoPlay = true,
     this.playInViewportOnly = true,
     this.autoPlayDelay = const Duration(milliseconds: 1200),
@@ -418,7 +417,7 @@ class _GraphicsBlockState extends State<GraphicsBlock> {
       image: widget.image,
       url: widget.videoUrl ?? widget.imageUrl,
       assetPath: widget.videoAssetPath ?? widget.imageAssetPath,
-      videoController: widget.videoController,
+      mediaBuilder: widget.mediaBuilder,
       customWidget: widget.imageWidget,
       autoPlay: widget.autoPlay,
       playInViewportOnly: widget.playInViewportOnly,

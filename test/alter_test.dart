@@ -1888,6 +1888,76 @@ void main() {
       expect(find.text('Mobile Carousel Title'), findsOneWidget);
       expect(find.byType(CarouselControl), findsNWidgets(2));
     });
+
+    testWidgets('NodeItem renders label, leading icon, right slot and handles tap', (WidgetTester tester) async {
+      bool tapped = false;
+      bool collapsedToggled = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: NodeItem(
+                label: 'Test Document',
+                type: NodeItemType.ghost,
+                hasRightSlot: true,
+                onTap: () => tapped = true,
+                onToggleCollapse: () => collapsedToggled = true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Test Document'), findsOneWidget);
+      expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
+      expect(find.byType(ButtonIconGhost), findsOneWidget);
+
+      await tester.tap(find.text('Test Document'));
+      await tester.pump();
+      expect(tapped, isTrue);
+
+      await tester.tap(find.byType(ButtonIconGhost));
+      await tester.pump();
+      expect(collapsedToggled, isTrue);
+    });
+
+    testWidgets('NodeItem renders collapsed mode as a compact icon tile', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: NodeItem(
+                label: 'Hidden Label',
+                isCollapsed: true,
+                type: NodeItemType.gray,
+                hasIcon: true,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Hidden Label'), findsNothing);
+      expect(find.byIcon(Icons.face_5_outlined), findsOneWidget);
+    });
+
+    testWidgets('NodeItem renders indentation spacers correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: NodeItem(
+                label: 'Nested Level 2',
+                indentationLevel: 2,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Nested Level 2'), findsOneWidget);
+    });
   });
 }
 

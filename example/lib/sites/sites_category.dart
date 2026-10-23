@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Badge, Divider;
+import 'package:video_player/video_player.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:alter/alter.dart';
 import '../toast_helper.dart';
@@ -257,8 +258,16 @@ WidgetbookComponent(
                 initialValue: true,
               );
 
+              final mediaType = context.knobs.object.dropdown<String>(
+                label: 'Media Type',
+                options: const ['Image', 'Stock Video'],
+                initialOption: 'Image',
+              );
+
               const sampleImage =
                   'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800';
+              const stockVideoUrl =
+                  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
               return Center(
                 child: SingleChildScrollView(
@@ -267,7 +276,10 @@ WidgetbookComponent(
                     constraints: const BoxConstraints(maxWidth: 896),
                     child: GraphicsBlock(
                       device: device,
-                      imageUrl: sampleImage,
+                      imageUrl: mediaType == 'Image' ? sampleImage : null,
+                      mediaBuilder: mediaType == 'Stock Video'
+                          ? (context) => const _ExampleVideoPlayer(url: stockVideoUrl)
+                          : null,
                       title: title,
                       subtitle: subtitle,
                       hasLogo: hasLogo,
@@ -1420,4 +1432,60 @@ WidgetbookComponent(
       ),
     ],
   );
+}
+
+class _ExampleVideoPlayer extends StatefulWidget {
+  final String url;
+  const _ExampleVideoPlayer({required this.url});
+
+  @override
+  State<_ExampleVideoPlayer> createState() => _ExampleVideoPlayerState();
+}
+
+class _ExampleVideoPlayerState extends State<_ExampleVideoPlayer> {
+  late VideoPlayerController _controller;
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+      ..setLooping(true)
+      ..setVolume(0.0)
+      ..initialize().then((_) {
+        if (mounted) {
+          setState(() {
+            _initialized = true;
+          });
+          _controller.play();
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_initialized) {
+      return Container(
+        color: AlterSemanticTokens.stroke100,
+        child: const Center(
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
+    }
+    return FittedBox(
+      fit: BoxFit.cover,
+      clipBehavior: Clip.hardEdge,
+      child: SizedBox(
+        width: _controller.value.size.width > 0 ? _controller.value.size.width : 16,
+        height: _controller.value.size.height > 0 ? _controller.value.size.height : 9,
+        child: VideoPlayer(_controller),
+      ),
+    );
+  }
 }

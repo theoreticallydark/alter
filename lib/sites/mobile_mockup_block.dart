@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Badge, Divider;
-import 'package:video_player/video_player.dart';
 import '../../components/utilities/alter_media_view.dart';
 import '../../foundations/device_scope.dart';
 import '../../styles/tokens.dart';
@@ -77,8 +76,8 @@ class MobileMockupBlock extends StatelessWidget {
   /// Custom asset path for autoplay video inside the mobile screen mockup.
   final String? videoAssetPath;
 
-  /// Optional pre-configured [VideoPlayerController] instance.
-  final VideoPlayerController? videoController;
+  /// Optional media slot / builder for the mobile screen (e.g. VideoPlayer, Lottie, custom widget).
+  final Widget Function(BuildContext context)? mediaBuilder;
 
   /// Whether video should start playing automatically (defaults to true).
   final bool autoPlay;
@@ -190,7 +189,7 @@ class MobileMockupBlock extends StatelessWidget {
     this.imageAssetPath,
     this.videoUrl,
     this.videoAssetPath,
-    this.videoController,
+    this.mediaBuilder,
     this.autoPlay = true,
     this.playInViewportOnly = true,
     this.autoPlayDelay = const Duration(milliseconds: 1200),
@@ -229,7 +228,7 @@ class MobileMockupBlock extends StatelessWidget {
       image: image,
       url: videoUrl ?? imageUrl,
       assetPath: videoAssetPath ?? imageAssetPath,
-      videoController: videoController,
+      mediaBuilder: mediaBuilder,
       customWidget: imageWidget,
       autoPlay: autoPlay,
       playInViewportOnly: playInViewportOnly,

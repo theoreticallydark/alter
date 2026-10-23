@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Release — Full Web & WASM Ready, Pluggable Media Slots & Node Item Tree
+
+#### 🚀 What’s New?
+- **Node Component (`lib/components/node/`)**:
+  - `NodeItem` (`v1.0.0`): Hierarchical tree view and directory listing component supporting expandable chevron states, customizable leading/trailing slots, selection feedback, and collapsed icon tile mode.
+- **Pluggable Media Slots Architecture (`AlterMediaView v2.0.0`)**:
+  - Decoupled `package:video_player` from core Alter dependencies, achieving **100% Web & WebAssembly (WASM) compatibility** and zero native `dart:io` restrictions.
+  - Added dedicated media slots (`slot` / `customWidget`) and lazy builders (`mediaBuilder: (context) => Widget`) to host custom video players (`video_player`, `media_kit`), Rive/Lottie animations, or custom interactive canvas layers.
+  - Updated `GraphicsBlock` and `MobileMockupBlock` with `mediaBuilder` slots.
+- **Explicit Platform Declarations**:
+  - Registered full multi-platform support across Android, iOS, Web, Windows, macOS, and Linux in `pubspec.yaml`.
+- **Ecosystem Quality**:
+  - Reached **150 / 150 points** with **WASM-ready** status on pub.dev (Pana analyzer).
+
 ## 3.0.0
 
 ### Major Release — Web & Responsive Sites Support, Multimedia Layer & Standardized Foundations

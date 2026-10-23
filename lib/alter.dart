@@ -16,6 +16,7 @@ export 'components/inputs/password_input.dart';
 export 'components/inputs/search_input.dart';
 export 'components/inputs/text_area_input.dart';
 export 'components/inputs/text_input.dart';
+export 'components/node/node_item.dart';
 export 'mobile/bottom_navigation/bottom_navigation_bar.dart';
 export 'mobile/bottom_navigation/bottom_navigation_bar_action.dart';
 export 'mobile/bottom_navigation/bottom_navigation_button.dart';

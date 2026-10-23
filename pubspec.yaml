@@ -1,6 +1,6 @@
 name: alter
 description: A lightweight, mobile-first Flutter design system featuring curated Geist typography, semantic tokens, and modular UI components.
-version: 3.0.0
+version: 3.1.0
 homepage: https://github.com/theoreticallydark/alter
 repository: https://github.com/theoreticallydark/alter
 issue_tracker: https://github.com/theoreticallydark/alter/issues
@@ -9,10 +9,17 @@ environment:
   sdk: ^3.12.2
   flutter: ">=1.17.0"
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
 dependencies:
   flutter:
     sdk: flutter
-  video_player: ^2.14.1
 
 dev_dependencies:
   flutter_test:
